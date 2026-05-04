@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Spotter design tokens — CSS custom properties.
+ *
+ * These mirror tailwind.config.ts. Both must stay in sync.
+ * See DESIGN.md at the repo root for the full design system.
+ *
+ * This is a starter — values will be refined in Phase P0.5 by /impeccable teach.
+ */
+@layer base {
+  :root {
+    /* Surface colors */
+    --color-bg-canvas: 13 13 15; /* #0d0d0f */
+    --color-bg-surface: 22 22 24; /* #161618 */
+    --color-bg-elevated: 28 28 31; /* #1c1c1f */
+    --color-border-default: 42 42 46; /* #2a2a2e */
+    --color-border-muted: 31 31 34; /* #1f1f22 */
+
+    /* Text colors */
+    --color-text-primary: 240 240 240; /* #f0f0f0 */
+    --color-text-muted: 136 136 136; /* #888 */
+    --color-text-dim: 85 85 85; /* #555 */
+
+    /* Accents */
+    --color-accent-primary: 232 255 71; /* #e8ff47 */
+    --color-accent-secondary: 255 107 53; /* #ff6b35 */
+
+    /* AI indicator (refine in P0.5) */
+    --color-ai: 167 139 250; /* #a78bfa */
+
+    /* Radii */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-pill: 9999px;
+  }
+
+  /* Base reset and accessibility defaults */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    margin: 0;
+    background-color: rgb(var(--color-bg-canvas));
+    color: rgb(var(--color-text-primary));
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  /* Arabic content uses Cairo */
+  [lang='ar'],
+  [dir='rtl'] {
+    font-family: 'Cairo', 'DM Sans', sans-serif;
+  }
+
+  /* Visible focus indicator on keyboard nav (constitution P5 + a11y) */
+  :focus-visible {
+    outline: 2px solid rgb(var(--color-accent-primary));
+    outline-offset: 2px;
+  }
+
+  /* Reduced motion preference (DESIGN.md §3.6) */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
