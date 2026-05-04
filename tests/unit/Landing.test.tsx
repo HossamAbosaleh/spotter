@@ -15,7 +15,9 @@ describe('Landing page', () => {
         <Landing />
       </MemoryRouter>
     );
-    expect(screen.getByRole('heading', { name: /spotter/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /spotter/i })
+    ).toBeInTheDocument();
   });
 
   it('renders the tagline', () => {

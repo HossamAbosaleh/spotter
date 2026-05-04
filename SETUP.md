@@ -117,6 +117,7 @@ Before creating the GitHub repo, quickly check:
 2. Optional: search "spotter app" on Google to see if there's a major existing project with the same name.
 
 If "spotter" is taken, use one of these alternatives in the next steps:
+
 - `spotter-app`
 - `spotter-gym`
 - `getspotter`
@@ -150,6 +151,7 @@ This creates a local git repo on the `main` branch.
 Open `README.md` and `package.json`. Find the `hossamabosaleh` placeholders and replace them with your actual GitHub username. The same in `LICENSE` and `SECURITY.md`.
 
 Quick search-and-replace if your editor supports it:
+
 - Find: `hossamabosaleh`
 - Replace: your actual GitHub username
 
