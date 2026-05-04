@@ -6,18 +6,26 @@ import Landing from '@/pages/Landing';
 describe('Landing page', () => {
   it('renders the project name', () => {
     render(
-      <MemoryRouter>
+      <MemoryRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <Landing />
       </MemoryRouter>
     );
-    expect(
-      screen.getByRole('heading', { name: /spotter/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /spotter/i })).toBeInTheDocument();
   });
 
   it('renders the tagline', () => {
     render(
-      <MemoryRouter>
+      <MemoryRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <Landing />
       </MemoryRouter>
     );
