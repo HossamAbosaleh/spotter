@@ -7,3 +7,5 @@ coverage
 .vercel
 .vite
 package-lock.json
+.specify
+.agents
