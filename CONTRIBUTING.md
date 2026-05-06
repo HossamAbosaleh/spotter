@@ -4,7 +4,7 @@ Thanks for your interest. Spotter is a community-driven open-source project, and
 
 ## Before you start
 
-1. **Read the [constitution](./spec/constitution.md).** Every change must comply with the five principles (no server, free forever, open source, professional quality, real security). PRs that violate the constitution will be declined regardless of how good they are technically.
+1. **Read the [constitution](./.specify/memory/constitution.md).** Every change must comply with the five principles
 
 2. **Read the [plan](./spec-kit-input/plan.md).** Make sure your contribution fits into a phase. Out-of-scope contributions get postponed, not merged.
 

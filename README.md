@@ -31,6 +31,18 @@ All client-side. No server. No account. No tracking. Your data lives on your dev
 - Track you (no analytics that identify users)
 - Lock you in (full JSON export at any time)
 
+## Project governance
+
+Spotter is a **spec-driven project**. Every decision is gated by five non-negotiable principles documented in [`.specify/memory/constitution.md`](./.specify/memory/constitution.md):
+
+1. **No server, no backend database** — all user data lives in the user's own browser
+2. **Free forever for users** — no paid tiers, no ads, no tracking-based monetization
+3. **Open source** — MIT license, permissive dependencies only
+4. **Professional quality with a real design system** — not "good enough for a side project," portfolio-grade
+5. **Real security, not theatrical** — strict CSP, schema-validated imports, no `dangerouslySetInnerHTML` for user data
+
+Every PR is reviewed against these principles. Changes that conflict with any principle are rejected unless the principle itself is formally amended (see the [Amendment procedure](./.specify/memory/constitution.md#governance) in the constitution).
+
 ## Tech stack
 
 - **Build:** Vite 5
