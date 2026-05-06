@@ -1,3 +1,6 @@
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/jetbrains-mono';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
