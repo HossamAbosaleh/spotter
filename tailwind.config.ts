@@ -47,6 +47,74 @@ const config: Config = {
         // warning surfaces.
         error: '#e35b4d',
         info: '#7eb6cb',
+
+        // ============================================================
+        // shadcn/ui bridge tokens
+        // ============================================================
+        // shadcn primitives expect token names like `background`,
+        // `foreground`, `primary`, `card`, `border`, `ring`, etc.
+        // Our project uses Spotter-semantic tokens (bg.canvas,
+        // accent.primary, etc.). These bridge entries map shadcn's
+        // expected names to Spotter's tokens, so shadcn components
+        // automatically use our design system without us editing
+        // every primitive.
+        //
+        // Decisions (locked, but revisitable):
+        // - primary  → accent.primary (lime)   — bold default for CTAs
+        // - destructive → error (#e35b4d)
+        // - ring → accent.primary (focus rings are lime)
+        //
+        // See DESIGN.md §4 for the rationale.
+
+        background: '#0d0d0f', // = bg.canvas
+        foreground: '#f0f0f0', // = text.primary
+
+        card: {
+          DEFAULT: '#161618', // = bg.surface
+          foreground: '#f0f0f0', // = text.primary
+        },
+
+        popover: {
+          DEFAULT: '#1c1c1f', // = bg.elevated
+          foreground: '#f0f0f0', // = text.primary
+        },
+
+        primary: {
+          DEFAULT: '#e8ff47', // = accent.primary (lime)
+          foreground: '#0d0d0f', // = bg.canvas (dark text on lime)
+        },
+
+        secondary: {
+          DEFAULT: '#1c1c1f', // = bg.elevated
+          foreground: '#f0f0f0', // = text.primary
+        },
+
+        muted: {
+          DEFAULT: '#161618', // = bg.surface
+          foreground: '#888888', // = text.muted
+        },
+
+        // Renamed shadcn `accent` to avoid collision with our existing `accent`.
+        // shadcn's accent is just hover/highlight; ours is brand color.
+        // We don't need shadcn's accent — primitives that use it can be
+        // overridden later. If shadcn complains it's missing, uncomment:
+        //
+        // shadcnAccent: { DEFAULT: '#ff6b35', foreground: '#0d0d0f' },
+
+        destructive: {
+          DEFAULT: '#e35b4d', // = error
+          foreground: '#f0f0f0', // = text.primary
+        },
+
+        input: '#2a2a2e', // = border.DEFAULT
+        ring: '#e8ff47', // = accent.primary (focus rings are lime)
+        chart: {
+          1: '#e8ff47', // accent.primary
+          2: '#ff6b35', // accent.secondary
+          3: '#7bd17a', // success
+          4: '#7eb6cb', // info
+          5: '#90c4d4', // ai.indicator
+        },
       },
       fontFamily: {
         display: ['"Bebas Neue"', 'sans-serif'],
