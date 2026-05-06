@@ -1,6 +1,3 @@
-@import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
-@import '@fontsource-variable/jetbrains-mono';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -96,7 +93,6 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
-    @apply font-mono;
   }
 
   body {
@@ -107,7 +103,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
-    @apply bg-background text-foreground;
   }
 
   /* Arabic content uses Cairo */
@@ -185,8 +180,5 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
-  }
-  * {
-    @apply outline-ring/50 border-border;
   }
 }
