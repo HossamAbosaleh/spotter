@@ -138,7 +138,7 @@ side project" is not the standard; the standard is a portfolio piece.
 - Performance budget on a mid-tier mobile device on 4G:
   - First Contentful Paint < 1.5s
   - Largest Contentful Paint < 2.5s
-  Regressions beyond budget MUST block release.
+    Regressions beyond budget MUST block release.
 - Mobile-first responsive design.
 
 **Design system (established before any feature work begins):**

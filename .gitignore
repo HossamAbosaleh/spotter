@@ -59,3 +59,8 @@ vitest.config.d.ts
 
 # Skills installed by npx skills add — they live globally in ~/.claude/skills/
 .agents/
+
+# Tool-managed files (regenerable; user-specific)
+.claude/settings.json
+.claude/skills/speckit-*/
+skills-lock.json
