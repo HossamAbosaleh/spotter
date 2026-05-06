@@ -56,3 +56,6 @@ vitest.config.d.ts
 
 # Vercel
 .vercel
+
+# Skills installed by npx skills add — they live globally in ~/.claude/skills/
+.agents/
