@@ -28,8 +28,21 @@
     --color-accent-primary: 232 255 71; /* #e8ff47 */
     --color-accent-secondary: 255 107 53; /* #ff6b35 */
 
-    /* AI indicator (refine in P0.5) */
-    --color-ai: 167 139 250; /* #a78bfa */
+    /*
+     * AI-generated content indicator — low-chroma cyan-teal.
+     * Replaces the previous lavender (#a78bfa), which violated the
+     * "no purple-blue AI gradient slop" anti-reference. See DESIGN.md §3.1.
+     */
+    --color-ai-indicator: 144 196 212; /* #90c4d4 */
+
+    /*
+     * Semantic state colors. Always paired with a non-color signal
+     * (icon/label/shape). `warning` is intentionally unified with
+     * accent.secondary; use that token directly. See DESIGN.md §3.1.
+     */
+    --color-success: 123 209 122; /* #7bd17a */
+    --color-error: 227 91 77; /* #e35b4d */
+    --color-info: 126 182 203; /* #7eb6cb */
 
     /* Radii */
     --radius-sm: 8px;
@@ -66,10 +79,26 @@
     font-family: 'Cairo', 'DM Sans', sans-serif;
   }
 
-  /* Visible focus indicator on keyboard nav (constitution P5 + a11y) */
+  /*
+   * Visible focus indicator on keyboard nav (constitution P5 + a11y).
+   * Default: outline pattern. See DESIGN.md §4.3.
+   */
   :focus-visible {
     outline: 2px solid rgb(var(--color-accent-primary));
     outline-offset: 2px;
+  }
+
+  /*
+   * Ring pattern — apply via `class="focus-ring-inset"` on elements where
+   * outline-offset would clip inside a tight container (e.g., an input
+   * inside a card). Renders the focus indicator inside the bounding box.
+   * See DESIGN.md §4.3.
+   */
+  .focus-ring-inset:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px rgb(var(--color-bg-canvas)),
+      0 0 0 4px rgb(var(--color-accent-primary));
   }
 
   /* Reduced motion preference (DESIGN.md §3.6) */
