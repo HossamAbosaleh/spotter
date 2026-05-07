@@ -192,6 +192,10 @@ const config: Config = {
       animation: {
         'fade-in': 'fade-in 200ms cubic-bezier(0.4, 0, 0.2, 1)',
         'slide-up': 'slide-up 300ms cubic-bezier(0.16, 1, 0.3, 1)',
+        // Skeleton loading pulse. Keyframe in src/styles/tokens.css.
+        // Suppressed under prefers-reduced-motion via global rule in globals.css.
+        'skeleton-pulse':
+          'spotter-skeleton-pulse 1200ms cubic-bezier(0.4, 0, 0.2, 1) infinite',
       },
     },
   },

@@ -62,5 +62,6 @@ vitest.config.d.ts
 
 # Tool-managed files (regenerable; user-specific)
 .claude/settings.json
+.claude/settings.local.json
 .claude/skills/speckit-*/
 skills-lock.json

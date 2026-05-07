@@ -1,0 +1,32 @@
+/*
+ * Spotter design tokens — keyframes and motion primitives.
+ *
+ * Color tokens, radii, and CSS variables live in globals.css.
+ * This file is reserved for keyframes and other motion primitives that
+ * don't fit cleanly into tailwind.config.ts (which handles durations,
+ * easings, and animation utility names).
+ *
+ * Reduced-motion is handled globally in globals.css — every keyframe
+ * defined here is automatically suppressed under
+ * `prefers-reduced-motion: reduce`. Don't duplicate that logic here.
+ *
+ * See DESIGN.md §3.6 for motion principles.
+ */
+
+/*
+ * Skeleton loading pulse.
+ *
+ * Single opacity step (1.0 → 0.6 → 1.0) over 1200ms. Deliberately
+ * NOT a gradient shimmer or shimmer-sweep — those read as
+ * consumer-app polish, not engineered tool. See ExerciseCard
+ * shape brief §8 ("Skeleton spec").
+ */
+@keyframes spotter-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
