@@ -74,6 +74,38 @@ const CANDIDATES: Candidate[] = [
     secondary: '#fbbf24',
     contrast: '9.2:1 (sky/dark)',
   },
+  {
+    letter: 'G',
+    name: 'Emerald + Signal Red — live/alarm, instrument cluster',
+    primary: '#34d399',
+    primaryForeground: '#0d0d0f',
+    secondary: '#ef4444',
+    contrast: '10.8:1 (emerald/dark)',
+  },
+  {
+    letter: 'H',
+    name: 'Emerald + Goldenrod — go/caution, brass instrument',
+    primary: '#34d399',
+    primaryForeground: '#0d0d0f',
+    secondary: '#eab308',
+    contrast: '10.8:1 (emerald/dark)',
+  },
+  {
+    letter: 'I',
+    name: 'Emerald + Burnt Sienna — court/leather, mature athletic',
+    primary: '#34d399',
+    primaryForeground: '#0d0d0f',
+    secondary: '#c44536',
+    contrast: '10.8:1 (emerald/dark)',
+  },
+  {
+    letter: 'J',
+    name: 'Emerald + Hot Pink — motorsport telemetry (wildcard)',
+    primary: '#34d399',
+    primaryForeground: '#0d0d0f',
+    secondary: '#ec4899',
+    contrast: '10.8:1 (emerald/dark)',
+  },
 ];
 
 function paletteVars(c: Candidate): CSSProperties {
