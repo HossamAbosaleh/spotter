@@ -22,6 +22,10 @@ type Candidate = {
   primary: string;
   primaryForeground: string;
   secondary: string;
+  // Foreground for the secondary badge mock. Defaults to bg.canvas
+  // (#0d0d0f) for bright secondaries; override to light when the
+  // secondary is dark enough that dark text fails contrast.
+  secondaryForeground?: string;
   contrast: string;
 };
 
@@ -52,59 +56,20 @@ const CANDIDATES: Candidate[] = [
   },
   {
     letter: 'D',
-    name: 'Emerald + Goldenrod — go/caution, brass instrument',
+    name: 'Emerald + Dark Yellow — deep brass on go-green',
     primary: '#34d399',
     primaryForeground: '#0d0d0f',
-    secondary: '#daa520',
+    secondary: '#854d0e',
+    secondaryForeground: '#f0f0f0',
     contrast: '10.8:1 (emerald/dark)',
   },
   {
     letter: 'E',
-    name: 'Amber + Signal Red — automotive cockpit',
-    primary: '#f59e0b',
-    primaryForeground: '#0d0d0f',
-    secondary: '#ef4444',
-    contrast: '10.0:1 (amber/dark)',
-  },
-  {
-    letter: 'F',
-    name: 'Cyan + Crimson — broadcast / mission control',
-    primary: '#67e8f9',
-    primaryForeground: '#0d0d0f',
-    secondary: '#dc2626',
-    contrast: '14.6:1 (cyan/dark)',
-  },
-  {
-    letter: 'G',
-    name: 'Cobalt + Saffron — engineered terminal',
-    primary: '#2563eb',
+    name: 'Dark Yellow + Saffron — brass instrument with amber LED',
+    primary: '#854d0e',
     primaryForeground: '#f0f0f0',
     secondary: '#f59e0b',
-    contrast: '6.7:1 (cobalt/light)',
-  },
-  {
-    letter: 'H',
-    name: 'Burnt Orange + Steel — stadium and girder',
-    primary: '#c2410c',
-    primaryForeground: '#f0f0f0',
-    secondary: '#64748b',
-    contrast: '5.5:1 (orange/light)',
-  },
-  {
-    letter: 'I',
-    name: 'Gunmetal + Saffron — brushed-steel instrument',
-    primary: '#475569',
-    primaryForeground: '#f0f0f0',
-    secondary: '#f59e0b',
-    contrast: '7.4:1 (gunmetal/light)',
-  },
-  {
-    letter: 'J',
-    name: 'Pewter + Crimson — ops-room console',
-    primary: '#475569',
-    primaryForeground: '#f0f0f0',
-    secondary: '#dc2626',
-    contrast: '7.4:1 (gunmetal/light)',
+    contrast: '6.1:1 (dark yellow/light)',
   },
 ];
 
@@ -113,6 +78,8 @@ function paletteVars(c: Candidate): CSSProperties {
     ['--palette-primary' as string]: c.primary,
     ['--palette-primary-foreground' as string]: c.primaryForeground,
     ['--palette-secondary' as string]: c.secondary,
+    ['--palette-secondary-foreground' as string]:
+      c.secondaryForeground ?? '#0d0d0f',
   } as CSSProperties;
 }
 
@@ -196,7 +163,7 @@ function SurfaceTrio() {
 
 function SecondaryBadgeMock() {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-pill bg-[var(--palette-secondary)] px-2.5 py-1 font-mono text-mono-sm font-medium uppercase tracking-wider text-bg-canvas">
+    <span className="inline-flex items-center gap-1.5 rounded-pill bg-[var(--palette-secondary)] px-2.5 py-1 font-mono text-mono-sm font-medium uppercase tracking-wider text-[var(--palette-secondary-foreground)]">
       Calibrate
     </span>
   );
