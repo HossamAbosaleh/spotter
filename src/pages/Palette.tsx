@@ -66,6 +66,14 @@ const CANDIDATES: Candidate[] = [
     secondary: '#ff6b35',
     contrast: '17.2:1 (lime/dark) — current',
   },
+  {
+    letter: 'F',
+    name: 'Sky + Amber — instrument tech, classic complementary',
+    primary: '#38bdf8',
+    primaryForeground: '#0d0d0f',
+    secondary: '#fbbf24',
+    contrast: '9.2:1 (sky/dark)',
+  },
 ];
 
 function paletteVars(c: Candidate): CSSProperties {
