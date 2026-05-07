@@ -49,5 +49,57 @@
   "language": {
     "switchTo": "العربية",
     "name": "English"
+  },
+  "wizard": {
+    "shell": {
+      "title": "Set up your profile",
+      "stepLabel": "Step {{n}} of {{total}}",
+      "next": "Next",
+      "back": "Back",
+      "finish": "Finish",
+      "savedIndicator": "Saved.",
+      "savingIndicator": "Saving…",
+      "languageSwitch": {
+        "aria": "Switch language"
+      },
+      "startFresh": {
+        "cta": "Start fresh",
+        "confirm": "Start fresh? This clears the answers you've entered so far."
+      }
+    },
+    "errors": {
+      "required": "This field is required.",
+      "numeric": "Enter a number.",
+      "outOfRange": {
+        "age": "Age must be between 13 and 100.",
+        "height": "Height must be between 120 and 230 cm.",
+        "bodyweight": "Bodyweight must be between 30 and 250 kg."
+      },
+      "tooLong": "Please keep this under {{max}} characters.",
+      "atLeastOneDay": "Pick at least one day.",
+      "saveFailed": {
+        "quota": "We couldn't save — your device is out of space.",
+        "unknown": "We couldn't save right now. Try again, or reload the page."
+      },
+      "corruptProfile": {
+        "title": "Your profile data couldn't be read.",
+        "body": "You can start fresh — this overwrites the existing record.",
+        "cta": "Start fresh"
+      }
+    }
+  },
+  "persistence": {
+    "banner": {
+      "private": "This is a private window — your answers won't be saved.",
+      "disabled": "Your browser has storage disabled. Enable it to save your profile.",
+      "quota": "Your device is out of space — your answers won't save until you free some up.",
+      "unknown": "We couldn't access local storage. Your answers won't be saved this session.",
+      "acknowledge": "I understand"
+    }
+  },
+  "profile": {
+    "shell": {
+      "title": "Your profile"
+    }
   }
 }

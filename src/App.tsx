@@ -1,6 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Landing from '@/pages/Landing';
 import DesignShowcase from '@/pages/Design';
+import Setup from '@/pages/Setup';
+import Profile from '@/pages/Profile';
+import { ProfileGuard } from '@/components/profile/profile-guard';
 import { useDirection } from '@/i18n/useDirection';
 
 /**
@@ -24,12 +27,16 @@ function App() {
         v7_relativeSplatPath: true,
       }}
     >
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        {import.meta.env.DEV ? (
-          <Route path="/_design" element={<DesignShowcase />} />
-        ) : null}
-      </Routes>
+      <ProfileGuard>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/setup" element={<Setup />} />
+          <Route path="/profile" element={<Profile />} />
+          {import.meta.env.DEV ? (
+            <Route path="/_design" element={<DesignShowcase />} />
+          ) : null}
+        </Routes>
+      </ProfileGuard>
     </BrowserRouter>
   );
 }
