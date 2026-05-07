@@ -23,6 +23,9 @@ const config: Config = {
         border: {
           DEFAULT: '#2a2a2e',
           muted: '#1f1f22',
+          // Interactive border (hover/focus-within/aria-current).
+          // One sanctioned step lighter than `border.DEFAULT`. See DESIGN.md §3.1.
+          hover: '#3a3a3e',
         },
         text: {
           primary: '#f0f0f0',
