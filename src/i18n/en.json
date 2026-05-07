@@ -38,8 +38,8 @@
       "swap": "Swap"
     },
     "ai": {
-      "suggested": "AI · suggested",
-      "calibrated": "AI · based on your last {{count}} sessions"
+      "suggested": "suggested",
+      "calibrated": "based on your last {{count}} sessions"
     }
   },
   "aiBadge": {

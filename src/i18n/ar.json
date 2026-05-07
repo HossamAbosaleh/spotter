@@ -38,8 +38,8 @@
       "swap": "استبدال"
     },
     "ai": {
-      "suggested": "AI · مقترح",
-      "calibrated": "AI · بناءً على آخر {{count}} جلسات"
+      "suggested": "مقترح",
+      "calibrated": "بناءً على آخر {{count}} جلسات"
     }
   },
   "aiBadge": {
