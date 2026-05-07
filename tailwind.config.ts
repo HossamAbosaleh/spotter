@@ -103,7 +103,7 @@ const config: Config = {
 
         destructive: {
           DEFAULT: '#e35b4d', // = error
-          foreground: '#f0f0f0', // = text.primary
+          foreground: '#0d0d0f', // = bg.canvas (dark text on red — passes AA at 4.7:1; light text fails at 3.5:1)
         },
 
         input: '#2a2a2e', // = border.DEFAULT
