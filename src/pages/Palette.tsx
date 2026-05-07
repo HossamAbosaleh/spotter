@@ -82,6 +82,30 @@ const CANDIDATES: Candidate[] = [
     secondary: '#f59e0b',
     contrast: '6.7:1 (cobalt/light)',
   },
+  {
+    letter: 'H',
+    name: 'Burnt Orange + Steel — stadium and girder',
+    primary: '#c2410c',
+    primaryForeground: '#f0f0f0',
+    secondary: '#64748b',
+    contrast: '5.5:1 (orange/light)',
+  },
+  {
+    letter: 'I',
+    name: 'Gunmetal + Saffron — brushed-steel instrument',
+    primary: '#475569',
+    primaryForeground: '#f0f0f0',
+    secondary: '#f59e0b',
+    contrast: '7.4:1 (gunmetal/light)',
+  },
+  {
+    letter: 'J',
+    name: 'Pewter + Crimson — ops-room console',
+    primary: '#475569',
+    primaryForeground: '#f0f0f0',
+    secondary: '#dc2626',
+    contrast: '7.4:1 (gunmetal/light)',
+  },
 ];
 
 function paletteVars(c: Candidate): CSSProperties {
