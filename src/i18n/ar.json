@@ -33,6 +33,7 @@
     "summary": {
       "skipped": "تم التخطّي"
     },
+    "setLabel": "المجموعة {{n}}",
     "preview": {
       "confirm": "استخدم هذا",
       "swap": "استبدال"

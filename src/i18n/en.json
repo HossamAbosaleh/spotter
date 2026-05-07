@@ -33,6 +33,7 @@
     "summary": {
       "skipped": "Skipped"
     },
+    "setLabel": "Set {{n}}",
     "preview": {
       "confirm": "Use this",
       "swap": "Swap"
