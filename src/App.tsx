@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Landing from '@/pages/Landing';
+import { useDirection } from '@/i18n/useDirection';
 
 /**
  * Spotter App root.
@@ -13,6 +14,8 @@ import Landing from '@/pages/Landing';
  * etc.
  */
 function App() {
+  useDirection();
+
   return (
     <BrowserRouter
       future={{

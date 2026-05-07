@@ -1,0 +1,52 @@
+{
+  "app": {
+    "name": "Spotter",
+    "tagline": "Your gym, your data, your AI coach."
+  },
+  "landing": {
+    "phaseLabel": "v0.1.0 · Phase P0 · Foundation",
+    "introBody": "This is the Phase P0 foundation build. The stack is up: React + Vite + TypeScript + Tailwind, deployed on Vercel as a static site.",
+    "nextPhase": "Next phase:",
+    "nextPhaseName": "P0.5 — Design System Foundation",
+    "runCommand": "Run",
+    "toBegin": "to begin.",
+    "badges": {
+      "noServer": "No server",
+      "freeForever": "Free forever",
+      "openSource": "Open source · MIT",
+      "allDataLocal": "All data local"
+    }
+  },
+  "exerciseCard": {
+    "image": {
+      "empty": "No image available",
+      "failed": "Image unavailable"
+    },
+    "library": {
+      "addToPlan": "Add to plan",
+      "inPlan": "In plan"
+    },
+    "daily": {
+      "logSet": "Log set",
+      "rest": "Rest"
+    },
+    "summary": {
+      "skipped": "Skipped"
+    },
+    "preview": {
+      "confirm": "Use this",
+      "swap": "Swap"
+    },
+    "ai": {
+      "suggested": "AI · suggested",
+      "calibrated": "AI · based on your last {{count}} sessions"
+    }
+  },
+  "aiBadge": {
+    "label": "AI"
+  },
+  "language": {
+    "switchTo": "العربية",
+    "name": "English"
+  }
+}

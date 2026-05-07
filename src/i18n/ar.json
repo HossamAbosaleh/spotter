@@ -1,0 +1,52 @@
+{
+  "app": {
+    "name": "Spotter",
+    "tagline": "صالتك، بياناتك، مدرّبك بالذكاء الاصطناعي."
+  },
+  "landing": {
+    "phaseLabel": "الإصدار 0.1.0 · المرحلة P0 · الأساس",
+    "introBody": "هذه نسخة أساس المرحلة P0. الواجهة جاهزة: React مع Vite وTypeScript وTailwind، منشورة على Vercel كموقع ثابت.",
+    "nextPhase": "المرحلة القادمة:",
+    "nextPhaseName": "P0.5 — أساس نظام التصميم",
+    "runCommand": "شغّل",
+    "toBegin": "للبدء.",
+    "badges": {
+      "noServer": "بدون خادم",
+      "freeForever": "مجّاني للأبد",
+      "openSource": "مفتوح المصدر · MIT",
+      "allDataLocal": "جميع البيانات محليًا"
+    }
+  },
+  "exerciseCard": {
+    "image": {
+      "empty": "لا توجد صورة",
+      "failed": "الصورة غير متاحة"
+    },
+    "library": {
+      "addToPlan": "إضافة إلى الخطة",
+      "inPlan": "ضمن الخطة"
+    },
+    "daily": {
+      "logSet": "تسجيل المجموعة",
+      "rest": "استراحة"
+    },
+    "summary": {
+      "skipped": "تم التخطّي"
+    },
+    "preview": {
+      "confirm": "استخدم هذا",
+      "swap": "استبدال"
+    },
+    "ai": {
+      "suggested": "AI · مقترح",
+      "calibrated": "AI · بناءً على آخر {{count}} جلسات"
+    }
+  },
+  "aiBadge": {
+    "label": "AI"
+  },
+  "language": {
+    "switchTo": "English",
+    "name": "العربية"
+  }
+}
