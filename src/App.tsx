@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Landing from '@/pages/Landing';
 import DesignShowcase from '@/pages/Design';
+import PaletteComparison from '@/pages/Palette';
 import { useDirection } from '@/i18n/useDirection';
 
 /**
@@ -28,6 +29,9 @@ function App() {
         <Route path="/" element={<Landing />} />
         {import.meta.env.DEV ? (
           <Route path="/_design" element={<DesignShowcase />} />
+        ) : null}
+        {import.meta.env.DEV ? (
+          <Route path="/_palette" element={<PaletteComparison />} />
         ) : null}
       </Routes>
     </BrowserRouter>
