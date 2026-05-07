@@ -77,13 +77,13 @@ All values are expressed in OKLCH (canonical) with sRGB hex fallbacks (used in t
 
 #### Surface
 
-| Token            | OKLCH                   | Hex fallback | Usage                                       |
-| ---------------- | ----------------------- | ------------ | ------------------------------------------- |
-| `bg.canvas`      | `oklch(0.18 0.004 270)` | `#0d0d0f`    | Body, page background                       |
-| `bg.surface`     | `oklch(0.23 0.004 270)` | `#161618`    | Default container, card surface             |
-| `bg.elevated`    | `oklch(0.27 0.004 270)` | `#1c1c1f`    | Popovers, modals, elevated cards            |
-| `border.default` | `oklch(0.34 0.004 270)` | `#2a2a2e`    | Standard separator, default 1px card border |
-| `border.muted`   | `oklch(0.27 0.004 270)` | `#1f1f22`    | Barely-there separator                      |
+| Token            | OKLCH                   | Hex fallback | Usage                                                              |
+| ---------------- | ----------------------- | ------------ | ------------------------------------------------------------------ |
+| `bg.canvas`      | `oklch(0.18 0.004 270)` | `#0d0d0f`    | Body, page background                                              |
+| `bg.surface`     | `oklch(0.23 0.004 270)` | `#161618`    | Default container, card surface                                    |
+| `bg.elevated`    | `oklch(0.27 0.004 270)` | `#1c1c1f`    | Popovers, modals, elevated cards                                   |
+| `border.default` | `oklch(0.34 0.004 270)` | `#2a2a2e`    | Standard separator, default 1px card border                        |
+| `border.muted`   | `oklch(0.27 0.004 270)` | `#1f1f22`    | Barely-there separator                                             |
 | `border.hover`   | `oklch(0.41 0.004 270)` | `#3a3a3e`    | Interactive border on hover/focus-within (e.g. library card hover) |
 
 Hex fallbacks are pre-existing in `tailwind.config.ts`. They are visually matched, not algorithmically converted; treat OKLCH as canonical for new variants.
