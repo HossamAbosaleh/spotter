@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Landing from '@/pages/Landing';
+import DesignShowcase from '@/pages/Design';
 import { useDirection } from '@/i18n/useDirection';
 
 /**
@@ -25,6 +26,9 @@ function App() {
     >
       <Routes>
         <Route path="/" element={<Landing />} />
+        {import.meta.env.DEV ? (
+          <Route path="/_design" element={<DesignShowcase />} />
+        ) : null}
       </Routes>
     </BrowserRouter>
   );
