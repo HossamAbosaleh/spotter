@@ -63,8 +63,8 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 ### shadcn primitives (token-customized)
 
-- [ ] T012 Install shadcn primitives via `npx shadcn add input label form select radio-group checkbox slider card progress sonner` into `src/components/ui/`. For each new file, replace shadcn default Tailwind classes with Spotter token classes (`bg-bg-canvas`, `bg-bg-surface`, `bg-bg-elevated`, `text-text-primary`, `text-text-muted`, `border-border`, `bg-accent-primary` for CTAs, etc.). Verify every interactive element meets `min-h-[44px]` and `min-w-[44px]` per FR-022. Leave radix-ui semantics, focus management, and ARIA wiring untouched.
-- [ ] T013 [P] Create `src/components/ui/persistence-banner.tsx` — Spotter-specific banner that renders above wizard content, takes `reason: 'private-mode' | 'disabled' | 'quota-exceeded' | 'unknown'`, displays the matching i18n key from the `persistence.banner.*` namespace, and exposes an "I understand" acknowledgement button that flips `usePersistenceStore.bannerAcknowledged`. Depends on T011, T012.
+- [x] T012 Install shadcn primitives via `npx shadcn add input label form select radio-group checkbox slider card progress sonner` into `src/components/ui/`. For each new file, replace shadcn default Tailwind classes with Spotter token classes (`bg-bg-canvas`, `bg-bg-surface`, `bg-bg-elevated`, `text-text-primary`, `text-text-muted`, `border-border`, `bg-accent-primary` for CTAs, etc.). Verify every interactive element meets `min-h-[44px]` and `min-w-[44px]` per FR-022. Leave radix-ui semantics, focus management, and ARIA wiring untouched.
+- [x] T013 [P] Create `src/components/ui/persistence-banner.tsx` — Spotter-specific banner that renders above wizard content, takes `reason: 'private-mode' | 'disabled' | 'quota-exceeded' | 'unknown'`, displays the matching i18n key from the `persistence.banner.*` namespace, and exposes an "I understand" acknowledgement button that flips `usePersistenceStore.bannerAcknowledged`. Depends on T011, T012.
 
 ### Routing guard
 
@@ -83,7 +83,7 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 ### Design audit surface
 
-- [ ] T020 Extend `src/pages/Design.tsx` to render every new shadcn primitive (Input, Label, Form/FormField/FormItem/FormLabel/FormControl/FormDescription/FormMessage, Select, RadioGroup, Checkbox, Slider, Card, Progress, Toast invocation, PersistenceBanner) in EN and AR. Required for the design discipline gate per the P0.5 closeout and constitution principle IV.
+- [x] T020 Extend `src/pages/Design.tsx` to render every new shadcn primitive (Input, Label, Form/FormField/FormItem/FormLabel/FormControl/FormDescription/FormMessage, Select, RadioGroup, Checkbox, Slider, Card, Progress, Toast invocation, PersistenceBanner) in EN and AR. Required for the design discipline gate per the P0.5 closeout and constitution principle IV.
 
 **Checkpoint**: Foundation complete. Data layer round-trips, primitives render in `/_design`, banner mounts in degraded mode, store wiring works. User-story phases can begin.
 
