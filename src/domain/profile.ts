@@ -6,6 +6,13 @@ import { z } from 'zod';
  * Source of truth for the wizard's data model. See
  * specs/001-profile-wizard/data-model.md §1 for the full field table and
  * invariants.
+ *
+ * Required fields are the absolute minimum for "this profile can exist":
+ * identity (name, age, sex), body (height, bodyweight), and language. Every
+ * other field is optional at the schema level. The wizard collects them to
+ * build a richer plan, but a stripped-down profile is a valid persisted
+ * profile. `profileCompleteness()` distinguishes between "recommended
+ * before generating a plan" and "nice-to-have."
  */
 
 export const SEX_VALUES = ['male', 'female', 'prefer-not-to-say'] as const;
@@ -54,40 +61,66 @@ export const profileSchema = z
     createdAt: isoDateString,
     updatedAt: isoDateString,
 
+    // Required: minimum viable identity.
     identity: z.object({
       name: z.string().trim().min(1).max(60),
       age: z.number().int().min(13).max(100),
       sex: z.enum(SEX_VALUES),
     }),
 
+    // Required: minimum viable body data for working-weight defaults.
     body: z.object({
       heightCm: z.number().min(120).max(230),
       bodyweightKg: z.number().min(30).max(250),
     }),
 
-    goal: z.enum(GOAL_VALUES),
+    // Optional. Recommended before generating a plan; flagged by
+    // profileCompleteness as "recommendedMissing.goal" until filled.
+    goal: z.enum(GOAL_VALUES).optional(),
 
+    // Wrapper required (forward-compat: P2+ may add more experience-related
+    // fields like yearsLifting). The level itself is optional.
     experience: z.object({
-      level: z.enum(EXPERIENCE_VALUES),
+      level: z.enum(EXPERIENCE_VALUES).optional(),
     }),
 
+    // Wrapper required, array can be empty. Some users train irregular
+    // cycles and don't think in weekly days; forcing a weekly schedule
+    // would be presumptuous.
     schedule: z.object({
-      preferredDays: z.array(z.enum(DAY_VALUES)).min(1).max(7),
+      preferredDays: z.array(z.enum(DAY_VALUES)).max(7),
     }),
 
+    // Wrapper required. `access` is optional (recommended before plan).
+    // `notes` is optional (nice-to-have).
     equipment: z.object({
-      access: z.enum(EQUIPMENT_VALUES),
+      access: z.enum(EQUIPMENT_VALUES).optional(),
       notes: z.string().trim().max(500).optional(),
     }),
 
+    /**
+     * Free-text injuries / movement limitations.
+     *
+     * v1: freeform text. Future: P2 AI bridge will likely require
+     * structured injury data (affectedJoints + details). Migration
+     * expected when the AI bridge needs to filter exercises by injury.
+     * The schema bump will add a structured field; this freeform field
+     * stays as fallback / archive.
+     */
     injuries: z.string().trim().max(500).optional(),
 
+    // Required: language preference is needed from first paint (RTL
+    // detection) so it cannot be optional.
     language: z.object({
       preferred: z.enum(LANGUAGE_VALUES),
       units: z.enum(UNITS_VALUES),
     }),
 
-    coachPersonality: z.enum(COACH_VALUES),
+    // Required at the type level via `.default('direct')`. The wizard's
+    // form may leave this unset; the resolver applies the default on
+    // submit so the persisted Profile always has a value. Adjustable
+    // later via settings.
+    coachPersonality: z.enum(COACH_VALUES).default('direct'),
 
     additionalContext: z.string().trim().max(1000).optional(),
   })
@@ -109,6 +142,7 @@ export const profileSchema = z
   );
 
 export type Profile = z.infer<typeof profileSchema>;
+export type ProfileInput = z.input<typeof profileSchema>;
 
 export type Sex = (typeof SEX_VALUES)[number];
 export type Goal = (typeof GOAL_VALUES)[number];
@@ -120,9 +154,10 @@ export type Units = (typeof UNITS_VALUES)[number];
 export type CoachPersonality = (typeof COACH_VALUES)[number];
 
 /**
- * Returns a Profile with empty defaults suitable as `react-hook-form`
- * `defaultValues`. The schema fails to parse this — that's expected; defaults
- * are only valid as a *form* state, not as a *persisted* state.
+ * Returns a Profile-shaped object suitable as `react-hook-form`
+ * `defaultValues`. The schema fails to parse this as-is — `name` is empty
+ * — that's expected; defaults are only valid as a *form* state, not as a
+ * *persisted* state.
  */
 export function defaultProfile(): Profile {
   const now = new Date().toISOString();
@@ -140,15 +175,15 @@ export function defaultProfile(): Profile {
       heightCm: 170,
       bodyweightKg: 75,
     },
-    goal: 'general-fitness',
+    goal: undefined,
     experience: {
-      level: 'intermediate',
+      level: undefined,
     },
     schedule: {
-      preferredDays: ['mon', 'wed', 'fri'],
+      preferredDays: [],
     },
     equipment: {
-      access: 'commercial-gym',
+      access: undefined,
       notes: undefined,
     },
     injuries: undefined,
@@ -162,9 +197,21 @@ export function defaultProfile(): Profile {
 }
 
 /**
- * Names of optional fields used by the completeness indicator.
- * Required fields are excluded by definition — they're filled or the wizard
- * wouldn't have completed.
+ * Fields recommended before the AI bridge generates a plan. The wizard
+ * does not block on these — a profile saves with any subset filled — but
+ * the post-setup nudge (and any "Generate plan" surface in P3+) prompts
+ * the user to fill them.
+ */
+export const RECOMMENDED_FIELDS = [
+  'goal',
+  'experience',
+  'equipmentAccess',
+  'preferredDays',
+] as const;
+
+/**
+ * Nice-to-have fields. Never block, never preempt the AI bridge — surface
+ * as a quiet "fill these when you have a moment" indicator.
  */
 export const OPTIONAL_FIELDS = [
   'equipmentNotes',
@@ -172,36 +219,58 @@ export const OPTIONAL_FIELDS = [
   'additionalContext',
 ] as const;
 
+export type RecommendedField = (typeof RECOMMENDED_FIELDS)[number];
 export type OptionalField = (typeof OPTIONAL_FIELDS)[number];
 
 export type CompletenessResult = {
-  /** Percentage filled, rounded to nearest 5 to avoid jitter. */
+  /** Total fill percentage across recommended + optional fields, rounded to nearest 5%. */
   percent: number;
-  /** Optional fields that are still empty. */
-  missingOptional: OptionalField[];
+  /** Fields recommended before plan generation. Surface prominently. */
+  recommendedMissing: RecommendedField[];
+  /** Nice-to-have fields. Surface quietly. */
+  optionalMissing: OptionalField[];
 };
 
 /**
- * Compute profile completeness from optional fields only. See R7 in
- * specs/001-profile-wizard/research.md.
+ * Compute profile completeness across recommended and nice-to-have
+ * fields. Required fields (identity, body, language) are excluded — by
+ * definition they're filled or the wizard wouldn't have completed.
+ *
+ * `recommendedMissing` and `optionalMissing` are returned separately so
+ * the UI can prioritize "fill these before generating a plan" prompts
+ * over decorative nudges. See R7 in specs/001-profile-wizard/research.md.
  */
 export function profileCompleteness(profile: Profile): CompletenessResult {
-  const missing: OptionalField[] = [];
+  const recommendedMissing: RecommendedField[] = [];
+  const optionalMissing: OptionalField[] = [];
+
+  if (!profile.goal) {
+    recommendedMissing.push('goal');
+  }
+  if (!profile.experience.level) {
+    recommendedMissing.push('experience');
+  }
+  if (!profile.equipment.access) {
+    recommendedMissing.push('equipmentAccess');
+  }
+  if (profile.schedule.preferredDays.length === 0) {
+    recommendedMissing.push('preferredDays');
+  }
 
   if (!profile.equipment.notes || profile.equipment.notes.trim() === '') {
-    missing.push('equipmentNotes');
+    optionalMissing.push('equipmentNotes');
   }
   if (!profile.injuries || profile.injuries.trim() === '') {
-    missing.push('injuries');
+    optionalMissing.push('injuries');
   }
   if (!profile.additionalContext || profile.additionalContext.trim() === '') {
-    missing.push('additionalContext');
+    optionalMissing.push('additionalContext');
   }
 
-  const total = OPTIONAL_FIELDS.length;
-  const filled = total - missing.length;
+  const total = RECOMMENDED_FIELDS.length + OPTIONAL_FIELDS.length; // 7
+  const filled = total - recommendedMissing.length - optionalMissing.length;
   const rawPercent = (filled / total) * 100;
   const percent = Math.round(rawPercent / 5) * 5;
 
-  return { percent, missingOptional: missing };
+  return { percent, recommendedMissing, optionalMissing };
 }

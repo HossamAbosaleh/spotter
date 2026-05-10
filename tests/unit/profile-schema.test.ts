@@ -7,6 +7,11 @@ import {
   profileSchema,
 } from '@/domain/profile';
 
+/**
+ * A "fully populated" valid profile. Every recommended and optional field
+ * is filled. Tests start from this and mutate to exercise individual
+ * validators.
+ */
 function validProfile(): Profile {
   const now = new Date().toISOString();
   return {
@@ -32,9 +37,42 @@ function validProfile(): Profile {
   };
 }
 
+/**
+ * Minimum viable profile: only the required fields filled (identity,
+ * body, language). Everything else either undefined or empty.
+ */
+function minimalProfile(): Profile {
+  const now = new Date().toISOString();
+  return {
+    id: 'me',
+    schemaVersion: 1,
+    createdAt: now,
+    updatedAt: now,
+    identity: {
+      name: 'Hossam',
+      age: 32,
+      sex: 'male',
+    },
+    body: {
+      heightCm: 180,
+      bodyweightKg: 80,
+    },
+    experience: {},
+    schedule: { preferredDays: [] },
+    equipment: {},
+    language: { preferred: 'en', units: 'metric' },
+    coachPersonality: 'direct',
+  };
+}
+
 describe('profileSchema', () => {
-  it('parses a valid profile', () => {
+  it('parses a fully populated profile', () => {
     const result = profileSchema.safeParse(validProfile());
+    expect(result.success).toBe(true);
+  });
+
+  it('parses a minimum viable profile (only required fields filled)', () => {
+    const result = profileSchema.safeParse(minimalProfile());
     expect(result.success).toBe(true);
   });
 
@@ -68,10 +106,10 @@ describe('profileSchema', () => {
     expect(profileSchema.safeParse(profile).success).toBe(false);
   });
 
-  it('rejects empty preferredDays', () => {
+  it('accepts an empty preferredDays array', () => {
     const profile = validProfile();
     profile.schedule.preferredDays = [];
-    expect(profileSchema.safeParse(profile).success).toBe(false);
+    expect(profileSchema.safeParse(profile).success).toBe(true);
   });
 
   it('rejects duplicate days', () => {
@@ -108,6 +146,16 @@ describe('profileSchema', () => {
       expect(profileSchema.safeParse(profile).success).toBe(true);
     }
   });
+
+  it('applies the coachPersonality default when input omits it', () => {
+    const input = minimalProfile() as unknown as Record<string, unknown>;
+    delete input.coachPersonality;
+    const result = profileSchema.safeParse(input);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.coachPersonality).toBe('direct');
+    }
+  });
 });
 
 describe('defaultProfile', () => {
@@ -121,36 +169,78 @@ describe('defaultProfile', () => {
   it('returns a profile that fails name validation (intentional — defaults are form state, not persisted state)', () => {
     expect(profileSchema.safeParse(defaultProfile()).success).toBe(false);
   });
+
+  it('starts every recommended field unset', () => {
+    const profile = defaultProfile();
+    expect(profile.goal).toBeUndefined();
+    expect(profile.experience.level).toBeUndefined();
+    expect(profile.equipment.access).toBeUndefined();
+    expect(profile.schedule.preferredDays).toEqual([]);
+  });
+
+  it('defaults coachPersonality to "direct"', () => {
+    expect(defaultProfile().coachPersonality).toBe('direct');
+  });
 });
 
 describe('profileCompleteness', () => {
-  it('returns 0% when all optional fields are empty', () => {
-    const profile = validProfile();
+  it('returns 0% when no recommended or optional fields are filled', () => {
+    const profile = minimalProfile();
     const result = profileCompleteness(profile);
     expect(result.percent).toBe(0);
-    expect(result.missingOptional).toEqual([
+    expect(result.recommendedMissing).toEqual([
+      'goal',
+      'experience',
+      'equipmentAccess',
+      'preferredDays',
+    ]);
+    expect(result.optionalMissing).toEqual([
       'equipmentNotes',
       'injuries',
       'additionalContext',
     ]);
   });
 
-  it('returns 100% when all optional fields are filled', () => {
+  it('returns 100% when every recommended and optional field is filled', () => {
     const profile = validProfile();
     profile.equipment.notes = 'rack and barbell';
     profile.injuries = 'left shoulder, no overhead';
     profile.additionalContext = 'training for a meet in October';
     const result = profileCompleteness(profile);
     expect(result.percent).toBe(100);
-    expect(result.missingOptional).toEqual([]);
+    expect(result.recommendedMissing).toEqual([]);
+    expect(result.optionalMissing).toEqual([]);
+  });
+
+  it('flags goal, experience, equipmentAccess, and preferredDays as recommended', () => {
+    const profile = minimalProfile();
+    profile.equipment.notes = 'something';
+    profile.injuries = 'something';
+    profile.additionalContext = 'something';
+    const result = profileCompleteness(profile);
+    // 3 of 7 filled = 42.86% → rounds to 45.
+    expect(result.percent).toBe(45);
+    expect(result.recommendedMissing).toEqual([
+      'goal',
+      'experience',
+      'equipmentAccess',
+      'preferredDays',
+    ]);
+    expect(result.optionalMissing).toEqual([]);
+  });
+
+  it('flags all four recommended fields when only required fields are filled', () => {
+    const profile = minimalProfile();
+    const result = profileCompleteness(profile);
+    expect(result.recommendedMissing).toHaveLength(4);
   });
 
   it('rounds to nearest 5%', () => {
-    const profile = validProfile();
-    profile.injuries = 'something';
-    // 1 of 3 filled = 33.33% → rounds to 35
+    const profile = minimalProfile();
+    profile.goal = 'strength';
+    // 1 of 7 filled = 14.28% → rounds to 15.
     const result = profileCompleteness(profile);
-    expect(result.percent).toBe(35);
+    expect(result.percent).toBe(15);
   });
 
   it('treats whitespace-only values as missing', () => {
@@ -158,7 +248,14 @@ describe('profileCompleteness', () => {
     profile.equipment.notes = '   ';
     profile.injuries = '\t\n';
     const result = profileCompleteness(profile);
-    expect(result.missingOptional).toContain('equipmentNotes');
-    expect(result.missingOptional).toContain('injuries');
+    expect(result.optionalMissing).toContain('equipmentNotes');
+    expect(result.optionalMissing).toContain('injuries');
+  });
+
+  it('treats empty preferredDays as recommended-missing', () => {
+    const profile = validProfile();
+    profile.schedule.preferredDays = [];
+    const result = profileCompleteness(profile);
+    expect(result.recommendedMissing).toContain('preferredDays');
   });
 });
