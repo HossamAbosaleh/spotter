@@ -131,12 +131,15 @@ function ToastClose({
   className,
   ...props
 }: React.ComponentProps<typeof ToastPrimitive.Close>) {
+  // No explicit text color — inherits from the Toast root's variant:
+  // text-text-primary on default, text-destructive-foreground on
+  // destructive. opacity-70 → 100% on hover provides the affordance.
   return (
     <ToastPrimitive.Close
       data-slot="toast-close"
       toast-close=""
       className={cn(
-        'absolute end-2 top-2 inline-flex size-8 items-center justify-center rounded-sm text-text-muted opacity-70',
+        'absolute end-2 top-2 inline-flex size-8 items-center justify-center rounded-sm opacity-70',
         'transition-opacity duration-micro ease-standard',
         'hover:opacity-100',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
@@ -166,10 +169,18 @@ function ToastDescription({
   className,
   ...props
 }: React.ComponentProps<typeof ToastPrimitive.Description>) {
+  // Color depends on the Toast root's variant. On default, override the
+  // inherited text-text-primary with text-text-muted for visual hierarchy
+  // against the title. On destructive, do NOT override — inherit
+  // text-destructive-foreground so the description stays readable on the
+  // red surface (the previous text-text-muted hardcode failed contrast).
   return (
     <ToastPrimitive.Description
       data-slot="toast-description"
-      className={cn('text-body-sm text-text-muted opacity-90', className)}
+      className={cn(
+        'text-body-sm group-data-[variant=default]:text-text-muted',
+        className
+      )}
       {...props}
     />
   );

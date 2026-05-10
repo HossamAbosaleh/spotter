@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -56,6 +57,11 @@ import { setLanguage, type Language } from '@/i18n';
  * Contract:
  * - Cycles each component through every reasonable state.
  * - Provides a language toggle so EN and AR can be eyeballed in one tab.
+ *   All copy goes through `design.*` i18n keys; sample exercise data
+ *   (Bench Press, Romanian Deadlift, etc.) is intentionally NOT
+ *   translated — it lives in JS literals on the Exercise type. Making
+ *   the showcase exercise data bilingual is its own task that touches
+ *   `domain/exercise.ts`.
  * - No real data, no network, no analytics.
  *
  * NOT a styleguide doc — this is a manual QA surface. The DESIGN.md file
@@ -147,15 +153,28 @@ function LanguageToggle() {
 
 /* ----------------------------- Form demo ----------------------------- */
 
-const demoFormSchema = z.object({
-  name: z.string().trim().min(1, 'Enter your name.'),
-  goal: z.enum(['strength', 'hypertrophy', 'fat-loss']),
-  experience: z.enum(['novice', 'intermediate', 'advanced']),
-});
-
-type DemoFormValues = z.infer<typeof demoFormSchema>;
+type DemoFormValues = {
+  name: string;
+  goal: 'strength' | 'hypertrophy' | 'fat-loss';
+  experience: 'novice' | 'intermediate' | 'advanced';
+};
 
 function DemoForm() {
+  const { t } = useTranslation();
+
+  // Schema lives inside the component so the validation error message
+  // can come through `t()`. Memoized on `t` so we don't recreate the
+  // schema on every render (which would invalidate rhf's resolver).
+  const demoFormSchema = useMemo(
+    () =>
+      z.object({
+        name: z.string().trim().min(1, t('design.form.nameError')),
+        goal: z.enum(['strength', 'hypertrophy', 'fat-loss']),
+        experience: z.enum(['novice', 'intermediate', 'advanced']),
+      }),
+    [t]
+  );
+
   const form = useForm<DemoFormValues>({
     resolver: zodResolver(demoFormSchema),
     mode: 'onBlur',
@@ -179,12 +198,15 @@ function DemoForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>{t('design.form.name')}</FormLabel>
               <FormControl>
-                <Input placeholder="What should we call you?" {...field} />
+                <Input
+                  placeholder={t('design.form.namePlaceholder')}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
-                Try submitting with this empty to see the validation styling.
+                {t('design.form.nameDescription')}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -196,17 +218,25 @@ function DemoForm() {
           name="goal"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Goal</FormLabel>
+              <FormLabel>{t('design.form.goal')}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Pick a goal" />
+                    <SelectValue
+                      placeholder={t('design.form.goalPlaceholder')}
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="strength">Strength</SelectItem>
-                  <SelectItem value="hypertrophy">Hypertrophy</SelectItem>
-                  <SelectItem value="fat-loss">Fat loss</SelectItem>
+                  <SelectItem value="strength">
+                    {t('design.form.goalOptions.strength')}
+                  </SelectItem>
+                  <SelectItem value="hypertrophy">
+                    {t('design.form.goalOptions.hypertrophy')}
+                  </SelectItem>
+                  <SelectItem value="fat-loss">
+                    {t('design.form.goalOptions.fatLoss')}
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -219,7 +249,7 @@ function DemoForm() {
           name="experience"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Experience level</FormLabel>
+              <FormLabel>{t('design.form.experience')}</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
@@ -232,8 +262,8 @@ function DemoForm() {
                         className="flex min-h-11 cursor-pointer items-center gap-3"
                       >
                         <RadioGroupItem value={value} id={`exp-${value}`} />
-                        <Label htmlFor={`exp-${value}`} className="capitalize">
-                          {value}
+                        <Label htmlFor={`exp-${value}`}>
+                          {t(`design.form.experienceOptions.${value}`)}
                         </Label>
                       </label>
                     )
@@ -246,7 +276,7 @@ function DemoForm() {
         />
 
         <Button type="submit" variant="primary" className="self-start">
-          Submit (showcase only)
+          {t('design.form.submit')}
         </Button>
       </form>
     </Form>
@@ -256,16 +286,15 @@ function DemoForm() {
 /* --------------------------- Toast preview --------------------------- */
 
 function ToastPreview() {
+  const { t } = useTranslation();
+
   // Single ToastProvider scoped to this section. The toast is rendered
   // permanently open via the controlled `open` prop so the visual stays
   // visible on the page without any auto-dismiss timer.
   return (
     <ToastProvider duration={1_000_000}>
       <div className="flex flex-col gap-2">
-        <p className="text-body-sm text-text-muted">
-          The viewport portals to <code>document.body</code>; the toast renders
-          at the bottom of the page (or bottom-right on `sm:` and up).
-        </p>
+        <p className="text-body-sm text-text-muted">{t('design.toast.note')}</p>
         <Toast
           open
           onOpenChange={() => {
@@ -273,9 +302,9 @@ function ToastPreview() {
           }}
         >
           <div className="flex flex-col gap-1">
-            <ToastTitle>Saved.</ToastTitle>
+            <ToastTitle>{t('design.toast.saved')}</ToastTitle>
             <ToastDescription>
-              Default toast variant — neutral elevated surface.
+              {t('design.toast.savedDescription')}
             </ToastDescription>
           </div>
           <ToastClose />
@@ -288,9 +317,9 @@ function ToastPreview() {
           }}
         >
           <div className="flex flex-col gap-1">
-            <ToastTitle>Couldn't save.</ToastTitle>
+            <ToastTitle>{t('design.toast.failed')}</ToastTitle>
             <ToastDescription>
-              Destructive variant — pair with an icon at the call site.
+              {t('design.toast.failedDescription')}
             </ToastDescription>
           </div>
           <ToastClose />
@@ -304,16 +333,18 @@ function ToastPreview() {
 /* ----------------------------- Page ----------------------------- */
 
 export default function DesignShowcase() {
+  const { t } = useTranslation();
+
   return (
     <main className="min-h-screen bg-bg-canvas px-6 py-10 text-text-primary">
       <div className="mx-auto flex max-w-6xl flex-col gap-12">
         <header className="flex items-center justify-between">
           <div>
             <p className="font-mono text-caption uppercase tracking-widest text-text-muted">
-              /_design · dev-only
+              {t('design.header.subhead')}
             </p>
             <h1 className="mt-2 font-display text-display-md text-text-primary">
-              Spotter primitives — P0.5 + P1
+              {t('design.header.title')}
             </h1>
           </div>
           <LanguageToggle />
@@ -321,62 +352,62 @@ export default function DesignShowcase() {
 
         {/* ============================ P1 primitives ============================ */}
 
-        <Section title="Input" cols={2}>
-          <Stack label="default">
-            <Input placeholder="Type something" />
+        <Section title={t('design.sections.input')} cols={2}>
+          <Stack label={t('design.labels.default')}>
+            <Input placeholder={t('design.input.typeSomething')} />
           </Stack>
-          <Stack label="with value">
-            <Input defaultValue="Hossam" />
+          <Stack label={t('design.labels.withValue')}>
+            <Input defaultValue={t('design.input.sampleName')} />
           </Stack>
-          <Stack label="numeric (inputMode=decimal)">
+          <Stack label={t('design.labels.numeric')}>
             <Input inputMode="decimal" placeholder="80" />
           </Stack>
-          <Stack label="disabled">
-            <Input disabled defaultValue="locked" />
+          <Stack label={t('design.labels.disabled')}>
+            <Input disabled defaultValue={t('design.input.locked')} />
           </Stack>
-          <Stack label="aria-invalid">
-            <Input aria-invalid defaultValue="invalid value" />
+          <Stack label={t('design.labels.ariaInvalid')}>
+            <Input aria-invalid defaultValue={t('design.input.invalidValue')} />
           </Stack>
-          <Stack label="with label peer">
-            <Label htmlFor="d-name">Display name</Label>
-            <Input id="d-name" placeholder="What should we call you?" />
+          <Stack label={t('design.labels.withLabelPeer')}>
+            <Label htmlFor="d-name">{t('design.input.displayName')}</Label>
+            <Input
+              id="d-name"
+              placeholder={t('design.input.placeholderName')}
+            />
           </Stack>
         </Section>
 
-        <Section title="Card" cols={2}>
+        <Section title={t('design.sections.card')} cols={2}>
           <Card>
             <CardHeader>
-              <CardTitle>Card title</CardTitle>
-              <CardDescription>
-                A short description, quieter than the title.
-              </CardDescription>
+              <CardTitle>{t('design.card.title')}</CardTitle>
+              <CardDescription>{t('design.card.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-body text-text-primary">
-                Card content lives here. Sub-components own horizontal padding
-                so embedded forms can draw their own gutters.
+                {t('design.card.content')}
               </p>
             </CardContent>
             <CardFooter className="justify-end gap-2">
               <Button variant="ghost" size="sm">
-                Cancel
+                {t('design.card.cancel')}
               </Button>
               <Button variant="primary" size="sm">
-                Confirm
+                {t('design.card.confirm')}
               </Button>
             </CardFooter>
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Header only</CardTitle>
+              <CardTitle>{t('design.card.headerOnlyTitle')}</CardTitle>
               <CardDescription>
-                Cards can omit any sub-component.
+                {t('design.card.headerOnlyDescription')}
               </CardDescription>
             </CardHeader>
           </Card>
         </Section>
 
-        <Section title="Progress" cols={1}>
+        <Section title={t('design.sections.progress')} cols={1}>
           <div className="flex flex-col gap-4">
             {[0, 17, 50, 83, 100].map((value) => (
               <Stack key={value} label={`${value}%`}>
@@ -386,35 +417,39 @@ export default function DesignShowcase() {
           </div>
         </Section>
 
-        <Section title="Checkbox (with touch-target wrapper)" cols={2}>
-          <Stack label="default + label wrapper">
+        <Section title={t('design.sections.checkbox')} cols={2}>
+          <Stack label={t('design.labels.defaultWithLabel')}>
             <label className="flex min-h-11 cursor-pointer items-center gap-3">
               <Checkbox id="cb-default" />
-              <Label htmlFor="cb-default">Monday</Label>
+              <Label htmlFor="cb-default">{t('design.checkbox.monday')}</Label>
             </label>
           </Stack>
-          <Stack label="checked">
+          <Stack label={t('design.labels.checked')}>
             <label className="flex min-h-11 cursor-pointer items-center gap-3">
               <Checkbox id="cb-checked" defaultChecked />
-              <Label htmlFor="cb-checked">Tuesday</Label>
+              <Label htmlFor="cb-checked">{t('design.checkbox.tuesday')}</Label>
             </label>
           </Stack>
-          <Stack label="disabled">
+          <Stack label={t('design.labels.disabled')}>
             <label className="flex min-h-11 cursor-pointer items-center gap-3">
               <Checkbox id="cb-disabled" disabled />
-              <Label htmlFor="cb-disabled">Disabled</Label>
+              <Label htmlFor="cb-disabled">
+                {t('design.checkbox.disabledLabel')}
+              </Label>
             </label>
           </Stack>
-          <Stack label="aria-invalid">
+          <Stack label={t('design.labels.ariaInvalid')}>
             <label className="flex min-h-11 cursor-pointer items-center gap-3">
               <Checkbox id="cb-invalid" aria-invalid />
-              <Label htmlFor="cb-invalid">Invalid</Label>
+              <Label htmlFor="cb-invalid">
+                {t('design.checkbox.invalidLabel')}
+              </Label>
             </label>
           </Stack>
         </Section>
 
-        <Section title="RadioGroup (with touch-target wrapper)" cols={2}>
-          <Stack label="default">
+        <Section title={t('design.sections.radioGroup')} cols={2}>
+          <Stack label={t('design.labels.default')}>
             <RadioGroup defaultValue="strength">
               {(['strength', 'hypertrophy', 'fat-loss'] as const).map((v) => (
                 <label
@@ -422,14 +457,16 @@ export default function DesignShowcase() {
                   className="flex min-h-11 cursor-pointer items-center gap-3"
                 >
                   <RadioGroupItem value={v} id={`rg-d-${v}`} />
-                  <Label htmlFor={`rg-d-${v}`} className="capitalize">
-                    {v.replace('-', ' ')}
+                  <Label htmlFor={`rg-d-${v}`}>
+                    {t(
+                      `design.form.goalOptions.${v === 'fat-loss' ? 'fatLoss' : v}`
+                    )}
                   </Label>
                 </label>
               ))}
             </RadioGroup>
           </Stack>
-          <Stack label="disabled">
+          <Stack label={t('design.labels.disabled')}>
             <RadioGroup defaultValue="strength" disabled>
               {(['strength', 'hypertrophy'] as const).map((v) => (
                 <label
@@ -437,8 +474,8 @@ export default function DesignShowcase() {
                   className="flex min-h-11 cursor-pointer items-center gap-3"
                 >
                   <RadioGroupItem value={v} id={`rg-dis-${v}`} />
-                  <Label htmlFor={`rg-dis-${v}`} className="capitalize">
-                    {v.replace('-', ' ')}
+                  <Label htmlFor={`rg-dis-${v}`}>
+                    {t(`design.form.goalOptions.${v}`)}
                   </Label>
                 </label>
               ))}
@@ -446,68 +483,76 @@ export default function DesignShowcase() {
           </Stack>
         </Section>
 
-        <Section title="Slider" cols={1}>
+        <Section title={t('design.sections.slider')} cols={1}>
           <div className="flex flex-col gap-6">
-            <Stack label="default (single thumb)">
+            <Stack label={t('design.labels.sliderSingle')}>
               <Slider defaultValue={[40]} />
             </Stack>
-            <Stack label="range (two thumbs)">
+            <Stack label={t('design.labels.sliderRange')}>
               <Slider defaultValue={[20, 80]} />
             </Stack>
-            <Stack label="disabled">
+            <Stack label={t('design.labels.disabled')}>
               <Slider defaultValue={[60]} disabled />
             </Stack>
           </div>
         </Section>
 
-        <Section title="Select" cols={2}>
-          <Stack label="default">
+        <Section title={t('design.sections.select')} cols={2}>
+          <Stack label={t('design.labels.default')}>
             <Select>
               <SelectTrigger>
-                <SelectValue placeholder="Pick an option" />
+                <SelectValue placeholder={t('design.select.pickOption')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="strength">Strength</SelectItem>
-                <SelectItem value="hypertrophy">Hypertrophy</SelectItem>
-                <SelectItem value="fat-loss">Fat loss</SelectItem>
-                <SelectItem value="recomposition">Recomposition</SelectItem>
-                <SelectItem value="general-fitness">General fitness</SelectItem>
+                <SelectItem value="strength">
+                  {t('design.select.strength')}
+                </SelectItem>
+                <SelectItem value="hypertrophy">
+                  {t('design.select.hypertrophy')}
+                </SelectItem>
+                <SelectItem value="fat-loss">
+                  {t('design.select.fatLoss')}
+                </SelectItem>
+                <SelectItem value="recomposition">
+                  {t('design.select.recomposition')}
+                </SelectItem>
+                <SelectItem value="general-fitness">
+                  {t('design.select.generalFitness')}
+                </SelectItem>
               </SelectContent>
             </Select>
           </Stack>
-          <Stack label="disabled">
+          <Stack label={t('design.labels.disabled')}>
             <Select disabled>
               <SelectTrigger>
-                <SelectValue placeholder="Disabled" />
+                <SelectValue
+                  placeholder={t('design.select.disabledPlaceholder')}
+                />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="x">X</SelectItem>
+                <SelectItem value="x">{t('design.select.x')}</SelectItem>
               </SelectContent>
             </Select>
           </Stack>
         </Section>
 
-        <Section title="Toast" cols={1}>
+        <Section title={t('design.sections.toast')} cols={1}>
           <ToastPreview />
         </Section>
 
-        <Section title="PersistenceBanner" cols={1}>
+        <Section title={t('design.sections.persistenceBanner')} cols={1}>
           <p className="text-body-sm text-text-muted">
-            Renders only when the persistence store reports a degraded status;
-            on this page the store is in its default `available` state, so the
-            banner element below is the styling preview rendered by the
-            component itself once a degraded reason is set. To preview live,
-            simulate degraded mode in the React DevTools store.
+            {t('design.persistence.note')}
           </p>
           <PersistenceBanner />
         </Section>
 
-        <Section title="Form (react-hook-form integration)" cols={1}>
+        <Section title={t('design.sections.form')} cols={1}>
           <Card>
             <CardHeader>
-              <CardTitle>Demo form</CardTitle>
+              <CardTitle>{t('design.form.cardTitle')}</CardTitle>
               <CardDescription>
-                Input + Select + RadioGroup wired through the Form primitive.
+                {t('design.form.cardDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -518,7 +563,7 @@ export default function DesignShowcase() {
 
         {/* ============================ P0.5 primitives ============================ */}
 
-        <Section title="ExerciseCard.Library">
+        <Section title={t('design.sections.exerciseLibrary')}>
           <ExerciseCard.Library exercise={benchPress} />
           <ExerciseCard.Library
             exercise={benchPress}
@@ -528,7 +573,7 @@ export default function DesignShowcase() {
           <ExerciseCard.Library exercise={exerciseWithoutImage} />
         </Section>
 
-        <Section title="ExerciseCard.Library — preview (plan import)">
+        <Section title={t('design.sections.exerciseLibraryPreview')}>
           <ExerciseCard.Library
             exercise={benchPress}
             preview
@@ -538,7 +583,7 @@ export default function DesignShowcase() {
           />
         </Section>
 
-        <Section title="ExerciseCard.Daily">
+        <Section title={t('design.sections.exerciseDaily')}>
           <ExerciseCard.Daily
             exercise={benchPress}
             plan={{
@@ -595,7 +640,7 @@ export default function DesignShowcase() {
           />
         </Section>
 
-        <Section title="ExerciseCard.Summary">
+        <Section title={t('design.sections.exerciseSummary')}>
           <ExerciseCard.Summary
             exercise={benchPress}
             plan={{ sets: 4, targetReps: 8 }}

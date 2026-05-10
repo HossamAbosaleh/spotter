@@ -101,5 +101,104 @@
     "shell": {
       "title": "Your profile"
     }
+  },
+  "design": {
+    "header": {
+      "title": "Spotter primitives — P0.5 + P1",
+      "subhead": "/_design · dev-only"
+    },
+    "sections": {
+      "input": "Input",
+      "card": "Card",
+      "progress": "Progress",
+      "checkbox": "Checkbox (with touch-target wrapper)",
+      "radioGroup": "RadioGroup (with touch-target wrapper)",
+      "slider": "Slider",
+      "select": "Select",
+      "toast": "Toast",
+      "persistenceBanner": "PersistenceBanner",
+      "form": "Form (react-hook-form integration)",
+      "exerciseLibrary": "ExerciseCard.Library",
+      "exerciseLibraryPreview": "ExerciseCard.Library — preview (plan import)",
+      "exerciseDaily": "ExerciseCard.Daily",
+      "exerciseSummary": "ExerciseCard.Summary"
+    },
+    "labels": {
+      "default": "default",
+      "withValue": "with value",
+      "numeric": "numeric (inputMode=decimal)",
+      "disabled": "disabled",
+      "ariaInvalid": "aria-invalid",
+      "withLabelPeer": "with label peer",
+      "checked": "checked",
+      "defaultWithLabel": "default + label wrapper",
+      "sliderSingle": "default (single thumb)",
+      "sliderRange": "range (two thumbs)"
+    },
+    "input": {
+      "typeSomething": "Type something",
+      "sampleName": "Hossam",
+      "locked": "locked",
+      "invalidValue": "invalid value",
+      "displayName": "Display name",
+      "placeholderName": "What should we call you?"
+    },
+    "card": {
+      "title": "Card title",
+      "description": "A short description, quieter than the title.",
+      "content": "Card content lives here. Sub-components own horizontal padding so embedded forms can draw their own gutters.",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "headerOnlyTitle": "Header only",
+      "headerOnlyDescription": "Cards can omit any sub-component."
+    },
+    "checkbox": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "disabledLabel": "Disabled",
+      "invalidLabel": "Invalid"
+    },
+    "select": {
+      "pickOption": "Pick an option",
+      "strength": "Strength",
+      "hypertrophy": "Hypertrophy",
+      "fatLoss": "Fat loss",
+      "recomposition": "Recomposition",
+      "generalFitness": "General fitness",
+      "disabledPlaceholder": "Disabled",
+      "x": "X"
+    },
+    "toast": {
+      "note": "The viewport portals to document.body; the toast renders at the bottom of the page (or bottom-right on `sm:` and up).",
+      "saved": "Saved.",
+      "savedDescription": "Default toast variant — neutral elevated surface.",
+      "failed": "Couldn't save.",
+      "failedDescription": "Destructive variant — pair with an icon at the call site."
+    },
+    "persistence": {
+      "note": "Renders only when the persistence store reports a degraded status; on this page the store is in its default `available` state, so the banner element below is the styling preview rendered by the component itself once a degraded reason is set. To preview live, simulate degraded mode in the React DevTools store."
+    },
+    "form": {
+      "cardTitle": "Demo form",
+      "cardDescription": "Input + Select + RadioGroup wired through the Form primitive.",
+      "name": "Name",
+      "namePlaceholder": "What should we call you?",
+      "nameDescription": "Try submitting with this empty to see the validation styling.",
+      "nameError": "Enter your name.",
+      "goal": "Goal",
+      "goalPlaceholder": "Pick a goal",
+      "goalOptions": {
+        "strength": "Strength",
+        "hypertrophy": "Hypertrophy",
+        "fatLoss": "Fat loss"
+      },
+      "experience": "Experience level",
+      "experienceOptions": {
+        "novice": "Novice",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      },
+      "submit": "Submit (showcase only)"
+    }
   }
 }

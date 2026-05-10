@@ -101,5 +101,104 @@
     "shell": {
       "title": "ملفّك"
     }
+  },
+  "design": {
+    "header": {
+      "title": "أساسيّات Spotter — P0.5 + P1",
+      "subhead": "/_design · dev-only"
+    },
+    "sections": {
+      "input": "حقل الإدخال (Input)",
+      "card": "البطاقة (Card)",
+      "progress": "شريط التقدّم (Progress)",
+      "checkbox": "مربّع اختيار داخل منطقة لمس (Checkbox)",
+      "radioGroup": "مجموعة اختيار داخل منطقة لمس (RadioGroup)",
+      "slider": "شريط التمرير (Slider)",
+      "select": "قائمة منسدلة (Select)",
+      "toast": "إشعار سريع (Toast)",
+      "persistenceBanner": "تنبيه التخزين (PersistenceBanner)",
+      "form": "النموذج، مع تكامل react-hook-form (Form)",
+      "exerciseLibrary": "بطاقة التمرين — المكتبة (ExerciseCard.Library)",
+      "exerciseLibraryPreview": "بطاقة التمرين — معاينة استيراد الخطة (ExerciseCard.Library — preview)",
+      "exerciseDaily": "بطاقة التمرين — اليومية (ExerciseCard.Daily)",
+      "exerciseSummary": "بطاقة التمرين — الملخّص (ExerciseCard.Summary)"
+    },
+    "labels": {
+      "default": "افتراضي",
+      "withValue": "بقيمة",
+      "numeric": "رقمي (inputMode=decimal)",
+      "disabled": "معطّل",
+      "ariaInvalid": "aria-invalid",
+      "withLabelPeer": "مع label مرافق",
+      "checked": "محدَّد",
+      "defaultWithLabel": "افتراضي + غلاف label",
+      "sliderSingle": "افتراضي (مقبض واحد)",
+      "sliderRange": "نطاق (مقبضان)"
+    },
+    "input": {
+      "typeSomething": "اكتب شيئًا",
+      "sampleName": "حسام",
+      "locked": "مُقفل",
+      "invalidValue": "قيمة غير صالحة",
+      "displayName": "الاسم المعروض",
+      "placeholderName": "بماذا ننادِيك؟"
+    },
+    "card": {
+      "title": "عنوان البطاقة",
+      "description": "وصف قصير، أهدأ من العنوان.",
+      "content": "محتوى البطاقة هنا. المكوّنات الفرعيّة تتولّى الهامش الأفقي بنفسها، فيمكن للنماذج المضمّنة رسم هوامشها الخاصّة.",
+      "cancel": "إلغاء",
+      "confirm": "تأكيد",
+      "headerOnlyTitle": "ترويسة فقط",
+      "headerOnlyDescription": "يمكن للبطاقات أن تستغني عن أيّ مكوّن فرعي."
+    },
+    "checkbox": {
+      "monday": "الإثنين",
+      "tuesday": "الثلاثاء",
+      "disabledLabel": "معطّل",
+      "invalidLabel": "غير صالح"
+    },
+    "select": {
+      "pickOption": "اختر خيارًا",
+      "strength": "القوّة",
+      "hypertrophy": "تضخّم العضلات",
+      "fatLoss": "خسارة الدهون",
+      "recomposition": "إعادة تكوين الجسم",
+      "generalFitness": "اللياقة العامّة",
+      "disabledPlaceholder": "معطّل",
+      "x": "X"
+    },
+    "toast": {
+      "note": "يتفرّع الإطار إلى document.body؛ يُعرض الإشعار أسفل الصفحة (أو أسفل اليمين على الشاشات الكبيرة `sm:` فأكثر).",
+      "saved": "تم الحفظ.",
+      "savedDescription": "النوع الافتراضي — سطح محايد مرتفع.",
+      "failed": "تعذّر الحفظ.",
+      "failedDescription": "النوع المُدمِّر (destructive) — اقرنه برمز في موضع الاستخدام."
+    },
+    "persistence": {
+      "note": "لا يظهر هذا التنبيه إلا حين تُبلّغ حالة التخزين عن وضع متدنٍّ؛ هنا الحالة افتراضيّة `available`، فالعنصر أدناه مجرّد معاينة شكليّة يرسمها المكوّن نفسه عند ضبط سبب متدنٍّ. لمعاينة حيّة، حاكِ الحالة المتدنّية من React DevTools في المخزن."
+    },
+    "form": {
+      "cardTitle": "نموذج تجريبي",
+      "cardDescription": "حقل إدخال + قائمة منسدلة + مجموعة اختيار، مُوصَّلة عبر مكوّن Form.",
+      "name": "الاسم",
+      "namePlaceholder": "بماذا ننادِيك؟",
+      "nameDescription": "جرّب الإرسال مع تركه فارغًا لرؤية شكل التحقّق.",
+      "nameError": "أدخل اسمك.",
+      "goal": "الهدف",
+      "goalPlaceholder": "اختر هدفًا",
+      "goalOptions": {
+        "strength": "القوّة",
+        "hypertrophy": "تضخّم العضلات",
+        "fatLoss": "خسارة الدهون"
+      },
+      "experience": "مستوى الخبرة",
+      "experienceOptions": {
+        "novice": "مبتدئ",
+        "intermediate": "متوسّط",
+        "advanced": "متقدّم"
+      },
+      "submit": "إرسال (للعرض فقط)"
+    }
   }
 }
