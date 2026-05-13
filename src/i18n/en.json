@@ -53,6 +53,8 @@
   "wizard": {
     "shell": {
       "title": "Set up your profile",
+      "editTitle": "Update your profile",
+      "tryAgain": "Try again",
       "stepLabel": "Step {{n}} of {{total}}",
       "next": "Next",
       "back": "Back",
@@ -247,6 +249,10 @@
         "title": "Your profile data couldn't be read.",
         "body": "You can start fresh — this overwrites the existing record.",
         "cta": "Start fresh"
+      },
+      "unknownLoad": {
+        "title": "We couldn't read your profile.",
+        "body": "Something went wrong loading your data. Reloading might help."
       }
     }
   },
