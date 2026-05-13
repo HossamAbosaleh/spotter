@@ -22,6 +22,7 @@ import { StepEquipmentLimitations } from './steps/step-equipment-limitations';
 import { StepExperienceSchedule } from './steps/step-experience-schedule';
 import { StepIdentity } from './steps/step-identity';
 import { StepLanguageCoach } from './steps/step-language-coach';
+import { StepReview } from './steps/step-review';
 import { useProfileForm } from './use-profile-form';
 
 const TOTAL_STEPS = 6;
@@ -160,7 +161,7 @@ export function Wizard() {
         </div>
 
         <Card>
-          <StepComponent activeStep={activeStep} />
+          <StepComponent activeStep={activeStep} onJumpToStep={setActiveStep} />
           <CardFooter
             className={cn(
               'mt-2 gap-3',
@@ -187,7 +188,7 @@ export function Wizard() {
                 data-slot="wizard-finish"
               >
                 <Check className="size-4" aria-hidden />
-                {t('wizard.shell.finish')}
+                {t('wizard.review.confirmCta')}
               </Button>
             ) : (
               <Button
@@ -207,7 +208,17 @@ export function Wizard() {
   );
 }
 
-type StepProps = { activeStep: number };
+type StepProps = {
+  activeStep: number;
+  /**
+   * Wizard shell hook for step components that need to jump to another
+   * step (e.g. the Review step's "edit this section" affordance).
+   * Optional because most steps don't need it — they only consume the
+   * shared form via useFormContext and let the shell's Back/Next/Finish
+   * drive navigation.
+   */
+  onJumpToStep?: (step: number) => void;
+};
 
 /**
  * Placeholder rendered for steps that haven't been implemented yet.
@@ -238,5 +249,5 @@ const STEP_COMPONENTS: Record<number, (props: StepProps) => ReactNode> = {
   3: StepExperienceSchedule,
   4: StepEquipmentLimitations,
   5: StepLanguageCoach,
-  // T029 → step-review.
+  6: StepReview,
 };
