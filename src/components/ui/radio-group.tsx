@@ -32,6 +32,13 @@ import { cn } from '@/lib/utils';
  *       <RadioGroupItem value="male" id="r-male" />
  *       <Label htmlFor="r-male">Male</Label>
  *     </label>
+ *
+ * **RTL**: relies on Radix's `Direction.DirectionProvider` being
+ * mounted at the app root (see `App.tsx`). Without it, Radix defaults
+ * the group's internal `dir` to `"ltr"` and the inner `<label>`
+ * wrappers inherit LTR layout regardless of `<html dir>` — radio dots
+ * stay on the left in AR mode. The provider syncs Radix's
+ * DirectionContext to the active i18n locale.
  */
 function RadioGroup({
   className,
