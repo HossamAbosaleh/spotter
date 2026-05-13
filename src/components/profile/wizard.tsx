@@ -18,6 +18,7 @@ import { usePersistenceStore } from '@/stores/persistence-store';
 import { cn } from '@/lib/utils';
 
 import { StepBodyGoal } from './steps/step-body-goal';
+import { StepExperienceSchedule } from './steps/step-experience-schedule';
 import { StepIdentity } from './steps/step-identity';
 import { useProfileForm } from './use-profile-form';
 
@@ -232,5 +233,6 @@ function StepPlaceholder({ activeStep }: StepProps): ReactNode {
 const STEP_COMPONENTS: Record<number, (props: StepProps) => ReactNode> = {
   1: StepIdentity,
   2: StepBodyGoal,
-  // T026 → step-experience-schedule, T027 → step-equipment-limitations, etc.
+  3: StepExperienceSchedule,
+  // T027 → step-equipment-limitations, T028 → step-language-coach, etc.
 };
