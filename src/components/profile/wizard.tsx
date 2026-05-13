@@ -84,8 +84,17 @@ export function Wizard() {
   const progressPercent = (activeStep / TOTAL_STEPS) * 100;
 
   async function handleNext() {
-    const ok = await form.trigger(STEP_FIELDS[activeStep] ?? []);
-    if (!ok) return;
+    // T024–T029: once a step's real FormField components land in
+    // STEP_COMPONENTS, validation gates the advance. While the step is
+    // still a placeholder there are no FormField/FormMessage slots to
+    // surface errors into, and defaultProfile() intentionally fails the
+    // schema (e.g. name: '' < min(1)) — so triggering would silently
+    // block Next with no user feedback. Skip until the real step lands.
+    const stepHasRealFields = activeStep in STEP_COMPONENTS;
+    if (stepHasRealFields) {
+      const ok = await form.trigger(STEP_FIELDS[activeStep] ?? []);
+      if (!ok) return;
+    }
     setActiveStep((step) => Math.min(TOTAL_STEPS, step + 1));
   }
 
