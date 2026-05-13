@@ -89,7 +89,7 @@
         },
         "sex": {
           "label": "Sex",
-          "helper": "Used for working-weight defaults. 'Prefer not to say' uses neutral defaults.",
+          "helper": "Used to calibrate exercise programming and working-weight defaults. 'Prefer not to say' uses neutral averages, which may be less precise for your body.",
           "options": {
             "male": "Male",
             "female": "Female",

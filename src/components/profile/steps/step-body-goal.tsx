@@ -94,6 +94,7 @@ export function StepBodyGoal() {
             <FormItem>
               <FormLabel>{t('wizard.bodyGoal.fields.goal.label')}</FormLabel>
               <FormControl>
+                {/* undefined possible during wizard draft state (defaultProfile lies — see domain/profile.ts JSDoc). */}
                 <RadioGroup
                   value={field.value ?? ''}
                   onValueChange={field.onChange}

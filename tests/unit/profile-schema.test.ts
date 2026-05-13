@@ -38,8 +38,11 @@ function validProfile(): Profile {
 }
 
 /**
- * Minimum viable profile: only the required fields filled (identity,
- * body, language). Everything else either undefined or empty.
+ * Minimum viable profile: every schema-required field filled with a
+ * legal value, every truly-optional field left empty or absent.
+ * goal / experience.level / equipment.access used to live in the
+ * "optional" bucket; they're required since the schema refactor and
+ * now carry concrete minimal values here.
  */
 function minimalProfile(): Profile {
   const now = new Date().toISOString();
@@ -57,9 +60,10 @@ function minimalProfile(): Profile {
       heightCm: 180,
       bodyweightKg: 80,
     },
-    experience: {},
+    goal: 'general-fitness',
+    experience: { level: 'novice' },
     schedule: { preferredDays: [] },
-    equipment: {},
+    equipment: { access: 'bodyweight-only' },
     language: { preferred: 'en', units: 'metric' },
     coachPersonality: 'direct',
   };
@@ -147,6 +151,28 @@ describe('profileSchema', () => {
     }
   });
 
+  it('rejects undefined goal', () => {
+    const profile = validProfile() as unknown as Record<string, unknown>;
+    delete profile.goal;
+    expect(profileSchema.safeParse(profile).success).toBe(false);
+  });
+
+  it('rejects undefined experience.level', () => {
+    const profile = validProfile() as unknown as {
+      experience: Record<string, unknown>;
+    };
+    delete profile.experience.level;
+    expect(profileSchema.safeParse(profile).success).toBe(false);
+  });
+
+  it('rejects undefined equipment.access', () => {
+    const profile = validProfile() as unknown as {
+      equipment: Record<string, unknown>;
+    };
+    delete profile.equipment.access;
+    expect(profileSchema.safeParse(profile).success).toBe(false);
+  });
+
   it('applies the coachPersonality default when input omits it', () => {
     const input = minimalProfile() as unknown as Record<string, unknown>;
     delete input.coachPersonality;
@@ -170,12 +196,21 @@ describe('defaultProfile', () => {
     expect(profileSchema.safeParse(defaultProfile()).success).toBe(false);
   });
 
-  it('starts every recommended field unset', () => {
-    const profile = defaultProfile();
+  it('leaves goal/experience.level/equipment.access undefined at runtime (the documented type lie)', () => {
+    const profile = defaultProfile() as unknown as {
+      goal: unknown;
+      experience: { level: unknown };
+      equipment: { access: unknown };
+      schedule: { preferredDays: unknown[] };
+    };
     expect(profile.goal).toBeUndefined();
     expect(profile.experience.level).toBeUndefined();
     expect(profile.equipment.access).toBeUndefined();
     expect(profile.schedule.preferredDays).toEqual([]);
+  });
+
+  it('produces a Profile that profileSchema rejects (it is form draft state, not persisted state)', () => {
+    expect(profileSchema.safeParse(defaultProfile()).success).toBe(false);
   });
 
   it('defaults coachPersonality to "direct"', () => {
@@ -184,16 +219,11 @@ describe('defaultProfile', () => {
 });
 
 describe('profileCompleteness', () => {
-  it('returns 0% when no recommended or optional fields are filled', () => {
+  it('returns 0% when preferredDays is empty and no optional fields are filled', () => {
     const profile = minimalProfile();
     const result = profileCompleteness(profile);
     expect(result.percent).toBe(0);
-    expect(result.recommendedMissing).toEqual([
-      'goal',
-      'experience',
-      'equipmentAccess',
-      'preferredDays',
-    ]);
+    expect(result.recommendedMissing).toEqual(['preferredDays']);
     expect(result.optionalMissing).toEqual([
       'equipmentNotes',
       'injuries',
@@ -201,7 +231,7 @@ describe('profileCompleteness', () => {
     ]);
   });
 
-  it('returns 100% when every recommended and optional field is filled', () => {
+  it('returns 100% when preferredDays + all three optional fields are filled', () => {
     const profile = validProfile();
     profile.equipment.notes = 'rack and barbell';
     profile.injuries = 'left shoulder, no overhead';
@@ -212,35 +242,28 @@ describe('profileCompleteness', () => {
     expect(result.optionalMissing).toEqual([]);
   });
 
-  it('flags goal, experience, equipmentAccess, and preferredDays as recommended', () => {
+  it('reports 25% with 1 of 4 filled', () => {
     const profile = minimalProfile();
-    profile.equipment.notes = 'something';
-    profile.injuries = 'something';
-    profile.additionalContext = 'something';
+    profile.schedule.preferredDays = ['mon'];
     const result = profileCompleteness(profile);
-    // 3 of 7 filled = 42.86% → rounds to 45.
-    expect(result.percent).toBe(45);
-    expect(result.recommendedMissing).toEqual([
-      'goal',
-      'experience',
-      'equipmentAccess',
-      'preferredDays',
-    ]);
-    expect(result.optionalMissing).toEqual([]);
+    expect(result.percent).toBe(25);
   });
 
-  it('flags all four recommended fields when only required fields are filled', () => {
+  it('reports 50% with 2 of 4 filled', () => {
     const profile = minimalProfile();
+    profile.schedule.preferredDays = ['mon'];
+    profile.equipment.notes = 'rack';
     const result = profileCompleteness(profile);
-    expect(result.recommendedMissing).toHaveLength(4);
+    expect(result.percent).toBe(50);
   });
 
-  it('rounds to nearest 5%', () => {
+  it('reports 75% with 3 of 4 filled', () => {
     const profile = minimalProfile();
-    profile.goal = 'strength';
-    // 1 of 7 filled = 14.28% → rounds to 15.
+    profile.schedule.preferredDays = ['mon'];
+    profile.equipment.notes = 'rack';
+    profile.injuries = 'none';
     const result = profileCompleteness(profile);
-    expect(result.percent).toBe(15);
+    expect(result.percent).toBe(75);
   });
 
   it('treats whitespace-only values as missing', () => {

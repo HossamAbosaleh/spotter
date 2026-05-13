@@ -68,6 +68,7 @@ export function StepExperienceSchedule() {
                 {t('wizard.experienceSchedule.fields.experience.label')}
               </FormLabel>
               <FormControl>
+                {/* undefined possible during wizard draft state (defaultProfile lies — see domain/profile.ts JSDoc). */}
                 <RadioGroup
                   value={field.value ?? ''}
                   onValueChange={field.onChange}

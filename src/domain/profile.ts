@@ -74,14 +74,16 @@ export const profileSchema = z
       bodyweightKg: z.number().min(30).max(250),
     }),
 
-    // Optional. Recommended before generating a plan; flagged by
-    // profileCompleteness as "recommendedMissing.goal" until filled.
-    goal: z.enum(GOAL_VALUES).optional(),
+    // Required: a chosen training goal is the strongest signal the AI
+    // plan generator has. We refuse to save a profile without it rather
+    // than ship a thin prompt the LLM has to guess around.
+    goal: z.enum(GOAL_VALUES),
 
-    // Wrapper required (forward-compat: P2+ may add more experience-related
-    // fields like yearsLifting). The level itself is optional.
+    // Required. Wrapper kept as an object (forward-compat: P2+ may add
+    // more experience-related fields like yearsLifting). `level` itself
+    // is mandatory.
     experience: z.object({
-      level: z.enum(EXPERIENCE_VALUES).optional(),
+      level: z.enum(EXPERIENCE_VALUES),
     }),
 
     // Wrapper required, array can be empty. Some users train irregular
@@ -91,10 +93,11 @@ export const profileSchema = z
       preferredDays: z.array(z.enum(DAY_VALUES)).max(7),
     }),
 
-    // Wrapper required. `access` is optional (recommended before plan).
-    // `notes` is optional (nice-to-have).
+    // Wrapper required. `access` is required (determines which
+    // exercises Spotter can suggest at all). `notes` stays optional
+    // (nice-to-have elaboration on the equipment context).
     equipment: z.object({
-      access: z.enum(EQUIPMENT_VALUES).optional(),
+      access: z.enum(EQUIPMENT_VALUES),
       notes: z.string().trim().max(500).optional(),
     }),
 
@@ -154,10 +157,29 @@ export type Units = (typeof UNITS_VALUES)[number];
 export type CoachPersonality = (typeof COACH_VALUES)[number];
 
 /**
- * Returns a Profile-shaped object suitable as `react-hook-form`
- * `defaultValues`. The schema fails to parse this as-is — `name` is empty
- * — that's expected; defaults are only valid as a *form* state, not as a
- * *persisted* state.
+ * Default profile shape used as the wizard's initial form values.
+ *
+ * CONTAINED TYPE LIE: This returns `Profile` via cast, but at runtime
+ * `goal`, `experience.level`, and `equipment.access` are `undefined`
+ * until the user picks them in the wizard. The lie is bounded to
+ * "wizard draft state" — after `form.handleSubmit` runs
+ * `profileSchema.parse`, the data is genuinely Profile-shaped, and
+ * `useProfileStore.profile` never holds undefined for these fields
+ * (persistence requires a valid schema parse).
+ *
+ * Consumers reading `form.watch()` or `field.value` during the wizard
+ * MUST tolerate `undefined` for these three paths. The wizard step
+ * components use `value={field.value ?? ''}` as defensive runtime
+ * guards (see steps 2/3/4).
+ *
+ * DO NOT "fix" the cast by introducing plausible defaults — that was
+ * the bug we're explicitly fixing. Pre-selecting goal/experience/
+ * equipment in the UI lets users breeze past required data, producing
+ * thin AI prompts that defeat Spotter's value proposition.
+ *
+ * The empty-string `name` and undefined required fields also mean
+ * `profileSchema.parse(defaultProfile())` intentionally fails. That's
+ * the seed shape for a form, not a persisted record.
  */
 export function defaultProfile(): Profile {
   const now = new Date().toISOString();
@@ -193,21 +215,19 @@ export function defaultProfile(): Profile {
     },
     coachPersonality: 'direct',
     additionalContext: undefined,
-  };
+  } as unknown as Profile;
 }
 
 /**
- * Fields recommended before the AI bridge generates a plan. The wizard
- * does not block on these — a profile saves with any subset filled — but
- * the post-setup nudge (and any "Generate plan" surface in P3+) prompts
- * the user to fill them.
+ * Fields recommended before the AI bridge generates a plan. A profile
+ * saves without these (the wizard doesn't block) but the post-setup
+ * nudge surfaces them.
+ *
+ * Note: goal, experience.level, and equipment.access used to live here
+ * but are now schema-required — the wizard can't save a profile
+ * without them, so they don't belong in completeness math any more.
  */
-export const RECOMMENDED_FIELDS = [
-  'goal',
-  'experience',
-  'equipmentAccess',
-  'preferredDays',
-] as const;
+export const RECOMMENDED_FIELDS = ['preferredDays'] as const;
 
 /**
  * Nice-to-have fields. Never block, never preempt the AI bridge — surface
@@ -244,15 +264,6 @@ export function profileCompleteness(profile: Profile): CompletenessResult {
   const recommendedMissing: RecommendedField[] = [];
   const optionalMissing: OptionalField[] = [];
 
-  if (!profile.goal) {
-    recommendedMissing.push('goal');
-  }
-  if (!profile.experience.level) {
-    recommendedMissing.push('experience');
-  }
-  if (!profile.equipment.access) {
-    recommendedMissing.push('equipmentAccess');
-  }
   if (profile.schedule.preferredDays.length === 0) {
     recommendedMissing.push('preferredDays');
   }
@@ -267,7 +278,7 @@ export function profileCompleteness(profile: Profile): CompletenessResult {
     optionalMissing.push('additionalContext');
   }
 
-  const total = RECOMMENDED_FIELDS.length + OPTIONAL_FIELDS.length; // 7
+  const total = RECOMMENDED_FIELDS.length + OPTIONAL_FIELDS.length; // 4
   const filled = total - recommendedMissing.length - optionalMissing.length;
   const rawPercent = (filled / total) * 100;
   const percent = Math.round(rawPercent / 5) * 5;

@@ -65,6 +65,7 @@ export function StepEquipmentLimitations() {
                 {t('wizard.equipmentLimitations.fields.equipment.label')}
               </FormLabel>
               <FormControl>
+                {/* undefined possible during wizard draft state (defaultProfile lies — see domain/profile.ts JSDoc). */}
                 <RadioGroup
                   value={field.value ?? ''}
                   onValueChange={field.onChange}
