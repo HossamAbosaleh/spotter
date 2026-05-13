@@ -65,6 +65,168 @@
       "startFresh": {
         "cta": "Start fresh",
         "confirm": "Start fresh? This clears the answers you've entered so far."
+      },
+      "progress": {
+        "1": { "label": "About you" },
+        "2": { "label": "Body & goal" },
+        "3": { "label": "How you train" },
+        "4": { "label": "Equipment" },
+        "5": { "label": "Language" },
+        "6": { "label": "Review" }
+      }
+    },
+    "identity": {
+      "title": "About you",
+      "subtitle": "A few basics so Spotter can talk to you like a person.",
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "What should we call you?"
+        },
+        "age": {
+          "label": "Age",
+          "helper": "Used to scale recommendations."
+        },
+        "sex": {
+          "label": "Sex",
+          "helper": "Used for working-weight defaults. 'Prefer not to say' uses neutral defaults.",
+          "options": {
+            "male": "Male",
+            "female": "Female",
+            "preferNotToSay": "Prefer not to say"
+          }
+        }
+      }
+    },
+    "bodyGoal": {
+      "title": "Body & goal",
+      "subtitle": "Sets a starting point for working-weight defaults and plan shape.",
+      "fields": {
+        "height": {
+          "label": "Height",
+          "unit": { "metric": "cm", "imperial": "in" }
+        },
+        "bodyweight": {
+          "label": "Bodyweight",
+          "unit": { "metric": "kg", "imperial": "lb" }
+        },
+        "goal": {
+          "label": "What are you training for?",
+          "options": {
+            "strength": "Strength",
+            "hypertrophy": "Hypertrophy",
+            "fatLoss": "Fat loss",
+            "recomposition": "Recomposition",
+            "generalFitness": "General fitness"
+          },
+          "descriptions": {
+            "strength": "Heavier loads, lower reps, longer rest.",
+            "hypertrophy": "Moderate loads, moderate reps, build muscle.",
+            "fatLoss": "Higher density, shorter rest, keep strength.",
+            "recomposition": "Balanced — lose fat while gaining strength.",
+            "generalFitness": "Stay strong, mobile, and conditioned."
+          }
+        }
+      }
+    },
+    "experienceSchedule": {
+      "title": "How you train",
+      "subtitle": "Tunes volume and what to call things.",
+      "fields": {
+        "experience": {
+          "label": "Experience level",
+          "options": {
+            "novice": "Novice (less than 1 year)",
+            "intermediate": "Intermediate (1–3 years)",
+            "advanced": "Advanced (3+ years)"
+          }
+        },
+        "preferredDays": {
+          "label": "Which days do you usually train?",
+          "helper": "Pick any that apply, or skip if your week varies.",
+          "irregularLabel": "I train on irregular days",
+          "options": {
+            "mon": "Monday",
+            "tue": "Tuesday",
+            "wed": "Wednesday",
+            "thu": "Thursday",
+            "fri": "Friday",
+            "sat": "Saturday",
+            "sun": "Sunday"
+          }
+        }
+      }
+    },
+    "equipmentLimitations": {
+      "title": "Equipment & limitations",
+      "subtitle": "Shapes which exercises Spotter suggests.",
+      "fields": {
+        "equipment": {
+          "label": "What do you have access to?",
+          "options": {
+            "commercialGym": "Commercial gym (full equipment)",
+            "homeFull": "Home gym (rack + barbell + plates)",
+            "homeMinimal": "Home minimal (dumbbells / bands / kettlebell)",
+            "bodyweightOnly": "Bodyweight only"
+          }
+        },
+        "equipmentNotes": {
+          "label": "Notes (optional)",
+          "placeholder": "Anything specific about your setup?"
+        },
+        "injuries": {
+          "label": "Injuries or movement limitations (optional)",
+          "placeholder": "Anything we should keep in mind?",
+          "helper": "Stays on this device. Used to filter exercise suggestions."
+        }
+      }
+    },
+    "languageCoach": {
+      "title": "How Spotter talks to you",
+      "subtitle": "Change any of these any time.",
+      "fields": {
+        "language": {
+          "label": "Language",
+          "options": { "en": "English", "ar": "Arabic" }
+        },
+        "units": {
+          "label": "Units",
+          "options": {
+            "metric": "Metric (kg, cm)",
+            "imperial": "Imperial (lb, in)"
+          }
+        },
+        "coach": {
+          "label": "Coaching tone",
+          "options": {
+            "encouraging": "Encouraging",
+            "direct": "Direct",
+            "technical": "Technical"
+          },
+          "descriptions": {
+            "encouraging": "Warm and motivating.",
+            "direct": "Plain, no fluff.",
+            "technical": "Cue-rich and precise."
+          }
+        }
+      }
+    },
+    "review": {
+      "title": "Look right?",
+      "subtitle": "Tap any field to edit.",
+      "editAria": "Edit {{field}}",
+      "confirmCta": "Save my profile",
+      "additionalContext": {
+        "label": "Anything else? (optional)",
+        "helper": "Goes into the AI prompt as context."
+      },
+      "empty": "Not set",
+      "sections": {
+        "identity": "About you",
+        "bodyGoal": "Body & goal",
+        "experienceSchedule": "How you train",
+        "equipmentLimitations": "Equipment & limitations",
+        "languageCoach": "How Spotter talks to you"
       }
     },
     "errors": {
