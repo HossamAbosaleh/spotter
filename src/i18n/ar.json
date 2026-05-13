@@ -65,6 +65,168 @@
       "startFresh": {
         "cta": "ابدأ من جديد",
         "confirm": "هل تريد البدء من جديد؟ سيُمسح ما أدخلته حتى الآن."
+      },
+      "progress": {
+        "1": { "label": "عنك" },
+        "2": { "label": "الجسم والهدف" },
+        "3": { "label": "أسلوب تدريبك" },
+        "4": { "label": "المعدّات" },
+        "5": { "label": "اللغة" },
+        "6": { "label": "المراجعة" }
+      }
+    },
+    "identity": {
+      "title": "عنك",
+      "subtitle": "أساسيّات سريعة كي يخاطبك Spotter كإنسان.",
+      "fields": {
+        "name": {
+          "label": "الاسم",
+          "placeholder": "بماذا ننادِيك؟"
+        },
+        "age": {
+          "label": "العمر",
+          "helper": "يُستخدم لمعايرة الاقتراحات."
+        },
+        "sex": {
+          "label": "الجنس",
+          "helper": "تُستخدم لضبط أوزان العمل الافتراضيّة. خيار \"أفضّل عدم الإفصاح\" يعتمد قيمًا محايدة.",
+          "options": {
+            "male": "ذكر",
+            "female": "أنثى",
+            "preferNotToSay": "أفضّل عدم الإفصاح"
+          }
+        }
+      }
+    },
+    "bodyGoal": {
+      "title": "الجسم والهدف",
+      "subtitle": "يضبط نقطة انطلاق لأوزان العمل الافتراضيّة وشكل الخطّة.",
+      "fields": {
+        "height": {
+          "label": "الطول",
+          "unit": { "metric": "سم", "imperial": "إنش" }
+        },
+        "bodyweight": {
+          "label": "وزن الجسم",
+          "unit": { "metric": "كجم", "imperial": "رطل" }
+        },
+        "goal": {
+          "label": "ما الذي تتدرّب من أجله؟",
+          "options": {
+            "strength": "القوّة",
+            "hypertrophy": "تضخّم العضلات",
+            "fatLoss": "خسارة الدهون",
+            "recomposition": "إعادة تكوين الجسم",
+            "generalFitness": "اللياقة العامّة"
+          },
+          "descriptions": {
+            "strength": "أوزان أثقل، تكرارات أقل، راحة أطول.",
+            "hypertrophy": "أوزان متوسّطة، تكرارات متوسّطة، لبناء العضلات.",
+            "fatLoss": "كثافة أعلى، راحة أقصر، مع الحفاظ على القوّة.",
+            "recomposition": "متوازن — خسارة الدهون مع اكتساب القوّة.",
+            "generalFitness": "ابقَ قويًّا ورشيقًا ومتأهِّبًا."
+          }
+        }
+      }
+    },
+    "experienceSchedule": {
+      "title": "أسلوب تدريبك",
+      "subtitle": "يضبط حجم العمل ومسمّيات الأشياء.",
+      "fields": {
+        "experience": {
+          "label": "مستوى الخبرة",
+          "options": {
+            "novice": "مبتدئ (أقل من سنة)",
+            "intermediate": "متوسّط (1–3 سنوات)",
+            "advanced": "متقدّم (3 سنوات فأكثر)"
+          }
+        },
+        "preferredDays": {
+          "label": "في أيّ الأيّام تتدرّب عادةً؟",
+          "helper": "اختر ما ينطبق، أو تجاوز إن كان أسبوعك متغيّرًا.",
+          "irregularLabel": "أتدرّب في أيّام غير منتظمة",
+          "options": {
+            "mon": "الإثنين",
+            "tue": "الثلاثاء",
+            "wed": "الأربعاء",
+            "thu": "الخميس",
+            "fri": "الجمعة",
+            "sat": "السبت",
+            "sun": "الأحد"
+          }
+        }
+      }
+    },
+    "equipmentLimitations": {
+      "title": "المعدّات والقيود",
+      "subtitle": "يحدّد التمارين التي يقترحها Spotter.",
+      "fields": {
+        "equipment": {
+          "label": "ما المتاح لديك؟",
+          "options": {
+            "commercialGym": "صالة تجاريّة (معدّات كاملة)",
+            "homeFull": "صالة منزليّة (رفّ + بار + أوزان)",
+            "homeMinimal": "منزل بأقل المعدّات (دامبل / مطّاطات / كيتل بِل)",
+            "bodyweightOnly": "وزن الجسم فقط"
+          }
+        },
+        "equipmentNotes": {
+          "label": "ملاحظات (اختياري)",
+          "placeholder": "أيّ شيء محدّد عن إعدادك؟"
+        },
+        "injuries": {
+          "label": "إصابات أو قيود حركيّة (اختياري)",
+          "placeholder": "أيّ شيء ينبغي أخذه بالحسبان؟",
+          "helper": "تبقى على هذا الجهاز. تُستخدم لتصفية اقتراحات التمارين."
+        }
+      }
+    },
+    "languageCoach": {
+      "title": "كيف يخاطبك Spotter",
+      "subtitle": "يمكنك تغيير أيّ من هذه في أيّ وقت.",
+      "fields": {
+        "language": {
+          "label": "اللغة",
+          "options": { "en": "الإنجليزيّة", "ar": "العربيّة" }
+        },
+        "units": {
+          "label": "الوحدات",
+          "options": {
+            "metric": "متريّ (كجم، سم)",
+            "imperial": "إمبراطوريّ (رطل، إنش)"
+          }
+        },
+        "coach": {
+          "label": "نبرة المدرّب",
+          "options": {
+            "encouraging": "مشجِّع",
+            "direct": "مباشر",
+            "technical": "تقني"
+          },
+          "descriptions": {
+            "encouraging": "دافئة ومحفّزة.",
+            "direct": "واضحة، بلا حشو.",
+            "technical": "غنيّة بالإشارات الفنيّة ودقيقة."
+          }
+        }
+      }
+    },
+    "review": {
+      "title": "هل يبدو هذا صحيحًا؟",
+      "subtitle": "اضغط أيّ حقل لتعديله.",
+      "editAria": "تعديل {{field}}",
+      "confirmCta": "احفظ ملفّي",
+      "additionalContext": {
+        "label": "أيّ شيء آخر؟ (اختياري)",
+        "helper": "يُضاف إلى موجِّه الذكاء الاصطناعي كسياق."
+      },
+      "empty": "غير محدَّد",
+      "sections": {
+        "identity": "عنك",
+        "bodyGoal": "الجسم والهدف",
+        "experienceSchedule": "أسلوب تدريبك",
+        "equipmentLimitations": "المعدّات والقيود",
+        "languageCoach": "كيف يخاطبك Spotter"
       }
     },
     "errors": {
