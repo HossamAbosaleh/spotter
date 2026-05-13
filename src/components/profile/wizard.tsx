@@ -1,0 +1,223 @@
+import { useState, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ArrowLeft, ArrowRight, Check } from '@phosphor-icons/react';
+import { FormProvider, type FieldPath } from 'react-hook-form';
+
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { PersistenceBanner } from '@/components/ui/persistence-banner';
+import { Progress } from '@/components/ui/progress';
+import type { Profile } from '@/domain/profile';
+import { usePersistenceStore } from '@/stores/persistence-store';
+import { cn } from '@/lib/utils';
+
+import { useProfileForm } from './use-profile-form';
+
+const TOTAL_STEPS = 6;
+
+/**
+ * Field paths validated when the user advances past each step. Optional
+ * fields (e.g. goal, equipment.access) are listed because `trigger`
+ * resolves them as valid when undefined — the cost is zero and it keeps
+ * the map exhaustive against the contract i18n keys.
+ *
+ * Step 6 (Review) has no fields of its own to gate; submission runs the
+ * full schema via `form.handleSubmit`.
+ */
+const STEP_FIELDS: Record<number, FieldPath<Profile>[]> = {
+  1: ['identity.name', 'identity.age', 'identity.sex'],
+  2: ['body.heightCm', 'body.bodyweightKg', 'goal'],
+  3: ['experience.level', 'schedule.preferredDays'],
+  4: ['equipment.access', 'equipment.notes', 'injuries'],
+  5: ['language.preferred', 'language.units', 'coachPersonality'],
+  6: ['additionalContext'],
+};
+
+/**
+ * Wizard — the six-step profile setup shell.
+ *
+ * Owns: step state, navigation, progress indicator, persistence banner
+ * placement, and the `FormProvider` that scopes a single
+ * `react-hook-form` instance across every step. Steps consume that form
+ * via `useFormContext()`; they don't receive it as a prop.
+ *
+ * Navigation contract:
+ * - **Next** runs `form.trigger(STEP_FIELDS[step])`. Only step-scoped
+ *   fields are validated, so a user can step past optional fields they
+ *   haven't filled. On failure, react-hook-form populates `errors` and
+ *   the active step renders its own error states.
+ * - **Back** is unconditional — never validates. Lets a user revise an
+ *   earlier step even if the current one is invalid.
+ * - **Finish** runs `form.handleSubmit`, which triggers the full Zod
+ *   schema. T033 wires the success path to the repository save; for now
+ *   the placeholder logs and stays on step 6.
+ *
+ * Persistence banner:
+ * - Renders only when storage is degraded AND the user has not yet
+ *   acknowledged it. Per T022 contract — the banner is a one-shot heads
+ *   up inside the wizard, distinct from how the same component renders
+ *   on standalone surfaces where it stays persistently visible.
+ *
+ * Step rendering:
+ * - Steps 1–6 are wired in via the `Steps` map. Steps not yet
+ *   implemented render a placeholder card so the shell is verifiable
+ *   end-to-end (progress + nav + banner + form context) before each
+ *   step component lands in T024–T029.
+ */
+export function Wizard() {
+  const { t } = useTranslation();
+  const form = useProfileForm();
+  const [activeStep, setActiveStep] = useState<number>(1);
+
+  const persistenceStatus = usePersistenceStore((s) => s.status.status);
+  const bannerAcknowledged = usePersistenceStore((s) => s.bannerAcknowledged);
+  const showBanner = persistenceStatus !== 'available' && !bannerAcknowledged;
+
+  const isFirstStep = activeStep === 1;
+  const isLastStep = activeStep === TOTAL_STEPS;
+  const progressPercent = (activeStep / TOTAL_STEPS) * 100;
+
+  async function handleNext() {
+    const ok = await form.trigger(STEP_FIELDS[activeStep] ?? []);
+    if (!ok) return;
+    setActiveStep((step) => Math.min(TOTAL_STEPS, step + 1));
+  }
+
+  function handleBack() {
+    setActiveStep((step) => Math.max(1, step - 1));
+  }
+
+  const handleFinish = form.handleSubmit((data) => {
+    // T033 will replace this with profileRepository.save() + toast +
+    // navigation. The Finish button stays wired so the shell is testable
+    // through the full step sequence today.
+    console.info('[wizard] submit (placeholder, T033 wires save)', data);
+  });
+
+  const StepComponent = STEP_COMPONENTS[activeStep] ?? StepPlaceholder;
+
+  return (
+    <FormProvider {...form}>
+      <form
+        noValidate
+        onSubmit={(event) => {
+          // Block implicit submits from non-Finish buttons. Without this,
+          // pressing Enter inside any input on steps 1–5 would submit the
+          // form against the full schema and surface confusing errors.
+          if (!isLastStep) {
+            event.preventDefault();
+          }
+        }}
+        className="flex w-full flex-col gap-6"
+      >
+        {showBanner ? <PersistenceBanner /> : null}
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-baseline justify-between gap-3">
+            <p
+              data-slot="wizard-step-label"
+              className="font-mono text-caption uppercase tracking-widest text-text-muted"
+            >
+              {t('wizard.shell.stepLabel', {
+                n: activeStep,
+                total: TOTAL_STEPS,
+              })}
+            </p>
+            <p
+              data-slot="wizard-step-name"
+              className="text-body-sm text-text-muted"
+            >
+              {t(`wizard.shell.progress.${activeStep}.label`)}
+            </p>
+          </div>
+          <Progress
+            value={progressPercent}
+            aria-label={t('wizard.shell.stepLabel', {
+              n: activeStep,
+              total: TOTAL_STEPS,
+            })}
+          />
+        </div>
+
+        <Card>
+          <StepComponent activeStep={activeStep} />
+          <CardFooter
+            className={cn(
+              'mt-2 gap-3',
+              // Back lives at inline-start, Next/Finish at inline-end.
+              'justify-between'
+            )}
+          >
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={handleBack}
+              disabled={isFirstStep}
+              data-slot="wizard-back"
+            >
+              <ArrowLeft className="size-4 rtl:rotate-180" aria-hidden />
+              {t('wizard.shell.back')}
+            </Button>
+            {isLastStep ? (
+              <Button
+                type="button"
+                variant="primary"
+                onClick={() => void handleFinish()}
+                disabled={form.formState.isSubmitting}
+                data-slot="wizard-finish"
+              >
+                <Check className="size-4" aria-hidden />
+                {t('wizard.shell.finish')}
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                variant="primary"
+                onClick={() => void handleNext()}
+                data-slot="wizard-next"
+              >
+                {t('wizard.shell.next')}
+                <ArrowRight className="size-4 rtl:rotate-180" aria-hidden />
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
+      </form>
+    </FormProvider>
+  );
+}
+
+type StepProps = { activeStep: number };
+
+/**
+ * Placeholder rendered for steps that haven't been implemented yet.
+ * Lets the shell be exercised end-to-end before T024–T029 land. Each
+ * step component will replace its entry in `STEP_COMPONENTS` below as
+ * it ships.
+ */
+function StepPlaceholder({ activeStep }: StepProps): ReactNode {
+  const { t } = useTranslation();
+  return (
+    <>
+      <CardHeader>
+        <CardTitle>{t(`wizard.shell.progress.${activeStep}.label`)}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-body-sm text-text-muted">
+          Step {activeStep} placeholder. The real step component lands in T0
+          {23 + activeStep}.
+        </p>
+      </CardContent>
+    </>
+  );
+}
+
+const STEP_COMPONENTS: Record<number, (props: StepProps) => ReactNode> = {
+  // T024 → step-identity, T025 → step-body-goal, etc.
+};
