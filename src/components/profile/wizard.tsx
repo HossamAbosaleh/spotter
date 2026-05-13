@@ -17,6 +17,7 @@ import type { Profile } from '@/domain/profile';
 import { usePersistenceStore } from '@/stores/persistence-store';
 import { cn } from '@/lib/utils';
 
+import { StepIdentity } from './steps/step-identity';
 import { useProfileForm } from './use-profile-form';
 
 const TOTAL_STEPS = 6;
@@ -228,5 +229,6 @@ function StepPlaceholder({ activeStep }: StepProps): ReactNode {
 }
 
 const STEP_COMPONENTS: Record<number, (props: StepProps) => ReactNode> = {
-  // T024 → step-identity, T025 → step-body-goal, etc.
+  1: StepIdentity,
+  // T025 → step-body-goal, T026 → step-experience-schedule, etc.
 };
