@@ -21,6 +21,7 @@ import { StepBodyGoal } from './steps/step-body-goal';
 import { StepEquipmentLimitations } from './steps/step-equipment-limitations';
 import { StepExperienceSchedule } from './steps/step-experience-schedule';
 import { StepIdentity } from './steps/step-identity';
+import { StepLanguageCoach } from './steps/step-language-coach';
 import { useProfileForm } from './use-profile-form';
 
 const TOTAL_STEPS = 6;
@@ -236,5 +237,6 @@ const STEP_COMPONENTS: Record<number, (props: StepProps) => ReactNode> = {
   2: StepBodyGoal,
   3: StepExperienceSchedule,
   4: StepEquipmentLimitations,
-  // T028 → step-language-coach, T029 → step-review.
+  5: StepLanguageCoach,
+  // T029 → step-review.
 };
