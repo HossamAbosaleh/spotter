@@ -3,29 +3,11 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 import Profile from '@/pages/Profile';
-import { type Profile as ProfileT } from '@/domain/profile';
 import { profileRepository } from '@/data/repositories/profile-repository';
 import { ok } from '@/data/result';
 import { useProfileStore } from '@/stores/profile-store';
 import { useToastStore } from '@/stores/toast-store';
-
-function validProfile(): ProfileT {
-  const now = new Date().toISOString();
-  return {
-    id: 'me',
-    schemaVersion: 1,
-    createdAt: now,
-    updatedAt: now,
-    identity: { name: 'Hossam', age: 28, sex: 'male' },
-    body: { heightCm: 178, bodyweightKg: 75 },
-    goal: 'hypertrophy',
-    experience: { level: 'intermediate' },
-    schedule: { preferredDays: ['mon', 'wed', 'fri'] },
-    equipment: { access: 'commercial-gym' },
-    language: { preferred: 'en', units: 'metric' },
-    coachPersonality: 'direct',
-  };
-}
+import { validProfile } from '../fixtures/profile';
 
 function LocationProbe() {
   const location = useLocation();

@@ -23,8 +23,8 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import { Wizard } from '@/components/profile/wizard';
-import type { Profile } from '@/domain/profile';
 import { useProfileStore } from '@/stores/profile-store';
+import { validProfile } from '../fixtures/profile';
 
 function renderWizard() {
   return render(
@@ -34,24 +34,6 @@ function renderWizard() {
       <Wizard />
     </MemoryRouter>
   );
-}
-
-function validProfile(): Profile {
-  const now = new Date().toISOString();
-  return {
-    id: 'me',
-    schemaVersion: 1,
-    createdAt: now,
-    updatedAt: now,
-    identity: { name: 'Saved User', age: 30, sex: 'male' },
-    body: { heightCm: 180, bodyweightKg: 80 },
-    goal: 'strength',
-    experience: { level: 'intermediate' },
-    schedule: { preferredDays: ['mon', 'wed', 'fri'] },
-    equipment: { access: 'commercial-gym' },
-    language: { preferred: 'en', units: 'metric' },
-    coachPersonality: 'direct',
-  };
 }
 
 describe('US2 — wizard resume integration', () => {
@@ -204,7 +186,3 @@ describe('US2 — wizard resume integration', () => {
     expect(useProfileStore.getState().profile).toEqual(saved);
   });
 });
-
-// Type-check anchor: this file deliberately imports `Profile` to
-// keep the type surface honest in case the schema shape changes.
-export type _IntegrationProfileShape = Profile;

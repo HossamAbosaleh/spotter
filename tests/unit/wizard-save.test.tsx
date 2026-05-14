@@ -4,35 +4,10 @@ import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 import { Wizard } from '@/components/profile/wizard';
 import { profileRepository } from '@/data/repositories/profile-repository';
-import type { Profile } from '@/domain/profile';
 import { err, ok } from '@/data/result';
 import { useProfileStore } from '@/stores/profile-store';
 import { useToastStore } from '@/stores/toast-store';
-
-/**
- * A fully-valid Profile we can seed into useProfileStore so the wizard
- * opens in "edit" mode with every field pre-filled. Pre-filled = every
- * step's `form.trigger()` passes, so Next is unblocked on every step
- * and we can advance to Step 6 by clicking Next five times without
- * having to drive each input.
- */
-function validProfile(): Profile {
-  const now = new Date().toISOString();
-  return {
-    id: 'me',
-    schemaVersion: 1,
-    createdAt: now,
-    updatedAt: now,
-    identity: { name: 'Test User', age: 30, sex: 'male' },
-    body: { heightCm: 180, bodyweightKg: 80 },
-    goal: 'strength',
-    experience: { level: 'intermediate' },
-    schedule: { preferredDays: ['mon', 'wed', 'fri'] },
-    equipment: { access: 'commercial-gym' },
-    language: { preferred: 'en', units: 'metric' },
-    coachPersonality: 'direct',
-  };
-}
+import { validProfile } from '../fixtures/profile';
 
 function LocationProbe() {
   const location = useLocation();
