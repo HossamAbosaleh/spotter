@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -20,6 +20,13 @@ import {
 import { PersistenceBanner } from '@/components/ui/persistence-banner';
 import { Progress } from '@/components/ui/progress';
 import { profileRepository } from '@/data/repositories/profile-repository';
+import {
+  clearDraft,
+  clearStep,
+  readStep,
+  writeDraft,
+  writeStep,
+} from '@/data/wizard-draft';
 import type { Profile } from '@/domain/profile';
 import { usePersistenceStore } from '@/stores/persistence-store';
 import { useProfileStore } from '@/stores/profile-store';
@@ -91,7 +98,10 @@ export function Wizard() {
   const { t } = useTranslation();
   const form = useProfileForm();
   const navigate = useNavigate();
-  const [activeStep, setActiveStep] = useState<number>(1);
+  // Initialiser runs once on mount: resume the user's last step if
+  // a persisted draft step exists. Defaults to step 1 on null/parse
+  // failure (see readStep for the validation rules).
+  const [activeStep, setActiveStep] = useState<number>(() => readStep() ?? 1);
 
   const persistenceStatus = usePersistenceStore((s) => s.status.status);
   const bannerAcknowledged = usePersistenceStore((s) => s.bannerAcknowledged);
@@ -101,6 +111,61 @@ export function Wizard() {
   const enqueueToast = useToastStore((s) => s.enqueue);
 
   const isSubmitting = form.formState.isSubmitting;
+
+  // Autosave indicator state. `idle` renders nothing; `saving` shows
+  // "Saving…"; `saved` shows "Saved." for ~1.5s then fades back to
+  // idle. Reset to `idle` whenever a save lands so successive edits
+  // re-trigger the transient "Saved." callout.
+  const [autosaveStatus, setAutosaveStatus] = useState<
+    'idle' | 'saving' | 'saved'
+  >('idle');
+
+  // Persist activeStep on every change so a tab close mid-step-3
+  // resumes at step 3 (not step 1) on next visit. T036.
+  useEffect(() => {
+    writeStep(activeStep);
+  }, [activeStep]);
+
+  // Autosave subscription. `form.watch(cb)` returns a subscription —
+  // it does NOT trigger re-renders (vs `form.watch()` as a hook,
+  // which would). The debounce avoids hammering localStorage on
+  // every keystroke. T035.
+  //
+  // Suppression rule: skip autosaves while submission is in flight.
+  // RHF's handleFinish path will clearDraft() after a successful
+  // write; if autosave races and re-writes the draft between save()
+  // and clearDraft(), the draft persists past Finish and the user
+  // resumes their just-saved profile as a "draft" next visit.
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+      setAutosaveStatus('saving');
+      debounceTimerRef.current = setTimeout(() => {
+        const result = writeDraft(values as Profile);
+        if (result.ok) {
+          setAutosaveStatus('saved');
+          if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+          savedTimerRef.current = setTimeout(() => {
+            setAutosaveStatus('idle');
+          }, 1500);
+        } else {
+          // Storage failure is already user-visible via the
+          // PersistenceBanner mounted by the wizard shell when
+          // storage is degraded. Don't double-surface with a toast
+          // on every keystroke — fall back to idle and let the
+          // banner carry the message.
+          setAutosaveStatus('idle');
+        }
+      }, 600);
+    });
+    return () => {
+      subscription.unsubscribe();
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+    };
+  }, [form]);
 
   const isFirstStep = activeStep === 1;
   const isLastStep = activeStep === TOTAL_STEPS;
@@ -142,6 +207,13 @@ export function Wizard() {
       const next =
         refreshed.ok && refreshed.value ? refreshed.value : (data as Profile);
       setProfile(next);
+
+      // Wizard work-in-progress state is now committed — drop the
+      // localStorage draft so the next /setup visit opens fresh
+      // (edit mode reads from the committed profile, not the now-
+      // stale draft).
+      clearDraft();
+      clearStep();
 
       enqueueToast({
         variant: 'default',
@@ -192,12 +264,30 @@ export function Wizard() {
                 total: TOTAL_STEPS,
               })}
             </p>
-            <p
-              data-slot="wizard-step-name"
-              className="text-body-sm text-text-muted"
-            >
-              {t(`wizard.shell.progress.${activeStep}.label`)}
-            </p>
+            <div className="flex items-baseline gap-2">
+              {autosaveStatus !== 'idle' ? (
+                <p
+                  data-slot="wizard-autosave-status"
+                  aria-live="polite"
+                  className={cn(
+                    'text-body-sm transition-opacity duration-emphasized ease-emphasized',
+                    autosaveStatus === 'saved'
+                      ? 'text-text-dim'
+                      : 'text-text-muted'
+                  )}
+                >
+                  {autosaveStatus === 'saving'
+                    ? t('wizard.shell.savingIndicator')
+                    : t('wizard.shell.savedIndicator')}
+                </p>
+              ) : null}
+              <p
+                data-slot="wizard-step-name"
+                className="text-body-sm text-text-muted"
+              >
+                {t(`wizard.shell.progress.${activeStep}.label`)}
+              </p>
+            </div>
           </div>
           <Progress
             value={progressPercent}

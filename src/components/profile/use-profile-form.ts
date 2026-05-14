@@ -3,6 +3,7 @@ import { useForm, type UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { defaultProfile, profileSchema, type Profile } from '@/domain/profile';
+import { readDraft } from '@/data/wizard-draft';
 import { useProfileStore } from '@/stores/profile-store';
 
 /**
@@ -17,13 +18,19 @@ import { useProfileStore } from '@/stores/profile-store';
  *   primitive's intended pattern). They never receive the form as a
  *   prop; the wizard shell wraps everything in `<FormProvider>`.
  *
- * Edit-mode handling:
- * - If `useProfileStore.profile` is populated (a previously saved
- *   profile), `defaultValues` is hydrated from it so the wizard opens
- *   with the user's existing answers.
- * - Otherwise `defaultValues` is the seed shape from `defaultProfile()`.
- *   That seed intentionally fails `profileSchema.parse` (empty name) —
- *   defaults are valid as form state, not as a persisted Profile.
+ * Edit-mode handling — defaultValues priority (highest wins):
+ * 1. Wizard draft from localStorage. If the user closed the tab mid-
+ *    wizard, the draft holds their in-progress answers — restoring
+ *    it makes the wizard "just continue" per US2 (no Resume? modal).
+ *    This wins over the saved profile because if both exist, the
+ *    user has been editing their saved profile and the draft is the
+ *    newer state they care about resuming.
+ * 2. `useProfileStore.profile` if populated (edit mode entry from
+ *    a previously saved profile) — pre-fills with their existing
+ *    answers.
+ * 3. `defaultProfile()` seed shape. Intentionally fails
+ *    `profileSchema.parse` (empty name) — defaults are valid as form
+ *    state, not as a persisted Profile.
  *
  * Validation:
  * - `mode: 'onBlur'` matches DESIGN.md §3.7 (errors surface when the
@@ -37,9 +44,16 @@ import { useProfileStore } from '@/stores/profile-store';
 export function useProfileForm(): UseFormReturn<Profile> {
   const savedProfile = useProfileStore((s) => s.profile);
 
+  // Read draft once at mount. Re-reading on every render would
+  // require the wizard to re-render any time localStorage changes,
+  // which doesn't fire React updates anyway (no storage event in
+  // same-tab writes). Mount-time read is the right granularity for
+  // a "resume on tab reopen" feature.
+  const draft = useMemo(() => readDraft(), []);
+
   const defaultValues = useMemo<Profile>(
-    () => savedProfile ?? defaultProfile(),
-    [savedProfile]
+    () => draft ?? savedProfile ?? defaultProfile(),
+    [draft, savedProfile]
   );
 
   return useForm<Profile>({

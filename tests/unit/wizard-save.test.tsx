@@ -72,6 +72,10 @@ async function advanceToReview() {
 
 describe('Wizard save flow', () => {
   beforeEach(() => {
+    // Reset localStorage so wizard-draft / wizard-step keys from a
+    // prior test (or another suite) don't preload form values or
+    // jump-start activeStep before this test's wizard mounts.
+    localStorage.clear();
     useToastStore.getState().clear();
     useProfileStore.setState({
       profile: validProfile(),

@@ -19,7 +19,10 @@ function renderSetup() {
 
 describe('Setup page', () => {
   beforeEach(() => {
-    // Reset stores to a clean ready state for every test.
+    // Reset stores AND localStorage so wizard-draft / wizard-step
+    // keys from a prior test don't preload the form or jump-start
+    // activeStep before this test's wizard mounts.
+    localStorage.clear();
     useProfileStore.setState({
       profile: null,
       status: 'ready',
