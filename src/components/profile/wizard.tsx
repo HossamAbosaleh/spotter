@@ -34,6 +34,7 @@ import { useToastStore } from '@/stores/toast-store';
 import { cn } from '@/lib/utils';
 
 import { saveErrorDescriptionKey, saveErrorTitleKey } from './save-error-keys';
+import { StartFreshDialog } from './start-fresh-dialog';
 
 import { StepBodyGoal } from './steps/step-body-goal';
 import { StepEquipmentLimitations } from './steps/step-equipment-limitations';
@@ -306,20 +307,31 @@ export function Wizard() {
           <CardFooter
             className={cn(
               'mt-2 gap-3',
-              // Back lives at inline-start, Next/Finish at inline-end.
+              // Back + Start fresh cluster at inline-start; Next/Finish
+              // at inline-end. Start fresh hides on step 1 (nothing to
+              // reset) so the cluster collapses to just Back there.
               'justify-between'
             )}
           >
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={handleBack}
-              disabled={isFirstStep || isSubmitting}
-              data-slot="wizard-back"
-            >
-              <ArrowLeft className="size-4 rtl:rotate-180" aria-hidden />
-              {t('wizard.shell.back')}
-            </Button>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleBack}
+                disabled={isFirstStep || isSubmitting}
+                data-slot="wizard-back"
+              >
+                <ArrowLeft className="size-4 rtl:rotate-180" aria-hidden />
+                {t('wizard.shell.back')}
+              </Button>
+              {activeStep >= 2 ? (
+                <StartFreshDialog
+                  form={form}
+                  disabled={isSubmitting}
+                  onReset={() => setActiveStep(1)}
+                />
+              ) : null}
+            </div>
             {isLastStep ? (
               <Button
                 type="button"

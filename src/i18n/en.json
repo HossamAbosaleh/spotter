@@ -67,7 +67,9 @@
       },
       "startFresh": {
         "cta": "Start fresh",
-        "confirm": "Start fresh? This clears the answers you've entered so far."
+        "title": "Start fresh?",
+        "confirm": "This clears the answers you've entered so far.",
+        "cancel": "Cancel"
       },
       "progress": {
         "1": { "label": "About you" },
