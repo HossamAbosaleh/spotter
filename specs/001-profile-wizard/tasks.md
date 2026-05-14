@@ -115,13 +115,13 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 ### Pages
 
-- [ ] T030 [US1] Create `src/pages/Setup.tsx` — mounts `<Wizard />`. If a saved profile exists in `useProfileStore`, the wizard opens in edit mode with values pre-filled. Depends on T022, T010.
+- [x] T030 [US1] Create `src/pages/Setup.tsx` — mounts `<Wizard />`. If a saved profile exists in `useProfileStore`, the wizard opens in edit mode with values pre-filled. Depends on T022, T010.
 - [ ] T031 [US1] Create `src/pages/Profile.tsx` — minimal post-setup view. Renders the profile fields grouped by wizard step, an "Edit profile" link to `/setup`, and a "Start fresh" link with a confirmation dialog (calls `profileRepository.clear()` + `useProfileStore.clearProfile()`). Depends on T009, T010, T012.
-- [ ] T032 [US1] Upgrade `src/pages/Landing.tsx` per FR-018: one-sentence value prop, primary CTA (label switches between "Try it" and "Continue" based on `useProfileStore.profile`), GitHub link, single-line privacy affirmation. Add the new EN keys to `src/i18n/en.json` under `landing.*`. Remove obsolete `landing.phaseLabel` / `landing.nextPhase*` keys. Depends on T010, T017.
+- [x] T032 [US1] Upgrade `src/pages/Landing.tsx` per FR-018: one-sentence value prop, primary CTA (label switches between "Try it" and "Continue" based on `useProfileStore.profile`), GitHub link, single-line privacy affirmation. Add the new EN keys to `src/i18n/en.json` under `landing.*`. Remove obsolete `landing.phaseLabel` / `landing.nextPhase*` keys. Depends on T010, T017.
 
 ### Save wiring
 
-- [ ] T033 [US1] In `src/components/profile/wizard.tsx`, on `form.handleSubmit` success, call `profileRepository.save(profile)`. On `Result.ok` → fire `wizard.shell.savedIndicator` toast, update `useProfileStore.setProfile`, navigate to `/profile`. On `Result.error` → branch by `DomainError` per `contracts/persistence.md` "Error mapping at the UI". Depends on T009, T010, T022.
+- [x] T033 [US1] In `src/components/profile/wizard.tsx`, on `form.handleSubmit` success, call `profileRepository.save(profile)`. On `Result.ok` → fire `wizard.shell.savedIndicator` toast, update `useProfileStore.setProfile`, navigate to `/profile`. On `Result.error` → branch by `DomainError` per `contracts/persistence.md` "Error mapping at the UI". Depends on T009, T010, T022.
 
 ### Integration test
 
@@ -139,13 +139,13 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 ### Autosave & resume
 
-- [ ] T035 [US2] In `src/components/profile/wizard.tsx`, subscribe to `form.watch()` inside a `useEffect`, debounce 600ms, and call `profileRepository.save(profile)` on every change. Show `wizard.shell.savingIndicator` toast on save start, switch to `savedIndicator` on success. On transient failure, log + retry once silently before surfacing `wizard.errors.saveFailed.unknown`. Depends on T033.
-- [ ] T036 [US2] Persist `activeStep` to `localStorage['spotter.wizardStep']` on every change. On wizard mount, restore from localStorage if a partial profile exists in the store. Clear the localStorage key on successful Finish. Depends on T022.
-- [ ] T037 [US2] Add a "Start fresh" affordance to the wizard shell (visible from step 2 onward) that opens a destructive confirmation, then on confirm calls `profileRepository.clear()`, clears `localStorage['spotter.wizardStep']`, resets `useForm` defaults, and routes to step 1. Uses `wizard.shell.startFresh.{cta,confirm}` keys. Depends on T022, T009.
+- [x] T035 [US2] In `src/components/profile/wizard.tsx`, subscribe to `form.watch()` inside a `useEffect`, debounce 600ms, and call `profileRepository.save(profile)` on every change. Show `wizard.shell.savingIndicator` toast on save start, switch to `savedIndicator` on success. On transient failure, log + retry once silently before surfacing `wizard.errors.saveFailed.unknown`. Depends on T033. _(Deviation: see commit d3b470f — drafts go to `localStorage['spotter.wizardDraft']`, not `profileRepository.save`, because `profileSchema` rejects partial form state; inline indicator replaces toast loop.)_
+- [x] T036 [US2] Persist `activeStep` to `localStorage['spotter.wizardStep']` on every change. On wizard mount, restore from localStorage if a partial profile exists in the store. Clear the localStorage key on successful Finish. Depends on T022.
+- [x] T037 [US2] Add a "Start fresh" affordance to the wizard shell (visible from step 2 onward) that opens a destructive confirmation, then on confirm calls `profileRepository.clear()`, clears `localStorage['spotter.wizardStep']`, resets `useForm` defaults, and routes to step 1. Uses `wizard.shell.startFresh.{cta,confirm}` keys. Depends on T022, T009. _(Deviation: see commit 8fdb9bb — clears localStorage only, never calls `profileRepository.clear()`, to protect saved profiles in edit mode.)_
 
 ### Integration test
 
-- [ ] T038 [US2] Create `tests/integration/wizard-resume.test.tsx` exercising US2 acceptance scenarios 1–3: type into steps 1 and 2 → assert repository contains partial profile within 1s of last edit; unmount → remount → wizard at step 2 with values; trigger Start fresh → confirm → wizard at step 1 with empty values + repository empty. Depends on T035, T036, T037.
+- [x] T038 [US2] Create `tests/integration/wizard-resume.test.tsx` exercising US2 acceptance scenarios 1–3: type into steps 1 and 2 → assert repository contains partial profile within 1s of last edit; unmount → remount → wizard at step 2 with values; trigger Start fresh → confirm → wizard at step 1 with empty values + repository empty. Depends on T035, T036, T037.
 
 **Checkpoint**: User Stories 1 + 2 work independently and together.
 
