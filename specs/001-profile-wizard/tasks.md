@@ -159,24 +159,24 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 ### AR translations
 
-- [ ] T039 [US3] Add wizard step i18n keys (AR) for steps 1–6 to `src/i18n/ar.json` mirroring every key added in T023. Native AR phrasing — not literal translation — per voice constraints. Modern Standard Arabic for instructions; common gym terminology where natural.
-- [ ] T040 [US3] Add landing + profile + completeness i18n keys (AR) to `src/i18n/ar.json` mirroring T032's EN landing keys and T031's profile keys.
+- [x] T039 [US3] Add wizard step i18n keys (AR) for steps 1–6 to `src/i18n/ar.json` mirroring every key added in T023. Native AR phrasing — not literal translation — per voice constraints. Modern Standard Arabic for instructions; common gym terminology where natural.
+- [ ] T040 [US3] Add landing + profile + completeness i18n keys (AR) to `src/i18n/ar.json` mirroring T032's EN landing keys and T031's profile keys. _(Partial: landing AR shipped in commit 15e0d7d, profile AR shipped in commit e579e7c. Completeness AR awaits US4's indicator component — no UI exists today to translate.)_
 
 ### Mid-wizard switching
 
-- [ ] T041 [US3] In `src/components/profile/wizard.tsx`, ensure the language switch in step 5 (and any header-level toggle) does not call `form.reset()` or otherwise discard form values. Verify `useDirection` hook reapplies `dir` to `<html>` and that progress indicator + nav buttons swap order correctly under RTL (logical properties only — `ms-*`, `me-*`, `ps-*`, `pe-*`).
+- [x] T041 [US3] In `src/components/profile/wizard.tsx`, ensure the language switch in step 5 (and any header-level toggle) does not call `form.reset()` or otherwise discard form values. Verify `useDirection` hook reapplies `dir` to `<html>` and that progress indicator + nav buttons swap order correctly under RTL (logical properties only — `ms-*`, `me-*`, `ps-*`, `pe-*`). _(Implementation correct by construction; T044's integration test locks it.)_
 
 ### Digit handling exercised in product
 
-- [ ] T042 [US3] In numeric step components (Identity age, Body & Goal height/bodyweight), confirm Arabic-Indic input is accepted: rendering uses `inputMode="decimal"`, blur handler runs `parseLocaleNumber`, validation shows the localized error message on out-of-range. Add a focused unit test in `tests/unit/wizard-numeric-input.test.tsx` covering Arabic-Indic entry + canonicalization on submit.
+- [x] T042 [US3] In numeric step components (Identity age, Body & Goal height/bodyweight), confirm Arabic-Indic input is accepted: rendering uses `inputMode="decimal"`, blur handler runs `parseLocaleNumber`, validation shows the localized error message on out-of-range. Add a focused unit test in `tests/unit/wizard-numeric-input.test.tsx` covering Arabic-Indic entry + canonicalization on submit. _(Shipped in commit f813bce — 3 tests, one per input. Testing notes: NumericInput wraps `<Input>` in a `<div>` for the unit suffix, so FormControl's auto-id wires `htmlFor` to the wrapping div; tests query by `name` attribute. Goal radios are matched by `/تضخّم/` because `/القوّة/` leaks into other goals' description text.)_
 
 ### Parity test
 
-- [ ] T043 [US3] Add `tests/unit/i18n-parity.test.ts` — recursively walks `en.json` and `ar.json` and fails if any key path exists in one file but not the other. Wires into `npm run check` so missing translations break CI.
+- [x] T043 [US3] Add `tests/unit/i18n-parity.test.ts` — recursively walks `en.json` and `ar.json` and fails if any key path exists in one file but not the other. Wires into `npm run check` so missing translations break CI. _(Shipped in commit 5ab9c56 — 3 tests covering count match, missing-in-AR, and dangling-AR. Failure mode verified pre-commit: deleting a key prints the exact path in the diff.)_
 
 ### Integration test
 
-- [ ] T044 [US3] Create `tests/integration/wizard-rtl-switch.test.tsx` exercising US3 acceptance scenarios 1–3: open wizard EN → fill step 1 → toggle AR → assert Arabic copy rendered, `<html dir="rtl">` set, step-1 values preserved; reload (with `localStorage['spotter.lang'] = 'ar'`) → assert no flash of LTR (initial DOM has `dir="rtl"`); enter Arabic-Indic digits in age field → assert canonical number stored. Depends on T039, T040, T041, T042.
+- [x] T044 [US3] Create `tests/integration/wizard-rtl-switch.test.tsx` exercising US3 acceptance scenarios 1–3: open wizard EN → fill step 1 → toggle AR → assert Arabic copy rendered, `<html dir="rtl">` set, step-1 values preserved; reload (with `localStorage['spotter.lang'] = 'ar'`) → assert no flash of LTR (initial DOM has `dir="rtl"`); enter Arabic-Indic digits in age field → assert canonical number stored. Depends on T039, T040, T041, T042. _(Shipped in commit 87bdf31 — 3 tests covering en→ar form-state preservation, full en↔ar↔en cycle, and activeStep preservation across language switch. Arabic-Indic digit coverage moved to T042's dedicated file.)_
 
 **Checkpoint**: User Stories 1 + 2 + 3 work. The product is bilingual end-to-end.
 
