@@ -116,7 +116,7 @@ Single-project frontend SPA. All paths are repo-root relative:
 ### Pages
 
 - [x] T030 [US1] Create `src/pages/Setup.tsx` — mounts `<Wizard />`. If a saved profile exists in `useProfileStore`, the wizard opens in edit mode with values pre-filled. Depends on T022, T010.
-- [ ] T031 [US1] Create `src/pages/Profile.tsx` — minimal post-setup view. Renders the profile fields grouped by wizard step, an "Edit profile" link to `/setup`, and a "Start fresh" link with a confirmation dialog (calls `profileRepository.clear()` + `useProfileStore.clearProfile()`). Depends on T009, T010, T012.
+- [x] T031 [US1] Create `src/pages/Profile.tsx` — minimal post-setup view. Renders the profile fields grouped by wizard step, an "Edit profile" link to `/setup`, and a "Start fresh" link with a confirmation dialog (calls `profileRepository.clear()` + `useProfileStore.clearProfile()`). Depends on T009, T010, T012. _(Shipped in commit e579e7c with deep-link pencils (`/setup?step=N`) for SC-008 three-tap compliance, F1 checkbox friction on the destructive flow, and a navigate-to-`/` post-delete path.)_
 - [x] T032 [US1] Upgrade `src/pages/Landing.tsx` per FR-018: one-sentence value prop, primary CTA (label switches between "Try it" and "Continue" based on `useProfileStore.profile`), GitHub link, single-line privacy affirmation. Add the new EN keys to `src/i18n/en.json` under `landing.*`. Remove obsolete `landing.phaseLabel` / `landing.nextPhase*` keys. Depends on T010, T017.
 
 ### Save wiring
@@ -125,9 +125,9 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 ### Integration test
 
-- [ ] T034 [US1] Create `tests/integration/wizard-completion.test.tsx` exercising US1 acceptance scenarios 1–4: clean session → wizard renders at step 1 with empty values; fill all required fields → Finish → "Saved." toast → navigate to `/profile`; unmount/remount tree → `<ProfileGuard>` finds the profile and routes to `/profile` (not wizard); navigate to `/setup` → wizard opens with values pre-filled. Uses `fake-indexeddb` for isolation. Depends on T033, T030, T031, T032.
+- [x] T034 [US1] Create `tests/integration/wizard-completion.test.tsx` exercising US1 acceptance scenarios 1–4: clean session → wizard renders at step 1 with empty values; fill all required fields → Finish → "Saved." toast → navigate to `/profile`; unmount/remount tree → `<ProfileGuard>` finds the profile and routes to `/profile` (not wizard); navigate to `/setup` → wizard opens with values pre-filled. Uses `fake-indexeddb` for isolation. Depends on T033, T030, T031, T032. _(Shipped in commit 8871041 with 3 consolidated tests instead of 4 — original scenario 3 absorbed into scenario 1's post-save Profile render assertions. Uses spied repository instead of `fake-indexeddb` round-trip — pipeline coverage, not IDB serialization, is the integration test's unique value.)_
 
-**Checkpoint**: User Story 1 complete. The MVP works end-to-end. Ship-quality at this point even if US2–US4 don't land.
+**Checkpoint**: ✅ User Story 1 complete. The MVP works end-to-end. Ship-quality at this point even if US2–US4 don't land.
 
 ---
 
@@ -147,7 +147,7 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 - [x] T038 [US2] Create `tests/integration/wizard-resume.test.tsx` exercising US2 acceptance scenarios 1–3: type into steps 1 and 2 → assert repository contains partial profile within 1s of last edit; unmount → remount → wizard at step 2 with values; trigger Start fresh → confirm → wizard at step 1 with empty values + repository empty. Depends on T035, T036, T037.
 
-**Checkpoint**: User Stories 1 + 2 work independently and together.
+**Checkpoint**: ✅ User Stories 1 + 2 work independently and together.
 
 ---
 
