@@ -3,6 +3,9 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import { Wizard } from '@/components/profile/wizard';
+// MemoryRouter usage spans two patterns in this file: renderWizard
+// (default entry at /setup) and a dedicated initialEntries push for
+// the ?step=N deep-link test below. Both kept inline for clarity.
 import { defaultProfile } from '@/domain/profile';
 import { useProfileStore } from '@/stores/profile-store';
 
@@ -92,5 +95,26 @@ describe('Wizard autosave + resume', () => {
     // the resumed state via the persisted localStorage which the
     // form is now built from.
     expect(localStorage.getItem('spotter.wizardDraft')).not.toBeNull();
+  });
+
+  it('opens at the URL ?step=N when no localStorage draft step exists', () => {
+    // Deep-link entry from /profile's section pencils. No
+    // localStorage step persisted yet (clean visit).
+    render(
+      <MemoryRouter
+        initialEntries={['/setup?step=4']}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
+        <Wizard />
+      </MemoryRouter>
+    );
+    expect(screen.getByText(/step 4 of 6/i)).toBeInTheDocument();
+    // URL param is read-only; it does NOT eagerly write to
+    // localStorage on mount. Confirms the priority chain.
+    expect(localStorage.getItem('spotter.wizardStep')).toBe('4');
+    // (the activeStep useEffect writes '4' immediately because
+    // setActiveStep was called via the lazy initialiser; this
+    // reflects the resumed state, not a URL-derived persistence
+    // bypass.)
   });
 });

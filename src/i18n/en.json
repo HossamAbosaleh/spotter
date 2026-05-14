@@ -293,6 +293,26 @@
   "profile": {
     "shell": {
       "title": "Your profile"
+    },
+    "title": "Your profile",
+    "subtitle": "Manage your training context.",
+    "edit": "Edit profile",
+    "editSection": "Edit {{section}}",
+    "empty": {
+      "title": "No profile yet",
+      "body": "Set up your profile to start using Spotter.",
+      "cta": "Get started"
+    },
+    "deleteTrigger": "Start fresh",
+    "deleteDialog": {
+      "title": "Delete your profile?",
+      "body": "This permanently deletes your saved profile, your goals, and your equipment notes. This cannot be undone.",
+      "checkbox": "I understand this cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "deletedToast": {
+      "title": "Profile deleted."
     }
   },
   "design": {

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ArrowLeft,
   ArrowRight,
@@ -99,10 +99,21 @@ export function Wizard() {
   const { t } = useTranslation();
   const form = useProfileForm();
   const navigate = useNavigate();
-  // Initialiser runs once on mount: resume the user's last step if
-  // a persisted draft step exists. Defaults to step 1 on null/parse
-  // failure (see readStep for the validation rules).
-  const [activeStep, setActiveStep] = useState<number>(() => readStep() ?? 1);
+  const [searchParams] = useSearchParams();
+  // Initialiser runs once on mount. Step source priority:
+  //   1. localStorage draft step — active resume state. If the user
+  //      had drafts in flight, that's where they want to land.
+  //   2. URL `?step=N` — entry signal from /profile's deep-link
+  //      pencils. Read once, never written.
+  //   3. Default 1 — fresh wizard.
+  // Out-of-range or non-integer URL values are ignored.
+  const [activeStep, setActiveStep] = useState<number>(() => {
+    const fromDraft = readStep();
+    if (fromDraft !== null) return fromDraft;
+    const raw = Number.parseInt(searchParams.get('step') ?? '', 10);
+    if (Number.isInteger(raw) && raw >= 1 && raw <= TOTAL_STEPS) return raw;
+    return 1;
+  });
 
   const persistenceStatus = usePersistenceStore((s) => s.status.status);
   const bannerAcknowledged = usePersistenceStore((s) => s.bannerAcknowledged);

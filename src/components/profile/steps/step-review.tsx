@@ -114,8 +114,8 @@ export function StepReview({ onJumpToStep }: StepProps): ReactNode {
               title={t(titleKey)}
               summary={summary}
               ariaLabel={t('wizard.review.editAria', { field: t(titleKey) })}
-              onClick={onJumpToStep ? () => onJumpToStep(step) : undefined}
               isLast={idx === sections.length - 1}
+              {...(onJumpToStep ? { onClick: () => onJumpToStep(step) } : {})}
             />
           ))}
         </div>
