@@ -6,6 +6,7 @@ import DesignShowcase from '@/pages/Design';
 import Setup from '@/pages/Setup';
 import Profile from '@/pages/Profile';
 import { ProfileGuard } from '@/components/profile/profile-guard';
+import { ToastRoot } from '@/components/ui/toast-root';
 import { useDirection } from '@/i18n/useDirection';
 
 /**
@@ -50,6 +51,7 @@ function App() {
           </Routes>
         </ProfileGuard>
       </BrowserRouter>
+      <ToastRoot />
     </Direction.DirectionProvider>
   );
 }

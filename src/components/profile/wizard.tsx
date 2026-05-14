@@ -1,6 +1,12 @@
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, ArrowRight, Check } from '@phosphor-icons/react';
+import { useNavigate } from 'react-router-dom';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  CircleNotch,
+} from '@phosphor-icons/react';
 import { FormProvider, type FieldPath } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -13,9 +19,14 @@ import {
 } from '@/components/ui/card';
 import { PersistenceBanner } from '@/components/ui/persistence-banner';
 import { Progress } from '@/components/ui/progress';
+import { profileRepository } from '@/data/repositories/profile-repository';
 import type { Profile } from '@/domain/profile';
 import { usePersistenceStore } from '@/stores/persistence-store';
+import { useProfileStore } from '@/stores/profile-store';
+import { useToastStore } from '@/stores/toast-store';
 import { cn } from '@/lib/utils';
+
+import { saveErrorDescriptionKey, saveErrorTitleKey } from './save-error-keys';
 
 import { StepBodyGoal } from './steps/step-body-goal';
 import { StepEquipmentLimitations } from './steps/step-equipment-limitations';
@@ -79,11 +90,17 @@ const STEP_FIELDS: Record<number, FieldPath<Profile>[]> = {
 export function Wizard() {
   const { t } = useTranslation();
   const form = useProfileForm();
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState<number>(1);
 
   const persistenceStatus = usePersistenceStore((s) => s.status.status);
   const bannerAcknowledged = usePersistenceStore((s) => s.bannerAcknowledged);
   const showBanner = persistenceStatus !== 'available' && !bannerAcknowledged;
+
+  const setProfile = useProfileStore((s) => s.setProfile);
+  const enqueueToast = useToastStore((s) => s.enqueue);
+
+  const isSubmitting = form.formState.isSubmitting;
 
   const isFirstStep = activeStep === 1;
   const isLastStep = activeStep === TOTAL_STEPS;
@@ -108,11 +125,42 @@ export function Wizard() {
     setActiveStep((step) => Math.max(1, step - 1));
   }
 
-  const handleFinish = form.handleSubmit((data) => {
-    // T033 will replace this with profileRepository.save() + toast +
-    // navigation. The Finish button stays wired so the shell is testable
-    // through the full step sequence today.
-    console.info('[wizard] submit (placeholder, T033 wires save)', data);
+  const handleFinish = form.handleSubmit(async (data) => {
+    // Capture edit-vs-create *before* save: after a successful save
+    // useProfileStore.profile is non-null, which would always read
+    // as "edit" and break the success-toast copy.
+    const wasEditing = useProfileStore.getState().profile !== null;
+
+    const result = await profileRepository.save(data);
+
+    if (result.ok) {
+      // Re-fetch the persisted record so the in-memory store mirrors
+      // the canonical row (with id/schemaVersion/createdAt/updatedAt
+      // stamped by the repository). Falling back to `data` keeps the
+      // store reasonable if the immediate re-read somehow fails.
+      const refreshed = await profileRepository.get();
+      const next =
+        refreshed.ok && refreshed.value ? refreshed.value : (data as Profile);
+      setProfile(next);
+
+      enqueueToast({
+        variant: 'default',
+        title: wasEditing
+          ? t('wizard.toast.updated.title')
+          : t('wizard.toast.saved.title'),
+        durationMs: 4000,
+      });
+
+      navigate('/profile');
+      return;
+    }
+
+    enqueueToast({
+      variant: 'destructive',
+      title: t(saveErrorTitleKey(result.error)),
+      description: t(saveErrorDescriptionKey(result.error)),
+      durationMs: 6000,
+    });
   });
 
   const StepComponent = STEP_COMPONENTS[activeStep] ?? StepPlaceholder;
@@ -161,7 +209,10 @@ export function Wizard() {
         </div>
 
         <Card>
-          <StepComponent activeStep={activeStep} onJumpToStep={setActiveStep} />
+          <StepComponent
+            activeStep={activeStep}
+            {...(isSubmitting ? {} : { onJumpToStep: setActiveStep })}
+          />
           <CardFooter
             className={cn(
               'mt-2 gap-3',
@@ -173,7 +224,7 @@ export function Wizard() {
               type="button"
               variant="ghost"
               onClick={handleBack}
-              disabled={isFirstStep}
+              disabled={isFirstStep || isSubmitting}
               data-slot="wizard-back"
             >
               <ArrowLeft className="size-4 rtl:rotate-180" aria-hidden />
@@ -184,11 +235,22 @@ export function Wizard() {
                 type="button"
                 variant="primary"
                 onClick={() => void handleFinish()}
-                disabled={form.formState.isSubmitting}
+                disabled={isSubmitting}
+                aria-busy={isSubmitting}
                 data-slot="wizard-finish"
               >
-                <Check className="size-4" aria-hidden />
-                {t('wizard.review.confirmCta')}
+                {isSubmitting ? (
+                  <CircleNotch
+                    className="size-4 animate-spin"
+                    aria-hidden
+                    weight="bold"
+                  />
+                ) : (
+                  <Check className="size-4" aria-hidden />
+                )}
+                {isSubmitting
+                  ? t('wizard.shell.savingIndicator')
+                  : t('wizard.review.confirmCta')}
               </Button>
             ) : (
               <Button

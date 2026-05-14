@@ -78,6 +78,28 @@
         "6": { "label": "Review" }
       }
     },
+    "toast": {
+      "saved": {
+        "title": "Profile saved."
+      },
+      "updated": {
+        "title": "Profile updated."
+      },
+      "errors": {
+        "quotaExceeded": {
+          "title": "Couldn't save — your storage is full.",
+          "description": "Free up space and try again."
+        },
+        "storageBlocked": {
+          "title": "Storage unavailable.",
+          "description": "Disable private browsing or check site permissions."
+        },
+        "unknown": {
+          "title": "Couldn't save.",
+          "description": "Please try again."
+        }
+      }
+    },
     "identity": {
       "title": "About you",
       "subtitle": "A few basics so Spotter can talk to you like a person.",
