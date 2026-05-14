@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { PencilSimple } from '@phosphor-icons/react';
 
 import {
   CardContent,
@@ -18,7 +17,16 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { DAY_VALUES, type Profile } from '@/domain/profile';
+import { type Profile } from '@/domain/profile';
+
+import {
+  formatBodyGoal,
+  formatEquipmentLimitations,
+  formatExperienceSchedule,
+  formatIdentity,
+  formatLanguageCoach,
+} from '../section-formatters';
+import { SectionRow } from '../section-row';
 
 /**
  * Step 6 — Review. Renders a summary of every prior step's choices,
@@ -139,151 +147,4 @@ export function StepReview({ onJumpToStep }: StepProps): ReactNode {
       </CardContent>
     </>
   );
-}
-
-/* --------------------------------- row --------------------------------- */
-
-function SectionRow({
-  title,
-  summary,
-  ariaLabel,
-  onClick,
-  isLast,
-}: {
-  title: string;
-  summary: ReactNode;
-  ariaLabel: string;
-  onClick: (() => void) | undefined;
-  isLast: boolean;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={!onClick}
-      aria-label={ariaLabel}
-      className={
-        'group flex w-full flex-col items-stretch gap-1 py-3 text-start outline-none transition-colors duration-micro ease-standard' +
-        ' rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background' +
-        (isLast ? '' : ' border-b border-border')
-      }
-    >
-      <div className="flex items-center justify-between gap-3">
-        <span className="font-medium text-text-primary">{title}</span>
-        <PencilSimple
-          className="size-4 shrink-0 text-text-muted transition-colors group-hover:text-text-primary"
-          aria-hidden
-        />
-      </div>
-      <div className="text-body-sm text-text-muted">{summary}</div>
-    </button>
-  );
-}
-
-/* ------------------------------ formatters ----------------------------- */
-
-type TFn = ReturnType<typeof useTranslation>['t'];
-
-/** Convert kebab-case enum value to camelCase for i18n key lookup. */
-function toCamel(kebab: string): string {
-  return kebab.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
-}
-
-function formatIdentity(profile: Profile, t: TFn): string {
-  const sexLabel = t(
-    `wizard.identity.fields.sex.options.${toCamel(profile.identity.sex)}`
-  );
-  return [profile.identity.name, profile.identity.age, sexLabel].join(', ');
-}
-
-function formatBodyGoal(profile: Profile, t: TFn): string {
-  // Metric-only display, matching T025's deferred-imperial decision.
-  const heightUnit = t('wizard.bodyGoal.fields.height.unit.metric');
-  const weightUnit = t('wizard.bodyGoal.fields.bodyweight.unit.metric');
-  const goalLabel = t(
-    `wizard.bodyGoal.fields.goal.options.${toCamel(profile.goal)}`
-  );
-  return `${profile.body.heightCm} ${heightUnit}, ${profile.body.bodyweightKg} ${weightUnit}, ${goalLabel}`;
-}
-
-function formatExperienceSchedule(
-  profile: Profile,
-  t: TFn,
-  language: string
-): string {
-  const experienceLabel = t(
-    `wizard.experienceSchedule.fields.experience.options.${profile.experience.level}`
-  );
-  const days = profile.schedule.preferredDays;
-  if (days.length === 0) {
-    return `${experienceLabel}, ${t(
-      'wizard.experienceSchedule.fields.preferredDays.irregularLabel'
-    )}`;
-  }
-  // Preserve week order regardless of pick order.
-  const sortedDays = [...days].sort(
-    (a, b) => DAY_VALUES.indexOf(a) - DAY_VALUES.indexOf(b)
-  );
-  const dayLabels = sortedDays.map((d) =>
-    t(`wizard.experienceSchedule.fields.preferredDays.options.${d}`)
-  );
-  const list = formatList(dayLabels, language);
-  return `${experienceLabel}, ${list}`;
-}
-
-function formatEquipmentLimitations(profile: Profile, t: TFn): ReactNode {
-  const accessLabel = t(
-    `wizard.equipmentLimitations.fields.equipment.options.${toCamel(
-      profile.equipment.access
-    )}`
-  );
-  const notes = profile.equipment.notes?.trim() ?? '';
-  const injuries = profile.injuries?.trim() ?? '';
-  // Single-line if no secondary elaboration; otherwise stack lines.
-  if (!notes && !injuries) return accessLabel;
-  return (
-    <span className="flex flex-col gap-0.5">
-      <span>{accessLabel}</span>
-      {notes ? (
-        <span>
-          {t('wizard.equipmentLimitations.fields.equipmentNotes.label')}:{' '}
-          {notes}
-        </span>
-      ) : null}
-      {injuries ? (
-        <span>
-          {t('wizard.equipmentLimitations.fields.injuries.label')}: {injuries}
-        </span>
-      ) : null}
-    </span>
-  );
-}
-
-function formatLanguageCoach(profile: Profile, t: TFn): string {
-  const languageLabel = t(
-    `wizard.languageCoach.fields.language.options.${profile.language.preferred}`
-  );
-  const unitsLabel = t(
-    `wizard.languageCoach.fields.units.options.${profile.language.units}`
-  );
-  const coachLabel = t(
-    `wizard.languageCoach.fields.coach.options.${profile.coachPersonality}`
-  );
-  return `${languageLabel}, ${unitsLabel}, ${coachLabel}`;
-}
-
-/**
- * Join a list of items using locale-aware punctuation (Arabic uses
- * `، ` separator and `و` conjunction; English uses commas + "and").
- * Falls back to plain comma-join if Intl.ListFormat is unavailable.
- */
-function formatList(items: string[], language: string): string {
-  try {
-    return new Intl.ListFormat(language, {
-      style: 'long',
-      type: 'conjunction',
-    }).format(items);
-  } catch {
-    return items.join(', ');
-  }
 }
