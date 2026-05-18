@@ -313,6 +313,18 @@
     },
     "deletedToast": {
       "title": "Profile deleted."
+    },
+    "completeness": {
+      "title": "Profile completeness",
+      "percent": "{{percent}}%",
+      "invitation": "A few optional details left — they help the AI coach calibrate.",
+      "complete": "All set.",
+      "missingFields": {
+        "preferredDays": "Schedule",
+        "equipmentNotes": "Equipment notes",
+        "injuries": "Injuries",
+        "additionalContext": "Additional context"
+      }
     }
   },
   "design": {

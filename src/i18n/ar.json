@@ -313,6 +313,18 @@
     },
     "deletedToast": {
       "title": "تمّ حذف الملفّ."
+    },
+    "completeness": {
+      "title": "اكتمال الملفّ",
+      "percent": "{{percent}}٪",
+      "invitation": "بقيت تفاصيل اختيارية قليلة ‏—‏ تساعد مدرّب الذكاء الاصطناعي على المعايرة.",
+      "complete": "اكتمل.",
+      "missingFields": {
+        "preferredDays": "الجدول",
+        "equipmentNotes": "ملاحظات المعدّات",
+        "injuries": "الإصابات",
+        "additionalContext": "سياق إضافي"
+      }
     }
   },
   "design": {
