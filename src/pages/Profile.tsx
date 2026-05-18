@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { CompletenessIndicator } from '@/components/profile/completeness-indicator';
 import { DeleteProfileDialog } from '@/components/profile/delete-profile-dialog';
 import {
   formatBodyGoal,
@@ -101,6 +102,8 @@ export default function Profile() {
           </h1>
           <p className="text-body text-text-muted">{t('profile.subtitle')}</p>
         </header>
+
+        <CompletenessIndicator />
 
         <Card>
           <CardContent className="flex flex-col">

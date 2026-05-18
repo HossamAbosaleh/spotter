@@ -27,7 +27,7 @@ import {
   writeDraft,
   writeStep,
 } from '@/data/wizard-draft';
-import type { Profile } from '@/domain/profile';
+import { profileCompleteness, type Profile } from '@/domain/profile';
 import { usePersistenceStore } from '@/stores/persistence-store';
 import { useProfileStore } from '@/stores/profile-store';
 import { useToastStore } from '@/stores/toast-store';
@@ -227,11 +227,20 @@ export function Wizard() {
       clearDraft();
       clearStep();
 
+      // T046: if optional fields are still empty, pair the success
+      // toast with a quiet hint pointing at /profile. The
+      // CompletenessIndicator on /profile carries the math; the
+      // toast just nudges the user toward it.
+      const isIncomplete = profileCompleteness(next).percent < 100;
+
       enqueueToast({
         variant: 'default',
         title: wasEditing
           ? t('wizard.toast.updated.title')
           : t('wizard.toast.saved.title'),
+        ...(isIncomplete
+          ? { description: t('wizard.toast.incompleteHint') }
+          : {}),
         durationMs: 4000,
       });
 

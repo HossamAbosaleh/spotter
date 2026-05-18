@@ -87,6 +87,7 @@
       "updated": {
         "title": "Profile updated."
       },
+      "incompleteHint": "Optional details can be added on your profile page.",
       "errors": {
         "quotaExceeded": {
           "title": "Couldn't save — your storage is full.",

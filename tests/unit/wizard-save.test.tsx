@@ -110,6 +110,52 @@ describe('Wizard save flow', () => {
     expect(toasts[0]?.title).toMatch(/profile saved/i);
   });
 
+  it('pairs the success toast with the incompleteHint description when optional fields are still empty', async () => {
+    // validProfile() leaves the three optional fields undefined →
+    // profileCompleteness().percent === 25 → toast carries the hint.
+    vi.spyOn(profileRepository, 'save').mockResolvedValue(ok(undefined));
+    vi.spyOn(profileRepository, 'get').mockResolvedValue(ok(validProfile()));
+
+    renderWizard();
+    await advanceToReview();
+    fireEvent.click(screen.getByRole('button', { name: /save my profile/i }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location')).toHaveTextContent('/profile');
+    });
+
+    const toast = useToastStore.getState().toasts[0];
+    expect(toast?.title).toMatch(/profile updated/i);
+    expect(toast?.description).toMatch(
+      /optional details can be added on your profile page/i
+    );
+  });
+
+  it('omits the description when the saved profile is fully complete', async () => {
+    // Hand-build a 100%-complete profile so profileCompleteness sees
+    // every recommended + optional field as filled.
+    const complete = {
+      ...validProfile(),
+      equipment: { access: 'commercial-gym' as const, notes: 'Half rack.' },
+      injuries: 'None.',
+      additionalContext: 'Morning sessions.',
+    };
+    vi.spyOn(profileRepository, 'save').mockResolvedValue(ok(undefined));
+    vi.spyOn(profileRepository, 'get').mockResolvedValue(ok(complete));
+
+    renderWizard();
+    await advanceToReview();
+    fireEvent.click(screen.getByRole('button', { name: /save my profile/i }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location')).toHaveTextContent('/profile');
+    });
+
+    const toast = useToastStore.getState().toasts[0];
+    expect(toast?.title).toMatch(/profile updated/i);
+    expect(toast?.description).toBeUndefined();
+  });
+
   it('shows the quotaExceeded toast and stays on /setup when storage is full', async () => {
     vi.spyOn(profileRepository, 'save').mockResolvedValue(
       err('storage-quota-exceeded')
