@@ -1,10 +1,12 @@
 /**
- * US1 integration tests — first-time profile setup that survives reload.
+ * US1 + US4 integration tests — first-time profile setup that
+ * survives reload, plus the US4 skip-optionals contract.
  *
- * Covers the three US1 acceptance scenarios end-to-end via the
- * actual page route elements (/setup → <Setup>, /profile →
- * <Profile>), not the wizard component in isolation. This is the
- * regression catch for the full pipeline:
+ * Covers the US1 acceptance scenarios + US4's skip-optionals
+ * acceptance end-to-end via the actual page route elements
+ * (/setup → <Setup>, /profile → <Profile>), not the wizard
+ * component in isolation. This is the regression catch for the
+ * full pipeline:
  *
  *   Setup page mounts Wizard → form.handleSubmit fires → repo.save
  *   succeeds → setProfile + clearDraft + clearStep + success toast
@@ -23,6 +25,11 @@
  * radio click to satisfy the schema (goal / experience.level /
  * equipment.access are all required) would add 40+ LOC of DOM
  * choreography and duplicate that coverage.
+ *
+ * The two US4 tests at the bottom reuse the same draft-seed pattern
+ * but exercise the partial-profile path: validProfile() already
+ * omits the three optional fields, so walking Next five times
+ * without touching them is exactly the skip-optionals scenario.
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -39,6 +46,7 @@ import Profile from '@/pages/Profile';
 import Setup from '@/pages/Setup';
 import { profileRepository } from '@/data/repositories/profile-repository';
 import { ok } from '@/data/result';
+import { profileCompleteness } from '@/domain/profile';
 import { useProfileStore } from '@/stores/profile-store';
 import { useToastStore } from '@/stores/toast-store';
 import { validProfile } from '../fixtures/profile';
@@ -63,7 +71,7 @@ async function clickNext() {
   });
 }
 
-describe('US1 — wizard completion integration', () => {
+describe('US1 + US4 — wizard completion integration', () => {
   beforeEach(() => {
     localStorage.clear();
     useToastStore.getState().clear();
@@ -225,5 +233,105 @@ describe('US1 — wizard completion integration', () => {
     // Edit-mode toast copy (profile was non-null at submit time).
     const toasts = useToastStore.getState().toasts;
     expect(toasts[0]?.title).toMatch(/profile updated/i);
+  });
+
+  it('US4: wizard saves successfully with all optional fields skipped', async () => {
+    // validProfile() omits equipment.notes, injuries, and
+    // additionalContext — exactly the skip-optionals shape. Pre-seed
+    // as a draft, walk Next five times without touching the optional
+    // inputs, and Save. The wizard must accept the partial profile.
+    const draft = validProfile();
+    localStorage.setItem('spotter.wizardDraft', JSON.stringify(draft));
+
+    const saveSpy = vi
+      .spyOn(profileRepository, 'save')
+      .mockResolvedValue(ok(undefined));
+    vi.spyOn(profileRepository, 'get').mockResolvedValue(ok(draft));
+
+    renderRoutes('/setup');
+
+    for (let i = 0; i < 5; i++) {
+      await clickNext();
+      await waitFor(() => {
+        expect(
+          screen.getByText(new RegExp(`step ${i + 2} of 6`, 'i'))
+        ).toBeInTheDocument();
+      });
+    }
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /save my profile/i }));
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('heading', { name: /^your profile$/i, level: 1 })
+      ).toBeInTheDocument();
+    });
+
+    expect(saveSpy).toHaveBeenCalledTimes(1);
+
+    // Don't assert raw field equality — equipment.notes / injuries /
+    // additionalContext may persist as undefined OR '' depending on
+    // RHF binding details. profileCompleteness treats both as
+    // unfilled, so the contract that matters is the completeness
+    // verdict, not the literal field value.
+    const submitted = saveSpy.mock.calls[0]?.[0];
+    expect(submitted).toBeDefined();
+    if (!submitted) return;
+    const { percent, optionalMissing } = profileCompleteness(submitted);
+    expect(percent).toBeLessThan(100);
+    expect(optionalMissing).toEqual(
+      expect.arrayContaining([
+        'equipmentNotes',
+        'injuries',
+        'additionalContext',
+      ])
+    );
+  });
+
+  it('US4: post-save toast + completeness indicator surface when optionals are empty', async () => {
+    // Same drive as the previous test. This one asserts the
+    // user-facing wiring: the toast picks up the incompleteHint
+    // description (T046) and the indicator mounts on /profile with
+    // its title + dismiss button (T045 + T047).
+    //
+    // Catches regressions where any single layer (isIncomplete
+    // computation, Profile.tsx mount, indicator render) could break
+    // independently while its unit tests still pass.
+    const draft = validProfile();
+    localStorage.setItem('spotter.wizardDraft', JSON.stringify(draft));
+
+    vi.spyOn(profileRepository, 'save').mockResolvedValue(ok(undefined));
+    vi.spyOn(profileRepository, 'get').mockResolvedValue(ok(draft));
+
+    renderRoutes('/setup');
+
+    for (let i = 0; i < 5; i++) {
+      await clickNext();
+      await waitFor(() => {
+        expect(
+          screen.getByText(new RegExp(`step ${i + 2} of 6`, 'i'))
+        ).toBeInTheDocument();
+      });
+    }
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /save my profile/i }));
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('heading', { name: /^your profile$/i, level: 1 })
+      ).toBeInTheDocument();
+    });
+
+    const toast = useToastStore.getState().toasts[0];
+    expect(toast?.description).toMatch(
+      /optional details can be added on your profile page/i
+    );
+    expect(screen.getByText(/profile completeness/i)).toBeInTheDocument();
+    // Got it button proves the indicator's full render path fired,
+    // not just the title — locks T047's dismiss affordance against
+    // future drift.
+    expect(screen.getByRole('button', { name: /got it/i })).toBeInTheDocument();
   });
 });
