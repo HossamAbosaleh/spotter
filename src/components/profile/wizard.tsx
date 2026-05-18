@@ -21,6 +21,7 @@ import { PersistenceBanner } from '@/components/ui/persistence-banner';
 import { Progress } from '@/components/ui/progress';
 import { profileRepository } from '@/data/repositories/profile-repository';
 import {
+  clearCompletenessAcknowledged,
   clearDraft,
   clearStep,
   readStep,
@@ -226,6 +227,9 @@ export function Wizard() {
       // stale draft).
       clearDraft();
       clearStep();
+      // T047: any save is a fresh post-save state — reset the dismiss
+      // flag so the indicator can re-evaluate at the new percent.
+      clearCompletenessAcknowledged();
 
       // T046: if optional fields are still empty, pair the success
       // toast with a quiet hint pointing at /profile. The

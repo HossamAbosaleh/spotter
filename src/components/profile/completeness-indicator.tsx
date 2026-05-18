@@ -1,12 +1,18 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import {
+  readCompletenessAcknowledged,
+  writeCompletenessAcknowledged,
+} from '@/data/wizard-draft';
 import { profileCompleteness } from '@/domain/profile';
 import { useProfileStore } from '@/stores/profile-store';
 
 /**
- * CompletenessIndicator — quiet post-setup nudge surface (T045).
+ * CompletenessIndicator — quiet post-setup nudge surface (T045 + T047).
  *
  * Reads the current profile from the store and renders a small
  * Card-styled summary of `profileCompleteness()`:
@@ -14,10 +20,16 @@ import { useProfileStore } from '@/stores/profile-store';
  *   - Progress bar
  *   - invitation copy
  *   - inline list of missing-field labels
+ *   - "Got it" dismiss button (ghost) at bottom-inline-end
  *
- * Returns `null` when no profile exists or when `percent === 100`.
- * The "complete" affordance is deferred to T047, which owns the
- * broader mount/dismiss policy on the Profile page.
+ * Returns `null` in three cases:
+ *   - No profile in the store (defensive; Profile.tsx already gates)
+ *   - `percent === 100` (T045's complete-state policy)
+ *   - The acknowledged flag is set in localStorage (T047)
+ *
+ * The acknowledged flag is cleared inside the wizard save handler
+ * (T046's branch in wizard.tsx), so the indicator can re-surface on
+ * the next save with whatever the new percent is.
  *
  * Field labels come from `profile.completeness.missingFields.*`. The
  * `preferredDays` key was added alongside the three optional-field
@@ -28,6 +40,9 @@ import { useProfileStore } from '@/stores/profile-store';
 export function CompletenessIndicator() {
   const { t } = useTranslation();
   const profile = useProfileStore((s) => s.profile);
+  const [acknowledged, setAcknowledged] = useState(() =>
+    readCompletenessAcknowledged()
+  );
 
   if (!profile) return null;
 
@@ -35,8 +50,14 @@ export function CompletenessIndicator() {
     profileCompleteness(profile);
 
   if (percent === 100) return null;
+  if (acknowledged) return null;
 
   const missing = [...recommendedMissing, ...optionalMissing];
+
+  function handleAcknowledge() {
+    writeCompletenessAcknowledged();
+    setAcknowledged(true);
+  }
 
   return (
     <Card data-slot="completeness-indicator">
@@ -74,6 +95,16 @@ export function CompletenessIndicator() {
             ))}
           </ul>
         ) : null}
+        <div className="flex justify-end">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={handleAcknowledge}
+            data-slot="completeness-acknowledge"
+          >
+            {t('profile.completeness.acknowledge')}
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

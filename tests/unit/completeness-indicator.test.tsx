@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import { CompletenessIndicator } from '@/components/profile/completeness-indicator';
 import { useProfileStore } from '@/stores/profile-store';
@@ -27,6 +27,9 @@ function setProfile(modify: (p: ReturnType<typeof validProfile>) => void) {
 
 describe('CompletenessIndicator', () => {
   beforeEach(() => {
+    // T047 reads spotter.completenessAcknowledged at mount; clear so
+    // tests don't leak the flag across each other.
+    localStorage.clear();
     useProfileStore.setState({
       profile: null,
       status: 'ready',
@@ -94,5 +97,29 @@ describe('CompletenessIndicator', () => {
       expect.stringContaining('25%')
     );
     expect(progressbar).toHaveAttribute('aria-valuenow', '25');
+  });
+
+  it('renders the Got it dismiss button on the partial-render path', () => {
+    setProfile(() => {});
+    render(<CompletenessIndicator />);
+    expect(screen.getByRole('button', { name: /got it/i })).toBeInTheDocument();
+  });
+
+  it('returns null when partial but the acknowledged flag is already set', () => {
+    localStorage.setItem('spotter.completenessAcknowledged', 'true');
+    setProfile(() => {});
+    const { container } = render(<CompletenessIndicator />);
+    expect(container.firstChild).toBeNull();
+  });
+
+  it('clicking Got it writes the flag and hides the indicator on the same render', () => {
+    setProfile(() => {});
+    const { container } = render(<CompletenessIndicator />);
+    fireEvent.click(screen.getByRole('button', { name: /got it/i }));
+
+    expect(localStorage.getItem('spotter.completenessAcknowledged')).toBe(
+      'true'
+    );
+    expect(container.firstChild).toBeNull();
   });
 });

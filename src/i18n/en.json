@@ -320,6 +320,7 @@
       "percent": "{{percent}}%",
       "invitation": "A few optional details left — they help the AI coach calibrate.",
       "complete": "All set.",
+      "acknowledge": "Got it",
       "missingFields": {
         "preferredDays": "Schedule",
         "equipmentNotes": "Equipment notes",

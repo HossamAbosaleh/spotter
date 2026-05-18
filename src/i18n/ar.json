@@ -320,6 +320,7 @@
       "percent": "{{percent}}٪",
       "invitation": "بقيت تفاصيل اختيارية قليلة ‏—‏ تساعد مدرّب الذكاء الاصطناعي على المعايرة.",
       "complete": "اكتمل.",
+      "acknowledge": "فهمت",
       "missingFields": {
         "preferredDays": "الجدول",
         "equipmentNotes": "ملاحظات المعدّات",

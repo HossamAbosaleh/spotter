@@ -156,6 +156,23 @@ describe('Wizard save flow', () => {
     expect(toast?.description).toBeUndefined();
   });
 
+  it('clears the completenessAcknowledged flag on successful save', async () => {
+    // Pre-seed: the user previously dismissed an indicator on /profile.
+    localStorage.setItem('spotter.completenessAcknowledged', 'true');
+    vi.spyOn(profileRepository, 'save').mockResolvedValue(ok(undefined));
+    vi.spyOn(profileRepository, 'get').mockResolvedValue(ok(validProfile()));
+
+    renderWizard();
+    await advanceToReview();
+    fireEvent.click(screen.getByRole('button', { name: /save my profile/i }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location')).toHaveTextContent('/profile');
+    });
+
+    expect(localStorage.getItem('spotter.completenessAcknowledged')).toBeNull();
+  });
+
   it('shows the quotaExceeded toast and stays on /setup when storage is full', async () => {
     vi.spyOn(profileRepository, 'save').mockResolvedValue(
       err('storage-quota-exceeded')

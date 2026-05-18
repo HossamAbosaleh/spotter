@@ -29,6 +29,7 @@ import { err, ok, type Result } from '@/data/result';
 
 const DRAFT_KEY = 'spotter.wizardDraft';
 const STEP_KEY = 'spotter.wizardStep';
+const COMPLETENESS_ACK_KEY = 'spotter.completenessAcknowledged';
 
 export type DraftWriteError =
   | 'storage-quota-exceeded'
@@ -119,6 +120,47 @@ export function clearStep(): void {
   if (typeof localStorage === 'undefined') return;
   try {
     localStorage.removeItem(STEP_KEY);
+  } catch {
+    // See clearDraft.
+  }
+}
+
+/**
+ * Completeness-indicator acknowledgment flag.
+ *
+ * Set when the user clicks "Got it" on the post-setup completeness
+ * indicator (T047). Hides the indicator on subsequent /profile visits
+ * until the wizard saves again, at which point the flag is cleared
+ * inside handleFinish so a fresh post-save state can re-evaluate
+ * whether to nudge.
+ *
+ * Unlike the draft/step helpers, these are void-not-Result. The flag
+ * is UX preference state, not user data — a failed write self-corrects
+ * on the next visit (the indicator reappears, the user re-dismisses)
+ * and there's no useful recovery path callers could take.
+ */
+export function readCompletenessAcknowledged(): boolean {
+  if (typeof localStorage === 'undefined') return false;
+  try {
+    return localStorage.getItem(COMPLETENESS_ACK_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+export function writeCompletenessAcknowledged(): void {
+  if (typeof localStorage === 'undefined') return;
+  try {
+    localStorage.setItem(COMPLETENESS_ACK_KEY, 'true');
+  } catch {
+    // Self-correcting on next visit. See doc-comment above.
+  }
+}
+
+export function clearCompletenessAcknowledged(): void {
+  if (typeof localStorage === 'undefined') return;
+  try {
+    localStorage.removeItem(COMPLETENESS_ACK_KEY);
   } catch {
     // See clearDraft.
   }
