@@ -86,10 +86,14 @@ parts of the design system — those are in place and govern every later phase.
 - `npm run check` (typecheck, lint, format, test) — passing (157 tests)
 - `npm run build` — passing (main bundle ~587 kB; wizard route not yet
   code-split — revisit if landing-page LCP regresses)
-- `npx impeccable detect src/` — pending
-- `/impeccable critique` on profile components — pending
-- AccessLint live audit (`/`, `/_design`, `/setup`, `/profile` in EN + AR) —
-  pending; results to be documented in `specs/001-profile-wizard/accesslint-report.md`
+- `npx impeccable detect src/` — passing (zero anti-patterns)
+- `/impeccable critique` on profile components — done (30/40); critical +
+  serious findings fixed, minor deferred (see `accesslint-report.md`)
+- Accessibility audit — done via Impeccable `/audit` (AccessLint is not an
+  installable package); 15/20, all P1/P2 addressed, documented in
+  `specs/001-profile-wizard/accesslint-report.md`. Code-level pass — live
+  screen-reader/contrast confirmation still recommended before release.
+- Manual EN/AR acceptance walkthrough (T056) — pending (human step)
 
 ### Coming next
 
