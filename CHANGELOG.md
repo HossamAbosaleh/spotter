@@ -31,6 +31,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - Tailwind-merge utility preserving custom font-size classes
   - `/_design` showcase route (dev-only) covering every primitive in EN + AR
 
+- Phase P1: Data Layer + Profile Wizard
+  - Local-first data layer: Dexie-backed `SpotterDB` (v1, 11-table schema),
+    `ProfileRepository` (read/write/clear) behind a `Result`/`DomainError`
+    boundary, `classifyDexieError`, and `detectPersistence` for storage health
+  - `Profile` domain entity with a Zod `profileSchema`, `defaultProfile()`,
+    and a `profileCompleteness()` scorer
+  - Six-step profile wizard (`wizard.tsx` + `useProfileForm`): Identity,
+    Body & Goal, Experience & Schedule, Equipment & Limitations,
+    Language & Coach, Review — with per-step validation and Back/Next/Finish
+  - Draft autosave, resume-after-close, and a Start-fresh reset flow
+  - Bilingual EN/AR content with full RTL support: `useDirection`
+    (`<html lang>`/`<html dir>` sync), Arabic-Indic digit conversion,
+    locale-aware number formatting, and an EN/AR key-parity test
+  - `CompletenessIndicator` (Progress bar + missing-field nudge) mounted on
+    `/profile`, with a dismiss/acknowledge flow
+  - `PersistenceBanner` + `ProfileGuard` covering the unavailable-storage
+    case (FR-004)
+  - Upgraded Landing, Setup (wizard host), and Profile (view/edit) pages
+  - Toast system (store + primitives) and confirmation dialogs
+    (Start-fresh, Delete-profile)
+
 ### Deferred from P0.5 (intentional)
 
 The plan listed additional shadcn primitives (Input, Label, Textarea, Select,
@@ -52,6 +73,24 @@ parts of the design system — those are in place and govern every later phase.
   `DESIGN.md` §3.1. Live audit to run on the next CI environment with
   Chrome available.
 
+### Deferred from P1 (intentional)
+
+- Imperial unit **display** for height/bodyweight. Units (metric/imperial) are
+  captured and stored, but Step 2 renders metric only; the imperial path needs
+  bidirectional conversion (parse imperial → store metric; read metric →
+  display imperial) and lands in a follow-up. See the TODO in
+  `src/components/profile/steps/step-body-goal.tsx`.
+
+### P1 closeout checks
+
+- `npm run check` (typecheck, lint, format, test) — passing (157 tests)
+- `npm run build` — passing (main bundle ~587 kB; wizard route not yet
+  code-split — revisit if landing-page LCP regresses)
+- `npx impeccable detect src/` — pending
+- `/impeccable critique` on profile components — pending
+- AccessLint live audit (`/`, `/_design`, `/setup`, `/profile` in EN + AR) —
+  pending; results to be documented in `specs/001-profile-wizard/accesslint-report.md`
+
 ### Coming next
 
-- Phase P1: Data Layer + Profile Wizard
+- Phase P2: Library + Working Weights

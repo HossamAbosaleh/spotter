@@ -10,3 +10,5 @@ package-lock.json
 .specify
 .agents
 .claude/settings*.json
+.claude/skills/graphify
+graphify-out

@@ -97,21 +97,21 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 ### Wizard substrate
 
-- [ ] T021 [US1] Create `src/components/profile/use-profile-form.ts` exporting `useProfileForm()` — bootstraps `useForm<Profile>` with `zodResolver(profileSchema)`, `mode: 'onBlur'`, `defaultValues: defaultProfile()`. Reads `useProfileStore.profile` and pre-fills if present (edit mode). Depends on T005, T010.
-- [ ] T022 [US1] Create `src/components/profile/wizard.tsx` — the wizard shell. Manages `activeStep` state (1–6), renders the progress indicator, the persistence-banner (only when degraded + not acknowledged), the active step component, and Back / Next / Finish navigation. Calls `form.trigger(stepFields)` on Next; `form.handleSubmit` on Finish. Depends on T021, T013, T012.
+- [x] T021 [US1] Create `src/components/profile/use-profile-form.ts` exporting `useProfileForm()` — bootstraps `useForm<Profile>` with `zodResolver(profileSchema)`, `mode: 'onBlur'`, `defaultValues: defaultProfile()`. Reads `useProfileStore.profile` and pre-fills if present (edit mode). Depends on T005, T010.
+- [x] T022 [US1] Create `src/components/profile/wizard.tsx` — the wizard shell. Manages `activeStep` state (1–6), renders the progress indicator, the persistence-banner (only when degraded + not acknowledged), the active step component, and Back / Next / Finish navigation. Calls `form.trigger(stepFields)` on Next; `form.handleSubmit` on Finish. Depends on T021, T013, T012.
 
 ### EN i18n keys for wizard steps
 
-- [ ] T023 [US1] Add wizard step i18n keys (EN) for steps 1–6 to `src/i18n/en.json` per `contracts/i18n-keys.md` (Identity, Body & Goal, Experience & Schedule, Equipment & Limitations, Language & Coach, Review). One commit, all six step namespaces.
+- [x] T023 [US1] Add wizard step i18n keys (EN) for steps 1–6 to `src/i18n/en.json` per `contracts/i18n-keys.md` (Identity, Body & Goal, Experience & Schedule, Equipment & Limitations, Language & Coach, Review). One commit, all six step namespaces.
 
 ### Step components
 
-- [ ] T024 [P] [US1] Create `src/components/profile/steps/step-identity.tsx` — name (text), age (numeric, `inputMode="decimal"`, `parseLocaleNumber` on blur), sex (RadioGroup, three options). Depends on T021, T012, T004, T023.
-- [ ] T025 [P] [US1] Create `src/components/profile/steps/step-body-goal.tsx` — height + bodyweight (numeric, unit label localized), goal (RadioGroup, five options with descriptions). Depends on T021, T012, T004, T023.
-- [ ] T026 [P] [US1] Create `src/components/profile/steps/step-experience-schedule.tsx` — experience level (RadioGroup, three options), preferred training days (Checkbox group, seven options, ≥1 required). Depends on T021, T012, T023.
-- [ ] T027 [P] [US1] Create `src/components/profile/steps/step-equipment-limitations.tsx` — equipment access (RadioGroup, four options), equipment notes (optional textarea), injuries (optional textarea). Depends on T021, T012, T023.
-- [ ] T028 [P] [US1] Create `src/components/profile/steps/step-language-coach.tsx` — language (Select EN/AR), units (Select metric/imperial), coach personality (RadioGroup, three options with descriptions). Selecting a language writes through to `localStorage['spotter.lang']` and triggers `useDirection` re-evaluation. Depends on T021, T012, T023.
-- [ ] T029 [P] [US1] Create `src/components/profile/steps/step-review.tsx` — read-only recap of every entered value with inline edit affordance (clicking a value jumps to that step), the optional `additionalContext` textarea, and a primary "Save my profile" CTA that triggers final form submit. Depends on T021, T012, T023.
+- [x] T024 [P] [US1] Create `src/components/profile/steps/step-identity.tsx` — name (text), age (numeric, `inputMode="decimal"`, `parseLocaleNumber` on blur), sex (RadioGroup, three options). Depends on T021, T012, T004, T023.
+- [x] T025 [P] [US1] Create `src/components/profile/steps/step-body-goal.tsx` — height + bodyweight (numeric, unit label localized), goal (RadioGroup, five options with descriptions). Depends on T021, T012, T004, T023.
+- [x] T026 [P] [US1] Create `src/components/profile/steps/step-experience-schedule.tsx` — experience level (RadioGroup, three options), preferred training days (Checkbox group, seven options, ≥1 required). Depends on T021, T012, T023.
+- [x] T027 [P] [US1] Create `src/components/profile/steps/step-equipment-limitations.tsx` — equipment access (RadioGroup, four options), equipment notes (optional textarea), injuries (optional textarea). Depends on T021, T012, T023.
+- [x] T028 [P] [US1] Create `src/components/profile/steps/step-language-coach.tsx` — language (Select EN/AR), units (Select metric/imperial), coach personality (RadioGroup, three options with descriptions). Selecting a language writes through to `localStorage['spotter.lang']` and triggers `useDirection` re-evaluation. Depends on T021, T012, T023.
+- [x] T029 [P] [US1] Create `src/components/profile/steps/step-review.tsx` — read-only recap of every entered value with inline edit affordance (clicking a value jumps to that step), the optional `additionalContext` textarea, and a primary "Save my profile" CTA that triggers final form submit. Depends on T021, T012, T023.
 
 ### Pages
 
@@ -160,7 +160,7 @@ Single-project frontend SPA. All paths are repo-root relative:
 ### AR translations
 
 - [x] T039 [US3] Add wizard step i18n keys (AR) for steps 1–6 to `src/i18n/ar.json` mirroring every key added in T023. Native AR phrasing — not literal translation — per voice constraints. Modern Standard Arabic for instructions; common gym terminology where natural.
-- [ ] T040 [US3] Add landing + profile + completeness i18n keys (AR) to `src/i18n/ar.json` mirroring T032's EN landing keys and T031's profile keys. _(Partial: landing AR shipped in commit 15e0d7d, profile AR shipped in commit e579e7c. Completeness AR awaits US4's indicator component — no UI exists today to translate.)_
+- [x] T040 [US3] Add landing + profile + completeness i18n keys (AR) to `src/i18n/ar.json` mirroring T032's EN landing keys and T031's profile keys. _(Partial: landing AR shipped in commit 15e0d7d, profile AR shipped in commit e579e7c. Completeness AR awaits US4's indicator component — no UI exists today to translate.)_
 
 ### Mid-wizard switching
 
@@ -190,13 +190,13 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 ### Completeness UI
 
-- [ ] T045 [US4] Create `src/components/profile/completeness-indicator.tsx` — small Card-styled chip showing a Progress bar (rounded to nearest 5%) plus the localized invitation copy and a list of missing-field names. If percent is 100, render the `profile.completeness.complete` chip and no nudge. Reads `profileCompleteness()` from `domain/profile.ts`. Depends on T005, T012.
-- [ ] T046 [US4] Add `profile.completeness.*` i18n keys (EN + AR) to `src/i18n/{en,ar}.json` per `contracts/i18n-keys.md`.
-- [ ] T047 [US4] Mount `<CompletenessIndicator />` in `src/pages/Profile.tsx` above the field list. Hide entirely when percent is 100 unless the user explicitly opens a "what's missing" detail view. Depends on T045, T046, T031.
+- [x] T045 [US4] Create `src/components/profile/completeness-indicator.tsx` — small Card-styled chip showing a Progress bar (rounded to nearest 5%) plus the localized invitation copy and a list of missing-field names. If percent is 100, render the `profile.completeness.complete` chip and no nudge. Reads `profileCompleteness()` from `domain/profile.ts`. Depends on T005, T012.
+- [x] T046 [US4] Add `profile.completeness.*` i18n keys (EN + AR) to `src/i18n/{en,ar}.json` per `contracts/i18n-keys.md`.
+- [x] T047 [US4] Mount `<CompletenessIndicator />` in `src/pages/Profile.tsx` above the field list. Hide entirely when percent is 100 unless the user explicitly opens a "what's missing" detail view. Depends on T045, T046, T031.
 
 ### Optional-field regression test
 
-- [ ] T048 [US4] Add `tests/unit/wizard-optional-fields.test.tsx` — renders the wizard, fills only required fields across all steps (skipping all three optional fields), submits, asserts the save succeeds and `profileCompleteness()` returns `< 100`. Depends on T034 patterns + T045.
+- [x] T048 [US4] Add `tests/unit/wizard-optional-fields.test.tsx` — renders the wizard, fills only required fields across all steps (skipping all three optional fields), submits, asserts the save succeeds and `profileCompleteness()` returns `< 100`. Depends on T034 patterns + T045.
 
 **Checkpoint**: All four user stories pass their independent tests.
 
@@ -206,13 +206,13 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 **Purpose**: Final quality gates, audits, documentation, and removal of stale P0 artifacts before merge.
 
-- [ ] T049 [P] Run `npm run check` (typecheck, lint, format, test) — must pass with zero warnings.
-- [ ] T050 [P] Run `npm run build` — must succeed; verify wizard route is code-split if landing-page LCP regresses.
+- [x] T049 [P] Run `npm run check` (typecheck, lint, format, test) — must pass with zero warnings.
+- [x] T050 [P] Run `npm run build` — must succeed; verify wizard route is code-split if landing-page LCP regresses.
 - [ ] T051 [P] Run `npx impeccable detect src/` — must report zero anti-patterns.
 - [ ] T052 Run AccessLint live audit on `/`, `/_design`, `/setup` (all six wizard steps), and `/profile` in both EN and AR. Document results in `specs/001-profile-wizard/accesslint-report.md`. Fix any contrast, keyboard, or focus issues; re-audit until clean.
 - [ ] T053 [P] Invoke `/impeccable critique` on `src/components/profile/` and `src/pages/{Setup,Profile,Landing}.tsx`. Address every critical and serious finding; document deferred minor findings in the PR description.
-- [ ] T054 Update `CHANGELOG.md` `[Unreleased]` section with a P1 block: shipped (data layer, profile wizard, six steps, bilingual + RTL, completeness indicator, persistence banner) and any deferred items with reasoning.
-- [ ] T055 Remove stale P0 placeholder copy from `src/i18n/{en,ar}.json` (`landing.phaseLabel`, `landing.nextPhase`, `landing.nextPhaseName`, `landing.runCommand`, `landing.toBegin`, `landing.introBody`) now that `Landing.tsx` is upgraded. Verify no remaining call sites via grep.
+- [x] T054 Update `CHANGELOG.md` `[Unreleased]` section with a P1 block: shipped (data layer, profile wizard, six steps, bilingual + RTL, completeness indicator, persistence banner) and any deferred items with reasoning.
+- [x] T055 Remove stale P0 placeholder copy from `src/i18n/{en,ar}.json` (`landing.phaseLabel`, `landing.nextPhase`, `landing.nextPhaseName`, `landing.runCommand`, `landing.toBegin`, `landing.introBody`) now that `Landing.tsx` is upgraded. Verify no remaining call sites via grep.
 - [ ] T056 Manual acceptance walkthrough on the dev server in both EN and AR: complete US1 (finish + reload), US2 (resume after close), US3 (mid-switch), US4 (skip optionals + see indicator), and the FR-004 unavailable-storage case (test in a private/incognito window). Document evidence (screenshots or short notes) in the PR description.
 
 ---
