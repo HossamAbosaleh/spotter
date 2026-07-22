@@ -297,7 +297,7 @@ export function Wizard() {
                   className={cn(
                     'text-body-sm transition-opacity duration-emphasized ease-emphasized',
                     autosaveStatus === 'saved'
-                      ? 'text-text-dim'
+                      ? 'text-text-muted'
                       : 'text-text-muted'
                   )}
                 >

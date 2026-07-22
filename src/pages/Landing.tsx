@@ -42,7 +42,7 @@ function Landing() {
           {t('landing.positioning')}
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-3 text-body-sm text-text-dim">
+        <div className="flex flex-wrap items-center justify-center gap-3 text-body-sm text-text-muted">
           <span className="rounded-pill border border-border px-3 py-1">
             {t('landing.badges.noServer')}
           </span>

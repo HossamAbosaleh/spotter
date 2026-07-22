@@ -4,7 +4,7 @@
     "tagline": "Your gym, your data, your AI coach."
   },
   "landing": {
-    "positioning": "The workout tracker that hands your training data to any AI — and never to anyone else.",
+    "positioning": "The workout tracker that hands your training data to any AI, and never to anyone else.",
     "privacy": "Your workouts stay on your device. No accounts, no tracking.",
     "cta": {
       "start": "Get started",
@@ -72,12 +72,24 @@
         "cancel": "Cancel"
       },
       "progress": {
-        "1": { "label": "About you" },
-        "2": { "label": "Body & goal" },
-        "3": { "label": "How you train" },
-        "4": { "label": "Equipment" },
-        "5": { "label": "Language" },
-        "6": { "label": "Review" }
+        "1": {
+          "label": "About you"
+        },
+        "2": {
+          "label": "Body & goal"
+        },
+        "3": {
+          "label": "How you train"
+        },
+        "4": {
+          "label": "Equipment"
+        },
+        "5": {
+          "label": "Language"
+        },
+        "6": {
+          "label": "Review"
+        }
       }
     },
     "toast": {
@@ -132,11 +144,17 @@
       "fields": {
         "height": {
           "label": "Height",
-          "unit": { "metric": "cm", "imperial": "in" }
+          "unit": {
+            "metric": "cm",
+            "imperial": "in"
+          }
         },
         "bodyweight": {
           "label": "Bodyweight",
-          "unit": { "metric": "kg", "imperial": "lb" }
+          "unit": {
+            "metric": "kg",
+            "imperial": "lb"
+          }
         },
         "goal": {
           "label": "What are you training for?",
@@ -215,7 +233,10 @@
       "fields": {
         "language": {
           "label": "Language",
-          "options": { "en": "English", "ar": "Arabic" }
+          "options": {
+            "en": "English",
+            "ar": "Arabic"
+          }
         },
         "units": {
           "label": "Units",

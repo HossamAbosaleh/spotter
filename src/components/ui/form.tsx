@@ -179,6 +179,7 @@ function FormMessage({
     <p
       data-slot="form-message"
       id={formMessageId}
+      role="alert"
       className={cn('text-body-sm text-destructive', className)}
       {...props}
     >
