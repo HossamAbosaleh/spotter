@@ -9,14 +9,14 @@
 
 ## Results
 
-| Story      | Scenario                                                                                       | Result                      |
-| ---------- | ---------------------------------------------------------------------------------------------- | --------------------------- |
-| **US1**    | Complete wizard (6 steps) → Save → `/profile` renders saved state                              | ✅ Pass                     |
-| **US1**    | Hard reload of `/profile` — data persists (IndexedDB, not memory)                              | ✅ Pass                     |
-| **US2**    | Reload mid-wizard — resumes at the same step with all answers intact                           | ✅ Pass                     |
-| **US3**    | Switch language mid-wizard (EN → AR) — instant RTL flip, state preserved                       | ✅ Pass                     |
-| **US4**    | Skip all optional fields — save succeeds, completeness indicator + incomplete-save toast shown | ✅ Pass                     |
-| **FR-004** | Unavailable-storage banner in a private/incognito window                                       | ⏳ Not run live (see below) |
+| Story      | Scenario                                                                                       | Result              |
+| ---------- | ---------------------------------------------------------------------------------------------- | ------------------- |
+| **US1**    | Complete wizard (6 steps) → Save → `/profile` renders saved state                              | ✅ Pass             |
+| **US1**    | Hard reload of `/profile` — data persists (IndexedDB, not memory)                              | ✅ Pass             |
+| **US2**    | Reload mid-wizard — resumes at the same step with all answers intact                           | ✅ Pass             |
+| **US3**    | Switch language mid-wizard (EN → AR) — instant RTL flip, state preserved                       | ✅ Pass             |
+| **US4**    | Skip all optional fields — save succeeds, completeness indicator + incomplete-save toast shown | ✅ Pass             |
+| **FR-004** | Unavailable-storage banner (degraded persistence)                                              | ✅ Pass (simulated) |
 
 ## Evidence / observations
 
@@ -43,6 +43,32 @@
 - **Landing copy (T053 #7)** — Positioning line renders with a comma, no em dash;
   capability badges are legibly bright (the `text-dim` → `text-muted` fix).
 
+- **FR-004** — Verified by driving the app's real persistence path into a
+  degraded state: closed the Dexie connection and made `IndexedDB.open` throw,
+  so the genuine `detectPersistence()` failed and returned `degraded`, exactly
+  as a storage-blocked browser leaves it. The wizard shell then rendered the
+  destructive banner **"This is a private window — your answers won't be
+  saved."** with an "I understand" action and `role="alert"`. (Chrome incognito
+  actually _allows_ IndexedDB, so it would not trigger this — the real triggers
+  are blocked site-data / Firefox private mode / Safari, which this simulates.)
+  Two sub-observations:
+  - The thrown `DOMException('InvalidStateError')` was classified as `unknown`
+    rather than `private-mode`, because Dexie wraps the error so
+    `err instanceof DOMException` is false in `classifyError`. Minor — real
+    Firefox surfaces the error differently — but worth a look if precise reason
+    messaging matters.
+  - The `bannerAcknowledged` flag correctly suppresses the banner across
+    sessions (had to clear `spotter.persistenceAcknowledged` to re-show it),
+    confirming that documented behavior works.
+
+## Em-dash findings (DESIGN §6.6 — banned in user-facing copy)
+
+The live run surfaced em dashes still present in shipping copy beyond the Landing
+line already fixed: the private-window banner (`persistence.banner.private`) and
+the goal-option descriptions (e.g. "Recomposition — Balanced — lose fat…").
+~11 remain in `en.json`, ~14 in `ar.json`. Not blockers, but a consistent copy
+sweep is warranted.
+
 ## Minor UX note (not a blocker)
 
 - On `/profile`, the completeness indicator reads **"0%"** for a profile whose
@@ -53,12 +79,12 @@
 
 ## Remaining
 
-- **FR-004 (unavailable storage)** was **not exercised live** — it requires a
-  private/incognito window, which the automation session could not open, and the
-  browser extension became flaky on repeated reloads. The persistence-banner
-  logic, `detectPersistence`, and degraded-mode gating are covered by unit/
-  integration tests. **Action:** a human should open the app in a private window
-  (or block site storage) and confirm the banner appears and the wizard gates
-  progression, per FR-004 / SC-007. Estimated 2 minutes.
+- **FR-004 fine detail:** the banner + degraded state were verified by
+  simulating storage failure (breaking IndexedDB), not by a genuine private
+  browser. A human confirming in a real Firefox private window / Safari / with
+  site-data blocked would also validate the `private-mode` vs `unknown` reason
+  classification (see the sub-observation above). Optional; the runtime behavior
+  is confirmed.
 - A live screen-reader (VoiceOver/NVDA) + real contrast-checker pass is still
   recommended before release sign-off, since the T052 audit was code-level.
+- Em-dash copy sweep (see above) — ~11 EN / ~14 AR user-facing strings.
