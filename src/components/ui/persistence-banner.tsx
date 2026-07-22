@@ -48,9 +48,11 @@ import { cn } from '@/lib/utils';
  *   interrupting in-progress speech. The icon carries `aria-hidden`
  *   because the message text already conveys the meaning.
  *
- * - **Acknowledge button**: uses our `<Button variant="destructive">`,
- *   which is already `min-h-11` per the Button size defaults. The
- *   button does NOT hide the banner on click (acknowledgement is
+ * - **Acknowledge button**: `<Button variant="destructive" size="sm">`
+ *   with an explicit `min-h-11` — the `sm` size is `h-8` (32px), below
+ *   the 44px touch target, so the class restores a compliant hitbox
+ *   while keeping the compact `sm` padding. The button does NOT hide the
+ *   banner on click (acknowledgement is
  *   purely a state flag the wizard reads); the banner stays visible
  *   as a persistent reminder while in degraded mode.
  *
@@ -102,6 +104,7 @@ function PersistenceBanner({ className }: { className?: string }) {
           <Button
             variant="destructive"
             size="sm"
+            className="min-h-11"
             onClick={acknowledgeBanner}
             data-slot="persistence-banner-acknowledge"
           >

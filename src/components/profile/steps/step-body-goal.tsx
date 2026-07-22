@@ -59,7 +59,9 @@ export function StepBodyGoal() {
   return (
     <>
       <CardHeader>
-        <CardTitle>{t('wizard.bodyGoal.title')}</CardTitle>
+        <CardTitle role="heading" aria-level={2}>
+          {t('wizard.bodyGoal.title')}
+        </CardTitle>
         <CardDescription>{t('wizard.bodyGoal.subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
@@ -98,6 +100,7 @@ export function StepBodyGoal() {
                 <RadioGroup
                   value={field.value ?? ''}
                   onValueChange={field.onChange}
+                  aria-label={t('wizard.bodyGoal.fields.goal.label')}
                 >
                   {GOAL_OPTIONS.map(({ value, tKey }) => {
                     const id = `goal-${value}`;

@@ -103,7 +103,9 @@ export function StepReview({ onJumpToStep }: StepProps): ReactNode {
   return (
     <>
       <CardHeader>
-        <CardTitle>{t('wizard.review.title')}</CardTitle>
+        <CardTitle role="heading" aria-level={2}>
+          {t('wizard.review.title')}
+        </CardTitle>
         <CardDescription>{t('wizard.review.subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col">

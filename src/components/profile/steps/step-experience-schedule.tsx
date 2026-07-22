@@ -53,7 +53,9 @@ export function StepExperienceSchedule() {
   return (
     <>
       <CardHeader>
-        <CardTitle>{t('wizard.experienceSchedule.title')}</CardTitle>
+        <CardTitle role="heading" aria-level={2}>
+          {t('wizard.experienceSchedule.title')}
+        </CardTitle>
         <CardDescription>
           {t('wizard.experienceSchedule.subtitle')}
         </CardDescription>
@@ -72,6 +74,9 @@ export function StepExperienceSchedule() {
                 <RadioGroup
                   value={field.value ?? ''}
                   onValueChange={field.onChange}
+                  aria-label={t(
+                    'wizard.experienceSchedule.fields.experience.label'
+                  )}
                 >
                   {EXPERIENCE_OPTIONS.map((value) => {
                     const id = `experience-${value}`;
@@ -154,7 +159,11 @@ function PreferredDaysField({
         {t('wizard.experienceSchedule.fields.preferredDays.label')}
       </FormLabel>
       <FormControl>
-        <div className="flex flex-col">
+        <div
+          className="flex flex-col"
+          role="group"
+          aria-label={t('wizard.experienceSchedule.fields.preferredDays.label')}
+        >
           {DAYS.map((day) => {
             const id = `day-${day}`;
             const checked = field.value.includes(day);

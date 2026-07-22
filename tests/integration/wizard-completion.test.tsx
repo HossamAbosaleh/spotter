@@ -152,7 +152,7 @@ describe('US1 + US4 — wizard completion integration', () => {
       screen.getByRole('link', { name: /edit profile/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /start fresh/i })
+      screen.getByRole('button', { name: /delete profile/i })
     ).toBeInTheDocument();
   });
 

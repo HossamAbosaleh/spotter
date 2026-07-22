@@ -52,7 +52,9 @@ export function StepIdentity() {
   return (
     <>
       <CardHeader>
-        <CardTitle>{t('wizard.identity.title')}</CardTitle>
+        <CardTitle role="heading" aria-level={2}>
+          {t('wizard.identity.title')}
+        </CardTitle>
         <CardDescription>{t('wizard.identity.subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
@@ -87,7 +89,11 @@ export function StepIdentity() {
             <FormItem>
               <FormLabel>{t('wizard.identity.fields.sex.label')}</FormLabel>
               <FormControl>
-                <RadioGroup value={field.value} onValueChange={field.onChange}>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  aria-label={t('wizard.identity.fields.sex.label')}
+                >
                   {SEX_OPTIONS.map(({ value, tKey }) => {
                     const id = `identity-sex-${value}`;
                     return (

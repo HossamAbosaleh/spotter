@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 
 import en from './en.json';
 import ar from './ar.json';
+import { installZodErrorMap } from './zod-error-map';
 
 export type Language = 'en' | 'ar';
 
@@ -32,6 +33,10 @@ void i18n.use(initReactI18next).init({
   interpolation: { escapeValue: false },
   returnNull: false,
 });
+
+// Route Zod validation messages through i18n so form errors render in the
+// active language (EN/AR) instead of Zod's English defaults.
+installZodErrorMap();
 
 export function setLanguage(lang: Language): void {
   void i18n.changeLanguage(lang);

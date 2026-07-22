@@ -60,7 +60,9 @@ export function StepLanguageCoach() {
   return (
     <>
       <CardHeader>
-        <CardTitle>{t('wizard.languageCoach.title')}</CardTitle>
+        <CardTitle role="heading" aria-level={2}>
+          {t('wizard.languageCoach.title')}
+        </CardTitle>
         <CardDescription>{t('wizard.languageCoach.subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
@@ -79,6 +81,7 @@ export function StepLanguageCoach() {
                     field.onChange(value);
                     setLanguage(value as Language);
                   }}
+                  aria-label={t('wizard.languageCoach.fields.language.label')}
                 >
                   {LANGUAGE_OPTIONS.map((value) => {
                     const id = `language-${value}`;
@@ -113,7 +116,11 @@ export function StepLanguageCoach() {
                 {t('wizard.languageCoach.fields.units.label')}
               </FormLabel>
               <FormControl>
-                <RadioGroup value={field.value} onValueChange={field.onChange}>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  aria-label={t('wizard.languageCoach.fields.units.label')}
+                >
                   {UNIT_OPTIONS.map((value) => {
                     const id = `units-${value}`;
                     return (
@@ -147,7 +154,11 @@ export function StepLanguageCoach() {
                 {t('wizard.languageCoach.fields.coach.label')}
               </FormLabel>
               <FormControl>
-                <RadioGroup value={field.value} onValueChange={field.onChange}>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  aria-label={t('wizard.languageCoach.fields.coach.label')}
+                >
                   {COACH_OPTIONS.map((value) => {
                     const id = `coach-${value}`;
                     return (

@@ -100,11 +100,11 @@ describe('Profile page', () => {
     }
   });
 
-  it('Start fresh trigger opens the delete dialog', () => {
+  it('Delete profile trigger opens the delete dialog', () => {
     useProfileStore.setState({ profile: validProfile() });
     renderProfile();
 
-    fireEvent.click(screen.getByRole('button', { name: /start fresh/i }));
+    fireEvent.click(screen.getByRole('button', { name: /delete profile/i }));
     expect(
       screen.getByRole('alertdialog', { name: /delete your profile\?/i })
     ).toBeInTheDocument();
@@ -114,7 +114,7 @@ describe('Profile page', () => {
     useProfileStore.setState({ profile: validProfile() });
     renderProfile();
 
-    fireEvent.click(screen.getByRole('button', { name: /start fresh/i }));
+    fireEvent.click(screen.getByRole('button', { name: /delete profile/i }));
 
     const confirmBtn = document.querySelector(
       '[data-slot="profile-delete-confirm"]'
@@ -137,7 +137,7 @@ describe('Profile page', () => {
 
     renderProfile();
 
-    fireEvent.click(screen.getByRole('button', { name: /start fresh/i }));
+    fireEvent.click(screen.getByRole('button', { name: /delete profile/i }));
     fireEvent.click(screen.getByRole('checkbox'));
 
     const confirmBtn = document.querySelector(
@@ -168,12 +168,12 @@ describe('Profile page', () => {
     renderProfile();
 
     // Open, check, cancel.
-    fireEvent.click(screen.getByRole('button', { name: /start fresh/i }));
+    fireEvent.click(screen.getByRole('button', { name: /delete profile/i }));
     fireEvent.click(screen.getByRole('checkbox'));
     fireEvent.click(screen.getByRole('button', { name: /cancel/i }));
 
     // Reopen.
-    fireEvent.click(screen.getByRole('button', { name: /start fresh/i }));
+    fireEvent.click(screen.getByRole('button', { name: /delete profile/i }));
 
     // Confirm should be disabled again because the checkbox reset.
     const confirmBtn = document.querySelector(

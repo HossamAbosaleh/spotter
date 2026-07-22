@@ -225,3 +225,41 @@ It does not read as any of the anti-anchors (Strong/Hevy, purple-blue AI slop, S
 ---
 
 _Note: This is a code-level pass. Actual contrast ratios were computed from documented token hex values (DESIGN.md §3.1), not sampled from rendered pixels; keyboard order and screen-reader announcements were inferred from ARIA wiring, not verified on a running build. Confirm the P1 items against a live screen reader (VoiceOver/NVDA) and a real AA contrast checker before sign-off._
+
+---
+
+## Remediation (2026-07-22)
+
+All P1 (critical) and P2 (serious) findings addressed as part of closing
+T052/T053. P3 items deferred with reasoning.
+
+**Fixed**
+
+- [P1] `FormMessage` now has `role="alert"` — validation errors announced to AT.
+- [P1] Validation messages localized via a global Zod error map
+  (`src/i18n/zod-error-map.ts`, installed in `src/i18n/index.ts`) routing
+  through i18n; `validation.*` keys added to `en.json` + `ar.json`. AR users
+  now get Arabic validation errors.
+- [P2] Radio/checkbox groups given accessible names (`aria-label` on each
+  `RadioGroup`; `role="group"` + `aria-label` on the training-days checkbox
+  group) across all six steps.
+- [P2] Informational `text-dim` (2.4:1) → `text-muted` (AA) for the "Saved."
+  autosave state and the four Landing capability badges.
+- [P2] Wizard step titles now expose `role="heading"` + `aria-level={2}`.
+- [P2] Em dash removed from `landing.positioning` (EN + AR); Arabic RLM
+  bidi wrapper dropped.
+- [P2] Persistence acknowledge button given `min-h-11` (was `sm`/32px).
+
+**Deferred (P3, with reasoning)**
+
+- `Progress` animates `width`: kept intentionally — a documented RTL-correctness
+  decision, and the bar updates only on discrete step changes (not in a loop),
+  so the perf cost is negligible. Switching to `transform` would reintroduce the
+  RTL inversion the component comment explicitly avoids.
+- Mono numerals on data inputs, unused shadcn dark-mode var system, dead
+  `StepPlaceholder` copy (a used defensive fallback), and bidi-isolation of
+  numerals in review summaries — cosmetic/identity polish, tracked for a later pass.
+
+_Verified: `npm run check` green (157 tests), `impeccable detect src/` zero
+anti-patterns. Live screen-reader/contrast confirmation still recommended before
+release sign-off (this remains a code-level pass)._

@@ -325,7 +325,7 @@
       "body": "Set up your profile to start using Spotter.",
       "cta": "Get started"
     },
-    "deleteTrigger": "Start fresh",
+    "deleteTrigger": "Delete profile",
     "deleteDialog": {
       "title": "Delete your profile?",
       "body": "This permanently deletes your saved profile, your goals, and your equipment notes. This cannot be undone.",
@@ -448,5 +448,15 @@
       },
       "submit": "Submit (showcase only)"
     }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "select": "Please choose an option.",
+    "numberMin": "Enter {{min}} or more.",
+    "numberMax": "Enter {{max}} or less.",
+    "stringMin": "Enter at least {{min}} characters.",
+    "stringMax": "Keep this under {{max}} characters.",
+    "arrayMin": "Choose at least {{min}}.",
+    "arrayMax": "Choose at most {{max}}."
   }
 }

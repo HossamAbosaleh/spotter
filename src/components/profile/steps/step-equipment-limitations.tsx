@@ -50,7 +50,9 @@ export function StepEquipmentLimitations() {
   return (
     <>
       <CardHeader>
-        <CardTitle>{t('wizard.equipmentLimitations.title')}</CardTitle>
+        <CardTitle role="heading" aria-level={2}>
+          {t('wizard.equipmentLimitations.title')}
+        </CardTitle>
         <CardDescription>
           {t('wizard.equipmentLimitations.subtitle')}
         </CardDescription>
@@ -69,6 +71,9 @@ export function StepEquipmentLimitations() {
                 <RadioGroup
                   value={field.value ?? ''}
                   onValueChange={field.onChange}
+                  aria-label={t(
+                    'wizard.equipmentLimitations.fields.equipment.label'
+                  )}
                 >
                   {EQUIPMENT_OPTIONS.map(({ value, tKey }) => {
                     const id = `equipment-${value}`;

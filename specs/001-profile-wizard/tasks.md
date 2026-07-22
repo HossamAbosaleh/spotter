@@ -209,8 +209,8 @@ Single-project frontend SPA. All paths are repo-root relative:
 - [x] T049 [P] Run `npm run check` (typecheck, lint, format, test) — must pass with zero warnings.
 - [x] T050 [P] Run `npm run build` — must succeed; verify wizard route is code-split if landing-page LCP regresses.
 - [x] T051 [P] Run `npx impeccable detect src/` — must report zero anti-patterns.
-- [ ] T052 Run AccessLint live audit on `/`, `/_design`, `/setup` (all six wizard steps), and `/profile` in both EN and AR. Document results in `specs/001-profile-wizard/accesslint-report.md`. Fix any contrast, keyboard, or focus issues; re-audit until clean.
-- [ ] T053 [P] Invoke `/impeccable critique` on `src/components/profile/` and `src/pages/{Setup,Profile,Landing}.tsx`. Address every critical and serious finding; document deferred minor findings in the PR description.
+- [x] T052 Run AccessLint live audit on `/`, `/_design`, `/setup` (all six wizard steps), and `/profile` in both EN and AR. Document results in `specs/001-profile-wizard/accesslint-report.md`. Fix any contrast, keyboard, or focus issues; re-audit until clean.
+- [x] T053 [P] Invoke `/impeccable critique` on `src/components/profile/` and `src/pages/{Setup,Profile,Landing}.tsx`. Address every critical and serious finding; document deferred minor findings in the PR description.
 - [x] T054 Update `CHANGELOG.md` `[Unreleased]` section with a P1 block: shipped (data layer, profile wizard, six steps, bilingual + RTL, completeness indicator, persistence banner) and any deferred items with reasoning.
 - [x] T055 Remove stale P0 placeholder copy from `src/i18n/{en,ar}.json` (`landing.phaseLabel`, `landing.nextPhase`, `landing.nextPhaseName`, `landing.runCommand`, `landing.toBegin`, `landing.introBody`) now that `Landing.tsx` is upgraded. Verify no remaining call sites via grep.
 - [ ] T056 Manual acceptance walkthrough on the dev server in both EN and AR: complete US1 (finish + reload), US2 (resume after close), US3 (mid-switch), US4 (skip optionals + see indicator), and the FR-004 unavailable-storage case (test in a private/incognito window). Document evidence (screenshots or short notes) in the PR description.
