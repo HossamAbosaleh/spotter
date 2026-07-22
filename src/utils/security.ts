@@ -20,7 +20,7 @@ const SAFE_DATA_IMAGE_PATTERN =
  * vbscript:, protocol-relative (//host/...), data:image/svg+xml,
  * data:text/*, malformed URLs, empty strings.
  *
- * The caller MUST NOT render an <img> with `src` if this returns false.
+ * The caller MUST NOT render an `img` element with `src` if this returns false.
  */
 export function isSafeImageUrl(src: unknown): src is string {
   if (typeof src !== 'string' || src.length === 0) {

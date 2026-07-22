@@ -208,7 +208,7 @@ Single-project frontend SPA. All paths are repo-root relative:
 
 - [x] T049 [P] Run `npm run check` (typecheck, lint, format, test) — must pass with zero warnings.
 - [x] T050 [P] Run `npm run build` — must succeed; verify wizard route is code-split if landing-page LCP regresses.
-- [ ] T051 [P] Run `npx impeccable detect src/` — must report zero anti-patterns.
+- [x] T051 [P] Run `npx impeccable detect src/` — must report zero anti-patterns.
 - [ ] T052 Run AccessLint live audit on `/`, `/_design`, `/setup` (all six wizard steps), and `/profile` in both EN and AR. Document results in `specs/001-profile-wizard/accesslint-report.md`. Fix any contrast, keyboard, or focus issues; re-audit until clean.
 - [ ] T053 [P] Invoke `/impeccable critique` on `src/components/profile/` and `src/pages/{Setup,Profile,Landing}.tsx`. Address every critical and serious finding; document deferred minor findings in the PR description.
 - [x] T054 Update `CHANGELOG.md` `[Unreleased]` section with a P1 block: shipped (data layer, profile wizard, six steps, bilingual + RTL, completeness indicator, persistence banner) and any deferred items with reasoning.
