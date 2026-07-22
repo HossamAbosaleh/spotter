@@ -11,4 +11,5 @@ package-lock.json
 .agents
 .claude/settings*.json
 .claude/skills/graphify
+.claude/skills/impeccable
 graphify-out
