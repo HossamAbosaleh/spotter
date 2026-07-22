@@ -23,20 +23,39 @@ export type PersistenceStatus =
 
 const PROBE_KEY = '__spotter_probe__';
 
-function classifyError(
+/**
+ * Collect the `name` of an error and any errors it wraps. Dexie does not
+ * rethrow the raw IndexedDB `DOMException` — it wraps it in its own error
+ * class and stashes the original under `.inner` (older Dexie) or `.cause`
+ * (standard `Error.cause`). Matching on `instanceof DOMException` therefore
+ * misses the real signal and everything degrades to `unknown`. Walking the
+ * chain and matching on the `name` string recovers the underlying reason
+ * whether the error is raw or Dexie-wrapped.
+ */
+function collectErrorNames(err: unknown): string[] {
+  const names: string[] = [];
+  let current: unknown = err;
+  for (let depth = 0; depth < 5 && current != null; depth++) {
+    const name = (current as { name?: unknown }).name;
+    if (typeof name === 'string') names.push(name);
+    const next = current as { inner?: unknown; cause?: unknown };
+    current = next.inner ?? next.cause;
+  }
+  return names;
+}
+
+export function classifyError(
   err: unknown
 ): PersistenceStatus & { status: 'degraded' } {
-  if (err instanceof DOMException) {
-    switch (err.name) {
-      case 'SecurityError':
-        return { status: 'degraded', reason: 'disabled' };
-      case 'QuotaExceededError':
-        return { status: 'degraded', reason: 'quota-exceeded' };
-      case 'InvalidStateError':
-        return { status: 'degraded', reason: 'private-mode' };
-      default:
-        return { status: 'degraded', reason: 'unknown' };
-    }
+  const names = collectErrorNames(err);
+  if (names.includes('SecurityError')) {
+    return { status: 'degraded', reason: 'disabled' };
+  }
+  if (names.includes('QuotaExceededError')) {
+    return { status: 'degraded', reason: 'quota-exceeded' };
+  }
+  if (names.includes('InvalidStateError')) {
+    return { status: 'degraded', reason: 'private-mode' };
   }
   return { status: 'degraded', reason: 'unknown' };
 }

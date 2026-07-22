@@ -102,7 +102,7 @@
       "incompleteHint": "Optional details can be added on your profile page.",
       "errors": {
         "quotaExceeded": {
-          "title": "Couldn't save — your storage is full.",
+          "title": "Couldn't save. Your storage is full.",
           "description": "Free up space and try again."
         },
         "storageBlocked": {
@@ -169,7 +169,7 @@
             "strength": "Heavier loads, lower reps, longer rest.",
             "hypertrophy": "Moderate loads, moderate reps, build muscle.",
             "fatLoss": "Higher density, shorter rest, keep strength.",
-            "recomposition": "Balanced — lose fat while gaining strength.",
+            "recomposition": "Balanced: lose fat while gaining strength.",
             "generalFitness": "Stay strong, mobile, and conditioned."
           }
         }
@@ -289,12 +289,12 @@
       "tooLong": "Please keep this under {{max}} characters.",
       "atLeastOneDay": "Pick at least one day.",
       "saveFailed": {
-        "quota": "We couldn't save — your device is out of space.",
+        "quota": "We couldn't save. Your device is out of space.",
         "unknown": "We couldn't save right now. Try again, or reload the page."
       },
       "corruptProfile": {
         "title": "Your profile data couldn't be read.",
-        "body": "You can start fresh — this overwrites the existing record.",
+        "body": "You can start fresh. This overwrites the existing record.",
         "cta": "Start fresh"
       },
       "unknownLoad": {
@@ -305,9 +305,9 @@
   },
   "persistence": {
     "banner": {
-      "private": "This is a private window — your answers won't be saved.",
+      "private": "This is a private window. Your answers won't be saved.",
       "disabled": "Your browser has storage disabled. Enable it to save your profile.",
-      "quota": "Your device is out of space — your answers won't save until you free some up.",
+      "quota": "Your device is out of space. Your answers won't save until you free some up.",
       "unknown": "We couldn't access local storage. Your answers won't be saved this session.",
       "acknowledge": "I understand"
     }
@@ -339,7 +339,7 @@
     "completeness": {
       "title": "Profile completeness",
       "percent": "{{percent}}%",
-      "invitation": "A few optional details left — they help the AI coach calibrate.",
+      "invitation": "A few optional details left. They help the AI coach calibrate.",
       "complete": "All set.",
       "acknowledge": "Got it",
       "missingFields": {
@@ -352,7 +352,7 @@
   },
   "design": {
     "header": {
-      "title": "Spotter primitives — P0.5 + P1",
+      "title": "Spotter primitives (P0.5 + P1)",
       "subhead": "/_design · dev-only"
     },
     "sections": {
@@ -367,7 +367,7 @@
       "persistenceBanner": "PersistenceBanner",
       "form": "Form (react-hook-form integration)",
       "exerciseLibrary": "ExerciseCard.Library",
-      "exerciseLibraryPreview": "ExerciseCard.Library — preview (plan import)",
+      "exerciseLibraryPreview": "ExerciseCard.Library preview (plan import)",
       "exerciseDaily": "ExerciseCard.Daily",
       "exerciseSummary": "ExerciseCard.Summary"
     },
@@ -419,9 +419,9 @@
     "toast": {
       "note": "The viewport portals to document.body; the toast renders at the bottom of the page (or bottom-right on `sm:` and up).",
       "saved": "Saved.",
-      "savedDescription": "Default toast variant — neutral elevated surface.",
+      "savedDescription": "Default toast variant. Neutral elevated surface.",
       "failed": "Couldn't save.",
-      "failedDescription": "Destructive variant — pair with an icon at the call site."
+      "failedDescription": "Destructive variant. Pair with an icon at the call site."
     },
     "persistence": {
       "note": "Renders only when the persistence store reports a degraded status; on this page the store is in its default `available` state, so the banner element below is the styling preview rendered by the component itself once a degraded reason is set. To preview live, simulate degraded mode in the React DevTools store."

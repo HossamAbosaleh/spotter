@@ -52,22 +52,22 @@
   actually _allows_ IndexedDB, so it would not trigger this — the real triggers
   are blocked site-data / Firefox private mode / Safari, which this simulates.)
   Two sub-observations:
-  - The thrown `DOMException('InvalidStateError')` was classified as `unknown`
-    rather than `private-mode`, because Dexie wraps the error so
-    `err instanceof DOMException` is false in `classifyError`. Minor — real
-    Firefox surfaces the error differently — but worth a look if precise reason
-    messaging matters.
+  - ~~The thrown `DOMException('InvalidStateError')` was classified as
+    `unknown` because Dexie wraps the error so `err instanceof DOMException`
+    is false.~~ **Fixed:** `classifyError` now walks the `.inner`/`.cause`
+    chain and matches on the error `name`, so wrapped errors resolve to the
+    correct reason (covered by `tests/unit/persistence-availability.test.ts`).
   - The `bannerAcknowledged` flag correctly suppresses the banner across
     sessions (had to clear `spotter.persistenceAcknowledged` to re-show it),
     confirming that documented behavior works.
 
-## Em-dash findings (DESIGN §6.6 — banned in user-facing copy)
+## Em-dash findings (DESIGN §6.6 — banned in user-facing copy) — RESOLVED
 
 The live run surfaced em dashes still present in shipping copy beyond the Landing
-line already fixed: the private-window banner (`persistence.banner.private`) and
-the goal-option descriptions (e.g. "Recomposition — Balanced — lose fat…").
-~11 remain in `en.json`, ~14 in `ar.json`. Not blockers, but a consistent copy
-sweep is warranted.
+line: the private-window/quota banners, the recomposition goal description, the
+save-error and corrupt-profile copy, the completeness invitation, and the
+dev-only `/_design` labels. **Swept:** all replaced with periods/colons/
+parentheses across `en.json` + `ar.json` (0 em dashes remain in either file).
 
 ## Minor UX note (not a blocker)
 
@@ -82,9 +82,7 @@ sweep is warranted.
 - **FR-004 fine detail:** the banner + degraded state were verified by
   simulating storage failure (breaking IndexedDB), not by a genuine private
   browser. A human confirming in a real Firefox private window / Safari / with
-  site-data blocked would also validate the `private-mode` vs `unknown` reason
-  classification (see the sub-observation above). Optional; the runtime behavior
-  is confirmed.
+  site-data blocked is still nice-to-have, but the reason-classification gap it
+  would have caught is now fixed and unit-tested. Runtime behavior confirmed.
 - A live screen-reader (VoiceOver/NVDA) + real contrast-checker pass is still
   recommended before release sign-off, since the T052 audit was code-level.
-- Em-dash copy sweep (see above) — ~11 EN / ~14 AR user-facing strings.
