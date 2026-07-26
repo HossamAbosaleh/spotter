@@ -4,12 +4,13 @@
     "tagline": "صالتك، بياناتك، مدرّبك بالذكاء الاصطناعي."
   },
   "landing": {
-    "phaseLabel": "الإصدار 0.1.0 · المرحلة P0 · الأساس",
-    "introBody": "هذه نسخة أساس المرحلة P0. الواجهة جاهزة: React مع Vite وTypeScript وTailwind، منشورة على Vercel كموقع ثابت.",
-    "nextPhase": "المرحلة القادمة:",
-    "nextPhaseName": "P0.5 — أساس نظام التصميم",
-    "runCommand": "شغّل",
-    "toBegin": "للبدء.",
+    "positioning": "متتبّع التمارين الذي يسلّم بياناتك لأيّ ذكاء اصطناعي، ولا يسلّمها لأحد سواه.",
+    "privacy": "تمارينك تبقى على جهازك. لا حسابات، لا تتبّع.",
+    "cta": {
+      "start": "ابدأ",
+      "open": "افتح Spotter",
+      "github": "افتح على GitHub"
+    },
     "badges": {
       "noServer": "بدون خادم",
       "freeForever": "مجّاني للأبد",
@@ -49,5 +50,413 @@
   "language": {
     "switchTo": "English",
     "name": "العربية"
+  },
+  "wizard": {
+    "shell": {
+      "title": "أعدّ ملفّك",
+      "editTitle": "حدّث ملفّك",
+      "tryAgain": "حاول مرة أخرى",
+      "stepLabel": "الخطوة {{n}} من {{total}}",
+      "next": "التالي",
+      "back": "السابق",
+      "finish": "إنهاء",
+      "savedIndicator": "تم الحفظ.",
+      "savingIndicator": "جاري الحفظ…",
+      "languageSwitch": {
+        "aria": "تبديل اللغة"
+      },
+      "startFresh": {
+        "cta": "ابدأ من جديد",
+        "title": "ابدأ من جديد؟",
+        "confirm": "سيُمسح ما أدخلته حتى الآن.",
+        "cancel": "إلغاء"
+      },
+      "progress": {
+        "1": {
+          "label": "عنك"
+        },
+        "2": {
+          "label": "الجسم والهدف"
+        },
+        "3": {
+          "label": "أسلوب تدريبك"
+        },
+        "4": {
+          "label": "المعدّات"
+        },
+        "5": {
+          "label": "اللغة"
+        },
+        "6": {
+          "label": "المراجعة"
+        }
+      }
+    },
+    "toast": {
+      "saved": {
+        "title": "تم حفظ ملفّك."
+      },
+      "updated": {
+        "title": "تم تحديث ملفّك."
+      },
+      "incompleteHint": "يمكنك إضافة التفاصيل الاختيارية من صفحة الملفّ.",
+      "errors": {
+        "quotaExceeded": {
+          "title": "تعذّر الحفظ. مساحة جهازك ممتلئة.",
+          "description": "أفرغ بعض المساحة وحاول مرة أخرى."
+        },
+        "storageBlocked": {
+          "title": "التخزين غير متاح.",
+          "description": "أوقف وضع التصفّح الخاص أو راجع أذونات الموقع."
+        },
+        "unknown": {
+          "title": "تعذّر الحفظ.",
+          "description": "حاول مرة أخرى من فضلك."
+        }
+      }
+    },
+    "identity": {
+      "title": "عنك",
+      "subtitle": "أساسيّات سريعة كي يخاطبك Spotter كإنسان.",
+      "fields": {
+        "name": {
+          "label": "الاسم",
+          "placeholder": "بماذا ننادِيك؟"
+        },
+        "age": {
+          "label": "العمر",
+          "helper": "يُستخدم لمعايرة الاقتراحات."
+        },
+        "sex": {
+          "label": "الجنس",
+          "helper": "تُستخدم لضبط برامج التمارين وأوزان العمل الافتراضيّة. خيار \"أفضّل عدم الإفصاح\" يعتمد متوسّطات محايدة قد تكون أقل دقّة لجسمك.",
+          "options": {
+            "male": "ذكر",
+            "female": "أنثى",
+            "preferNotToSay": "أفضّل عدم الإفصاح"
+          }
+        }
+      }
+    },
+    "bodyGoal": {
+      "title": "الجسم والهدف",
+      "subtitle": "يضبط نقطة انطلاق لأوزان العمل الافتراضيّة وشكل الخطّة.",
+      "fields": {
+        "height": {
+          "label": "الطول",
+          "unit": {
+            "metric": "سم",
+            "imperial": "إنش"
+          }
+        },
+        "bodyweight": {
+          "label": "وزن الجسم",
+          "unit": {
+            "metric": "كجم",
+            "imperial": "رطل"
+          }
+        },
+        "goal": {
+          "label": "ما الذي تتدرّب من أجله؟",
+          "options": {
+            "strength": "القوّة",
+            "hypertrophy": "تضخّم العضلات",
+            "fatLoss": "خسارة الدهون",
+            "recomposition": "إعادة تكوين الجسم",
+            "generalFitness": "اللياقة العامّة"
+          },
+          "descriptions": {
+            "strength": "أوزان أثقل، تكرارات أقل، راحة أطول.",
+            "hypertrophy": "أوزان متوسّطة، تكرارات متوسّطة، لبناء العضلات.",
+            "fatLoss": "كثافة أعلى، راحة أقصر، مع الحفاظ على القوّة.",
+            "recomposition": "متوازن: خسارة الدهون مع اكتساب القوّة.",
+            "generalFitness": "ابقَ قويًّا ورشيقًا ومتأهِّبًا."
+          }
+        }
+      }
+    },
+    "experienceSchedule": {
+      "title": "أسلوب تدريبك",
+      "subtitle": "يضبط حجم العمل ومسمّيات الأشياء.",
+      "fields": {
+        "experience": {
+          "label": "مستوى الخبرة",
+          "options": {
+            "novice": "مبتدئ (أقل من سنة)",
+            "intermediate": "متوسّط (1–3 سنوات)",
+            "advanced": "متقدّم (3 سنوات فأكثر)"
+          }
+        },
+        "preferredDays": {
+          "label": "في أيّ الأيّام تتدرّب عادةً؟",
+          "helper": "اختر ما ينطبق، أو تجاوز إن كان أسبوعك متغيّرًا.",
+          "irregularLabel": "أتدرّب في أيّام غير منتظمة",
+          "options": {
+            "mon": "الإثنين",
+            "tue": "الثلاثاء",
+            "wed": "الأربعاء",
+            "thu": "الخميس",
+            "fri": "الجمعة",
+            "sat": "السبت",
+            "sun": "الأحد"
+          }
+        }
+      }
+    },
+    "equipmentLimitations": {
+      "title": "المعدّات والقيود",
+      "subtitle": "يحدّد التمارين التي يقترحها Spotter.",
+      "fields": {
+        "equipment": {
+          "label": "ما المتاح لديك؟",
+          "options": {
+            "commercialGym": "صالة تجاريّة (معدّات كاملة)",
+            "homeFull": "صالة منزليّة (رفّ + بار + أوزان)",
+            "homeMinimal": "منزل بأقل المعدّات (دامبل / مطّاطات / كيتل بِل)",
+            "bodyweightOnly": "وزن الجسم فقط"
+          }
+        },
+        "equipmentNotes": {
+          "label": "ملاحظات (اختياري)",
+          "placeholder": "أيّ شيء محدّد عن إعدادك؟"
+        },
+        "injuries": {
+          "label": "إصابات أو قيود حركيّة (اختياري)",
+          "placeholder": "أيّ شيء ينبغي أخذه بالحسبان؟",
+          "helper": "تبقى على هذا الجهاز. تُستخدم لتصفية اقتراحات التمارين."
+        }
+      }
+    },
+    "languageCoach": {
+      "title": "كيف يخاطبك Spotter",
+      "subtitle": "يمكنك تغيير أيّ من هذه في أيّ وقت.",
+      "fields": {
+        "language": {
+          "label": "اللغة",
+          "options": {
+            "en": "الإنجليزيّة",
+            "ar": "العربيّة"
+          }
+        },
+        "units": {
+          "label": "الوحدات",
+          "options": {
+            "metric": "متريّ (كجم، سم)",
+            "imperial": "إمبراطوريّ (رطل، إنش)"
+          }
+        },
+        "coach": {
+          "label": "نبرة المدرّب",
+          "options": {
+            "encouraging": "مشجِّع",
+            "direct": "مباشر",
+            "technical": "تقني"
+          },
+          "descriptions": {
+            "encouraging": "دافئة ومحفّزة.",
+            "direct": "واضحة، بلا حشو.",
+            "technical": "غنيّة بالإشارات الفنيّة ودقيقة."
+          }
+        }
+      }
+    },
+    "review": {
+      "title": "هل يبدو هذا صحيحًا؟",
+      "subtitle": "اضغط أيّ حقل لتعديله.",
+      "editAria": "تعديل {{field}}",
+      "confirmCta": "احفظ ملفّي",
+      "additionalContext": {
+        "label": "أيّ شيء آخر؟ (اختياري)",
+        "helper": "يُضاف إلى موجِّه الذكاء الاصطناعي كسياق."
+      },
+      "empty": "غير محدَّد",
+      "sections": {
+        "identity": "عنك",
+        "bodyGoal": "الجسم والهدف",
+        "experienceSchedule": "أسلوب تدريبك",
+        "equipmentLimitations": "المعدّات والقيود",
+        "languageCoach": "كيف يخاطبك Spotter"
+      }
+    },
+    "errors": {
+      "required": "هذا الحقل مطلوب.",
+      "numeric": "أدخل رقمًا.",
+      "outOfRange": {
+        "age": "العمر يجب أن يتراوح بين 13 و100 سنة.",
+        "height": "الطول يجب أن يتراوح بين 120 و230 سم.",
+        "bodyweight": "الوزن يجب أن يتراوح بين 30 و250 كجم."
+      },
+      "tooLong": "أبقِ الإدخال أقل من {{max}} حرفًا.",
+      "atLeastOneDay": "اختر يومًا واحدًا على الأقل.",
+      "saveFailed": {
+        "quota": "تعذّر الحفظ. لا توجد مساحة كافية على جهازك.",
+        "unknown": "تعذّر الحفظ الآن. حاول مرة أخرى أو أعد تحميل الصفحة."
+      },
+      "corruptProfile": {
+        "title": "تعذّر قراءة بيانات ملفّك.",
+        "body": "يمكنك البدء من جديد، وسيستبدل ذلك السجلّ الحالي.",
+        "cta": "ابدأ من جديد"
+      },
+      "unknownLoad": {
+        "title": "تعذّر قراءة ملفّك.",
+        "body": "حدث خطأ أثناء تحميل بياناتك. قد تساعد إعادة التحميل."
+      }
+    }
+  },
+  "persistence": {
+    "banner": {
+      "private": "هذه نافذة خاصّة. لن تُحفظ إجاباتك.",
+      "disabled": "متصفّحك يمنع التخزين. فعّله لحفظ ملفّك.",
+      "quota": "لا توجد مساحة على جهازك. لن تُحفظ إجاباتك حتى توفّر مساحة.",
+      "unknown": "تعذّر الوصول إلى التخزين المحلّي. لن تُحفظ إجاباتك في هذه الجلسة.",
+      "acknowledge": "فهمت"
+    }
+  },
+  "profile": {
+    "shell": {
+      "title": "ملفّك"
+    },
+    "title": "ملفّك",
+    "subtitle": "أدر سياق تدريبك.",
+    "edit": "تعديل الملفّ",
+    "editSection": "تعديل {{section}}",
+    "empty": {
+      "title": "لا يوجد ملفّ بعد",
+      "body": "أعدّ ملفّك لتبدأ باستخدام Spotter.",
+      "cta": "ابدأ"
+    },
+    "deleteTrigger": "احذف الملف",
+    "deleteDialog": {
+      "title": "حذف ملفّك؟",
+      "body": "سيتمّ حذف ملفّك المحفوظ وأهدافك وملاحظات معدّاتك نهائياً. لا يمكن التراجع عن هذا الإجراء.",
+      "checkbox": "أفهم أنّ هذا لا يمكن التراجع عنه.",
+      "confirm": "احذف",
+      "cancel": "إلغاء"
+    },
+    "deletedToast": {
+      "title": "تمّ حذف الملفّ."
+    },
+    "completeness": {
+      "title": "اكتمال الملفّ",
+      "percent": "{{percent}}٪",
+      "invitation": "بقيت تفاصيل اختيارية قليلة. تساعد مدرّب الذكاء الاصطناعي على المعايرة.",
+      "complete": "اكتمل.",
+      "acknowledge": "فهمت",
+      "missingFields": {
+        "preferredDays": "الجدول",
+        "equipmentNotes": "ملاحظات المعدّات",
+        "injuries": "الإصابات",
+        "additionalContext": "سياق إضافي"
+      }
+    }
+  },
+  "design": {
+    "header": {
+      "title": "أساسيّات Spotter (P0.5 + P1)",
+      "subhead": "/_design · dev-only"
+    },
+    "sections": {
+      "input": "حقل الإدخال (Input)",
+      "card": "البطاقة (Card)",
+      "progress": "شريط التقدّم (Progress)",
+      "checkbox": "مربّع اختيار داخل منطقة لمس (Checkbox)",
+      "radioGroup": "مجموعة اختيار داخل منطقة لمس (RadioGroup)",
+      "slider": "شريط التمرير (Slider)",
+      "select": "قائمة منسدلة (Select)",
+      "toast": "إشعار سريع (Toast)",
+      "persistenceBanner": "تنبيه التخزين (PersistenceBanner)",
+      "form": "النموذج، مع تكامل react-hook-form (Form)",
+      "exerciseLibrary": "بطاقة التمرين: المكتبة (ExerciseCard.Library)",
+      "exerciseLibraryPreview": "بطاقة التمرين: معاينة استيراد الخطة (ExerciseCard.Library preview)",
+      "exerciseDaily": "بطاقة التمرين: اليومية (ExerciseCard.Daily)",
+      "exerciseSummary": "بطاقة التمرين: الملخّص (ExerciseCard.Summary)"
+    },
+    "labels": {
+      "default": "افتراضي",
+      "withValue": "بقيمة",
+      "numeric": "رقمي (inputMode=decimal)",
+      "disabled": "معطّل",
+      "ariaInvalid": "aria-invalid",
+      "withLabelPeer": "مع label مرافق",
+      "checked": "محدَّد",
+      "defaultWithLabel": "افتراضي + غلاف label",
+      "sliderSingle": "افتراضي (مقبض واحد)",
+      "sliderRange": "نطاق (مقبضان)"
+    },
+    "input": {
+      "typeSomething": "اكتب شيئًا",
+      "sampleName": "حسام",
+      "locked": "مُقفل",
+      "invalidValue": "قيمة غير صالحة",
+      "displayName": "الاسم المعروض",
+      "placeholderName": "بماذا ننادِيك؟"
+    },
+    "card": {
+      "title": "عنوان البطاقة",
+      "description": "وصف قصير، أهدأ من العنوان.",
+      "content": "محتوى البطاقة هنا. المكوّنات الفرعيّة تتولّى الهامش الأفقي بنفسها، فيمكن للنماذج المضمّنة رسم هوامشها الخاصّة.",
+      "cancel": "إلغاء",
+      "confirm": "تأكيد",
+      "headerOnlyTitle": "ترويسة فقط",
+      "headerOnlyDescription": "يمكن للبطاقات أن تستغني عن أيّ مكوّن فرعي."
+    },
+    "checkbox": {
+      "monday": "الإثنين",
+      "tuesday": "الثلاثاء",
+      "disabledLabel": "معطّل",
+      "invalidLabel": "غير صالح"
+    },
+    "select": {
+      "pickOption": "اختر خيارًا",
+      "strength": "القوّة",
+      "hypertrophy": "تضخّم العضلات",
+      "fatLoss": "خسارة الدهون",
+      "recomposition": "إعادة تكوين الجسم",
+      "generalFitness": "اللياقة العامّة",
+      "disabledPlaceholder": "معطّل",
+      "x": "X"
+    },
+    "toast": {
+      "note": "يتفرّع الإطار إلى document.body؛ يُعرض الإشعار أسفل الصفحة (أو أسفل اليمين على الشاشات الكبيرة `sm:` فأكثر).",
+      "saved": "تم الحفظ.",
+      "savedDescription": "النوع الافتراضي. سطح محايد مرتفع.",
+      "failed": "تعذّر الحفظ.",
+      "failedDescription": "النوع المُدمِّر (destructive). اقرنه برمز في موضع الاستخدام."
+    },
+    "persistence": {
+      "note": "لا يظهر هذا التنبيه إلا حين تُبلّغ حالة التخزين عن وضع متدنٍّ؛ هنا الحالة افتراضيّة `available`، فالعنصر أدناه مجرّد معاينة شكليّة يرسمها المكوّن نفسه عند ضبط سبب متدنٍّ. لمعاينة حيّة، حاكِ الحالة المتدنّية من React DevTools في المخزن."
+    },
+    "form": {
+      "cardTitle": "نموذج تجريبي",
+      "cardDescription": "حقل إدخال + قائمة منسدلة + مجموعة اختيار، مُوصَّلة عبر مكوّن Form.",
+      "name": "الاسم",
+      "namePlaceholder": "بماذا ننادِيك؟",
+      "nameDescription": "جرّب الإرسال مع تركه فارغًا لرؤية شكل التحقّق.",
+      "nameError": "أدخل اسمك.",
+      "goal": "الهدف",
+      "goalPlaceholder": "اختر هدفًا",
+      "goalOptions": {
+        "strength": "القوّة",
+        "hypertrophy": "تضخّم العضلات",
+        "fatLoss": "خسارة الدهون"
+      },
+      "experience": "مستوى الخبرة",
+      "experienceOptions": {
+        "novice": "مبتدئ",
+        "intermediate": "متوسّط",
+        "advanced": "متقدّم"
+      },
+      "submit": "إرسال (للعرض فقط)"
+    }
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب.",
+    "select": "الرجاء اختيار خيار.",
+    "numberMin": "أدخل {{min}} أو أكثر.",
+    "numberMax": "أدخل {{max}} أو أقل.",
+    "stringMin": "أدخل {{min}} حرفًا على الأقل.",
+    "stringMax": "أبقِ النص أقل من {{max}} حرفًا.",
+    "arrayMin": "اختر {{min}} على الأقل.",
+    "arrayMax": "اختر {{max}} على الأكثر."
   }
 }

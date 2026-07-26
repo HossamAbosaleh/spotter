@@ -10,3 +10,6 @@ package-lock.json
 .specify
 .agents
 .claude/settings*.json
+.claude/skills/graphify
+.claude/skills/impeccable
+graphify-out

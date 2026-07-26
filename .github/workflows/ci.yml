@@ -40,6 +40,9 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Security audit
+      - name: Security audit (production deps)
         run: npm run audit
-        continue-on-error: false
+
+      - name: Security audit (all deps, informational)
+        run: npm run audit:full
+        continue-on-error: true

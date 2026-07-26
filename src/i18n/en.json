@@ -4,12 +4,13 @@
     "tagline": "Your gym, your data, your AI coach."
   },
   "landing": {
-    "phaseLabel": "v0.1.0 · Phase P0 · Foundation",
-    "introBody": "This is the Phase P0 foundation build. The stack is up: React + Vite + TypeScript + Tailwind, deployed on Vercel as a static site.",
-    "nextPhase": "Next phase:",
-    "nextPhaseName": "P0.5 — Design System Foundation",
-    "runCommand": "Run",
-    "toBegin": "to begin.",
+    "positioning": "The workout tracker that hands your training data to any AI, and never to anyone else.",
+    "privacy": "Your workouts stay on your device. No accounts, no tracking.",
+    "cta": {
+      "start": "Get started",
+      "open": "Open Spotter",
+      "github": "View on GitHub"
+    },
     "badges": {
       "noServer": "No server",
       "freeForever": "Free forever",
@@ -49,5 +50,413 @@
   "language": {
     "switchTo": "العربية",
     "name": "English"
+  },
+  "wizard": {
+    "shell": {
+      "title": "Set up your profile",
+      "editTitle": "Update your profile",
+      "tryAgain": "Try again",
+      "stepLabel": "Step {{n}} of {{total}}",
+      "next": "Next",
+      "back": "Back",
+      "finish": "Finish",
+      "savedIndicator": "Saved.",
+      "savingIndicator": "Saving…",
+      "languageSwitch": {
+        "aria": "Switch language"
+      },
+      "startFresh": {
+        "cta": "Start fresh",
+        "title": "Start fresh?",
+        "confirm": "This clears the answers you've entered so far.",
+        "cancel": "Cancel"
+      },
+      "progress": {
+        "1": {
+          "label": "About you"
+        },
+        "2": {
+          "label": "Body & goal"
+        },
+        "3": {
+          "label": "How you train"
+        },
+        "4": {
+          "label": "Equipment"
+        },
+        "5": {
+          "label": "Language"
+        },
+        "6": {
+          "label": "Review"
+        }
+      }
+    },
+    "toast": {
+      "saved": {
+        "title": "Profile saved."
+      },
+      "updated": {
+        "title": "Profile updated."
+      },
+      "incompleteHint": "Optional details can be added on your profile page.",
+      "errors": {
+        "quotaExceeded": {
+          "title": "Couldn't save. Your storage is full.",
+          "description": "Free up space and try again."
+        },
+        "storageBlocked": {
+          "title": "Storage unavailable.",
+          "description": "Disable private browsing or check site permissions."
+        },
+        "unknown": {
+          "title": "Couldn't save.",
+          "description": "Please try again."
+        }
+      }
+    },
+    "identity": {
+      "title": "About you",
+      "subtitle": "A few basics so Spotter can talk to you like a person.",
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "What should we call you?"
+        },
+        "age": {
+          "label": "Age",
+          "helper": "Used to scale recommendations."
+        },
+        "sex": {
+          "label": "Sex",
+          "helper": "Used to calibrate exercise programming and working-weight defaults. 'Prefer not to say' uses neutral averages, which may be less precise for your body.",
+          "options": {
+            "male": "Male",
+            "female": "Female",
+            "preferNotToSay": "Prefer not to say"
+          }
+        }
+      }
+    },
+    "bodyGoal": {
+      "title": "Body & goal",
+      "subtitle": "Sets a starting point for working-weight defaults and plan shape.",
+      "fields": {
+        "height": {
+          "label": "Height",
+          "unit": {
+            "metric": "cm",
+            "imperial": "in"
+          }
+        },
+        "bodyweight": {
+          "label": "Bodyweight",
+          "unit": {
+            "metric": "kg",
+            "imperial": "lb"
+          }
+        },
+        "goal": {
+          "label": "What are you training for?",
+          "options": {
+            "strength": "Strength",
+            "hypertrophy": "Hypertrophy",
+            "fatLoss": "Fat loss",
+            "recomposition": "Recomposition",
+            "generalFitness": "General fitness"
+          },
+          "descriptions": {
+            "strength": "Heavier loads, lower reps, longer rest.",
+            "hypertrophy": "Moderate loads, moderate reps, build muscle.",
+            "fatLoss": "Higher density, shorter rest, keep strength.",
+            "recomposition": "Balanced: lose fat while gaining strength.",
+            "generalFitness": "Stay strong, mobile, and conditioned."
+          }
+        }
+      }
+    },
+    "experienceSchedule": {
+      "title": "How you train",
+      "subtitle": "Tunes volume and what to call things.",
+      "fields": {
+        "experience": {
+          "label": "Experience level",
+          "options": {
+            "novice": "Novice (less than 1 year)",
+            "intermediate": "Intermediate (1–3 years)",
+            "advanced": "Advanced (3+ years)"
+          }
+        },
+        "preferredDays": {
+          "label": "Which days do you usually train?",
+          "helper": "Pick any that apply, or skip if your week varies.",
+          "irregularLabel": "I train on irregular days",
+          "options": {
+            "mon": "Monday",
+            "tue": "Tuesday",
+            "wed": "Wednesday",
+            "thu": "Thursday",
+            "fri": "Friday",
+            "sat": "Saturday",
+            "sun": "Sunday"
+          }
+        }
+      }
+    },
+    "equipmentLimitations": {
+      "title": "Equipment & limitations",
+      "subtitle": "Shapes which exercises Spotter suggests.",
+      "fields": {
+        "equipment": {
+          "label": "What do you have access to?",
+          "options": {
+            "commercialGym": "Commercial gym (full equipment)",
+            "homeFull": "Home gym (rack + barbell + plates)",
+            "homeMinimal": "Home minimal (dumbbells / bands / kettlebell)",
+            "bodyweightOnly": "Bodyweight only"
+          }
+        },
+        "equipmentNotes": {
+          "label": "Notes (optional)",
+          "placeholder": "Anything specific about your setup?"
+        },
+        "injuries": {
+          "label": "Injuries or movement limitations (optional)",
+          "placeholder": "Anything we should keep in mind?",
+          "helper": "Stays on this device. Used to filter exercise suggestions."
+        }
+      }
+    },
+    "languageCoach": {
+      "title": "How Spotter talks to you",
+      "subtitle": "Change any of these any time.",
+      "fields": {
+        "language": {
+          "label": "Language",
+          "options": {
+            "en": "English",
+            "ar": "Arabic"
+          }
+        },
+        "units": {
+          "label": "Units",
+          "options": {
+            "metric": "Metric (kg, cm)",
+            "imperial": "Imperial (lb, in)"
+          }
+        },
+        "coach": {
+          "label": "Coaching tone",
+          "options": {
+            "encouraging": "Encouraging",
+            "direct": "Direct",
+            "technical": "Technical"
+          },
+          "descriptions": {
+            "encouraging": "Warm and motivating.",
+            "direct": "Plain, no fluff.",
+            "technical": "Cue-rich and precise."
+          }
+        }
+      }
+    },
+    "review": {
+      "title": "Look right?",
+      "subtitle": "Tap any field to edit.",
+      "editAria": "Edit {{field}}",
+      "confirmCta": "Save my profile",
+      "additionalContext": {
+        "label": "Anything else? (optional)",
+        "helper": "Goes into the AI prompt as context."
+      },
+      "empty": "Not set",
+      "sections": {
+        "identity": "About you",
+        "bodyGoal": "Body & goal",
+        "experienceSchedule": "How you train",
+        "equipmentLimitations": "Equipment & limitations",
+        "languageCoach": "How Spotter talks to you"
+      }
+    },
+    "errors": {
+      "required": "This field is required.",
+      "numeric": "Enter a number.",
+      "outOfRange": {
+        "age": "Age must be between 13 and 100.",
+        "height": "Height must be between 120 and 230 cm.",
+        "bodyweight": "Bodyweight must be between 30 and 250 kg."
+      },
+      "tooLong": "Please keep this under {{max}} characters.",
+      "atLeastOneDay": "Pick at least one day.",
+      "saveFailed": {
+        "quota": "We couldn't save. Your device is out of space.",
+        "unknown": "We couldn't save right now. Try again, or reload the page."
+      },
+      "corruptProfile": {
+        "title": "Your profile data couldn't be read.",
+        "body": "You can start fresh. This overwrites the existing record.",
+        "cta": "Start fresh"
+      },
+      "unknownLoad": {
+        "title": "We couldn't read your profile.",
+        "body": "Something went wrong loading your data. Reloading might help."
+      }
+    }
+  },
+  "persistence": {
+    "banner": {
+      "private": "This is a private window. Your answers won't be saved.",
+      "disabled": "Your browser has storage disabled. Enable it to save your profile.",
+      "quota": "Your device is out of space. Your answers won't save until you free some up.",
+      "unknown": "We couldn't access local storage. Your answers won't be saved this session.",
+      "acknowledge": "I understand"
+    }
+  },
+  "profile": {
+    "shell": {
+      "title": "Your profile"
+    },
+    "title": "Your profile",
+    "subtitle": "Manage your training context.",
+    "edit": "Edit profile",
+    "editSection": "Edit {{section}}",
+    "empty": {
+      "title": "No profile yet",
+      "body": "Set up your profile to start using Spotter.",
+      "cta": "Get started"
+    },
+    "deleteTrigger": "Delete profile",
+    "deleteDialog": {
+      "title": "Delete your profile?",
+      "body": "This permanently deletes your saved profile, your goals, and your equipment notes. This cannot be undone.",
+      "checkbox": "I understand this cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "deletedToast": {
+      "title": "Profile deleted."
+    },
+    "completeness": {
+      "title": "Profile completeness",
+      "percent": "{{percent}}%",
+      "invitation": "A few optional details left. They help the AI coach calibrate.",
+      "complete": "All set.",
+      "acknowledge": "Got it",
+      "missingFields": {
+        "preferredDays": "Schedule",
+        "equipmentNotes": "Equipment notes",
+        "injuries": "Injuries",
+        "additionalContext": "Additional context"
+      }
+    }
+  },
+  "design": {
+    "header": {
+      "title": "Spotter primitives (P0.5 + P1)",
+      "subhead": "/_design · dev-only"
+    },
+    "sections": {
+      "input": "Input",
+      "card": "Card",
+      "progress": "Progress",
+      "checkbox": "Checkbox (with touch-target wrapper)",
+      "radioGroup": "RadioGroup (with touch-target wrapper)",
+      "slider": "Slider",
+      "select": "Select",
+      "toast": "Toast",
+      "persistenceBanner": "PersistenceBanner",
+      "form": "Form (react-hook-form integration)",
+      "exerciseLibrary": "ExerciseCard.Library",
+      "exerciseLibraryPreview": "ExerciseCard.Library preview (plan import)",
+      "exerciseDaily": "ExerciseCard.Daily",
+      "exerciseSummary": "ExerciseCard.Summary"
+    },
+    "labels": {
+      "default": "default",
+      "withValue": "with value",
+      "numeric": "numeric (inputMode=decimal)",
+      "disabled": "disabled",
+      "ariaInvalid": "aria-invalid",
+      "withLabelPeer": "with label peer",
+      "checked": "checked",
+      "defaultWithLabel": "default + label wrapper",
+      "sliderSingle": "default (single thumb)",
+      "sliderRange": "range (two thumbs)"
+    },
+    "input": {
+      "typeSomething": "Type something",
+      "sampleName": "Hossam",
+      "locked": "locked",
+      "invalidValue": "invalid value",
+      "displayName": "Display name",
+      "placeholderName": "What should we call you?"
+    },
+    "card": {
+      "title": "Card title",
+      "description": "A short description, quieter than the title.",
+      "content": "Card content lives here. Sub-components own horizontal padding so embedded forms can draw their own gutters.",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "headerOnlyTitle": "Header only",
+      "headerOnlyDescription": "Cards can omit any sub-component."
+    },
+    "checkbox": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "disabledLabel": "Disabled",
+      "invalidLabel": "Invalid"
+    },
+    "select": {
+      "pickOption": "Pick an option",
+      "strength": "Strength",
+      "hypertrophy": "Hypertrophy",
+      "fatLoss": "Fat loss",
+      "recomposition": "Recomposition",
+      "generalFitness": "General fitness",
+      "disabledPlaceholder": "Disabled",
+      "x": "X"
+    },
+    "toast": {
+      "note": "The viewport portals to document.body; the toast renders at the bottom of the page (or bottom-right on `sm:` and up).",
+      "saved": "Saved.",
+      "savedDescription": "Default toast variant. Neutral elevated surface.",
+      "failed": "Couldn't save.",
+      "failedDescription": "Destructive variant. Pair with an icon at the call site."
+    },
+    "persistence": {
+      "note": "Renders only when the persistence store reports a degraded status; on this page the store is in its default `available` state, so the banner element below is the styling preview rendered by the component itself once a degraded reason is set. To preview live, simulate degraded mode in the React DevTools store."
+    },
+    "form": {
+      "cardTitle": "Demo form",
+      "cardDescription": "Input + Select + RadioGroup wired through the Form primitive.",
+      "name": "Name",
+      "namePlaceholder": "What should we call you?",
+      "nameDescription": "Try submitting with this empty to see the validation styling.",
+      "nameError": "Enter your name.",
+      "goal": "Goal",
+      "goalPlaceholder": "Pick a goal",
+      "goalOptions": {
+        "strength": "Strength",
+        "hypertrophy": "Hypertrophy",
+        "fatLoss": "Fat loss"
+      },
+      "experience": "Experience level",
+      "experienceOptions": {
+        "novice": "Novice",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      },
+      "submit": "Submit (showcase only)"
+    }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "select": "Please choose an option.",
+    "numberMin": "Enter {{min}} or more.",
+    "numberMax": "Enter {{max}} or less.",
+    "stringMin": "Enter at least {{min}} characters.",
+    "stringMax": "Keep this under {{max}} characters.",
+    "arrayMin": "Choose at least {{min}}.",
+    "arrayMax": "Choose at most {{max}}."
   }
 }
